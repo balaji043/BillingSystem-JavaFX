@@ -61,7 +61,7 @@ public class Preferences {
         invoice = "0";
         allBillNO = "0";
         limit = "22";
-        theme = "blue";
+        theme = "boot2";
         logoName = "StdEnt";
     }
 

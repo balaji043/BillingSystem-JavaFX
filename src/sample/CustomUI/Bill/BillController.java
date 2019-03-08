@@ -105,29 +105,9 @@ public class BillController {
             lCusMob.setText(": " + bill.getMobile());
             lGSTin.setText(": " + bill.getGSTNo());
         }
-
-        //Table View
-
-        //initGridPane(bill);
-
         initGridPane(bill);
-
         lTotalAmountNum.setText("RS. " + bill.getTotalAmount());
-
         //TAX section
-
-        //Central Half
-
-        lTax6perCAmount.setText(bill.getGst12Half());
-        lTax8perCAmount.setText(bill.getGst18Half());
-        lTax12perCAmount.setText(bill.getGst28Half());
-
-        //State Half
-
-        lTax6perSAmount.setText(bill.getGst12Half());
-        lTax8perSAmount.setText(bill.getGst18Half());
-        lTax12perSAmount.setText(bill.getGst28Half());
-
         //TAX OVERALL TOTAL
         double t = Float.parseFloat(bill.getTotalAmount()), r = 0.00f;
         if ((t - (int) t) != 0.00) {
@@ -138,20 +118,26 @@ public class BillController {
         roundedOff.setText(String.format("%.2f", r));
         lTotalPlusTaxNum.setText("RS. " + t);
         lgrossAmount.setText(bill.getGross());
-        laCGST.setText(bill.getHalfTax());
-        laSGST.setText(bill.getHalfTax());
-
-
-        lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int)
-                t) + " Rupees Only )");
-        //Bank Details
-
+        lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int)t) + " Rupees Only )");//Bank Details
         lBankName.setText(preferences.getBank());
         lBranchName.setText(preferences.getBranch());
         lBankAccNo.setText(preferences.getAcc());
         lBankIFSC.setText(preferences.getIfsc());
-
         forStoreName.setText("For " + preferences.getName());
+
+        //Central Half
+
+        laCGST.setText(bill.getHalfTax());
+        laSGST.setText(bill.getHalfTax());
+        lTax6perCAmount.setText(bill.getGst12Half());
+        lTax8perCAmount.setText(bill.getGst18Half());
+        lTax12perCAmount.setText(bill.getGst28Half());
+
+        //State Half
+
+        lTax6perSAmount.setText(bill.getGst12Half());
+        lTax8perSAmount.setText(bill.getGst18Half());
+        lTax12perSAmount.setText(bill.getGst28Half());
     }
 
     private void initGridPane(Bill bill) {
