@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UI.UserPanel.UserPanelController">
+    <BorderPane fx:id="borderPane">
+        <right>
+            <VBox alignment="CENTER" spacing="50.0">
+                <BorderPane.margin>
+                    <Insets bottom="80.0" left="10.0" right="10.0" top="80.0" />
+                </BorderPane.margin>
+                <VBox spacing="40.0">
+                    <JFXTextField fx:id="name" promptText="Name" />
+                    <JFXTextField fx:id="username" promptText="User name" />
+                    <JFXComboBox fx:id="accessComboBox" labelFloat="true" promptText="Access group" />
+                    <JFXPasswordField fx:id="passwordField" promptText="Password" />
+                </VBox>
+                <VBox spacing="20.0">
+                    <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleAddNow" prefHeight="40.0" prefWidth="185.0" styleClass="jfx-button1" text="submit" textFill="WHITE" />
+                    <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleBack" prefHeight="40.0" prefWidth="185.0" styleClass="jfx-button1" text="Delete User" textFill="WHITE" />
+                </VBox>
+                <VBox spacing="10.0">
+                    <JFXPasswordField fx:id="passwordField1" promptText="Special Password" />
+                    <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleSpecial" prefHeight="40.0" prefWidth="185.0" styleClass="jfx-button1" text="submit" textFill="WHITE" />
+                </VBox>
+            </VBox>
+        </right>
+        <center>
+            <TableView fx:id="userTableView" BorderPane.alignment="CENTER">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
+            <BorderPane.margin>
+               <Insets />
+            </BorderPane.margin>
+            </TableView>
+        </center>
+    </BorderPane>
+</StackPane>

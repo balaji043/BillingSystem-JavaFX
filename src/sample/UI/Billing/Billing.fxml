@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane prefHeight="720.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UI.Billing.BillingController">
+    <BorderPane fx:id="root" prefHeight="200.0" prefWidth="200.0">
+        <top>
+            <HBox alignment="CENTER" prefHeight="100.0" spacing="50.0" BorderPane.alignment="CENTER">
+                <JFXCheckBox fx:id="checkBoxGST" prefHeight="40.0" prefWidth="200.0" text="GST Customer" />
+                <Label text="Bill For" />
+                <JFXComboBox fx:id="comboBoxCustomer" editable="true" prefHeight="40.0" prefWidth="200.0" promptText="Customer" />
+            <JFXCheckBox fx:id="checkIGST" text="I-GST Bill" />
+                <JFXButton buttonType="RAISED" onAction="#handleCustomerSubmit" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="Submit" textFill="WHITE" />
+            </HBox>
+        </top>
+        <center>
+          <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+              <center>
+                  <JFXListView fx:id="listView" BorderPane.alignment="CENTER">
+                      <padding>
+                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                      </padding>
+                      <styleClass>
+                          <String fx:value="decrement-arrow" />
+                          <String fx:value="decrement-button" />
+                          <String fx:value="increment-arrow" />
+                          <String fx:value="increment-button" />
+                          <String fx:value="pretty-list-view" />
+                          <String fx:value="pretty-scroll-bar" />
+                          <String fx:value="scroll-bar" />
+                          <String fx:value="thumb" />
+                          <String fx:value="virtual-flow" />
+                      </styleClass>
+                  </JFXListView>
+              </center>
+              <top>
+                  <GridPane maxHeight="80.0" minHeight="80.0" minWidth="50.0" prefHeight="80.0" prefWidth="50.0">
+                      <columnConstraints>
+                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="372.0" minWidth="10.0" prefWidth="166.0" />
+                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="419.0" minWidth="10.0" prefWidth="140.0" />
+                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="504.0" minWidth="10.0" prefWidth="504.0" />
+                      </columnConstraints>
+                      <rowConstraints>
+                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                      </rowConstraints>
+                      <StackPane>
+                          <Text fx:id="labelBillFor" text="Bill For" />
+                      </StackPane>
+                      <StackPane alignment="CENTER_RIGHT" GridPane.columnIndex="1">
+                          <JFXButton buttonType="RAISED" onAction="#handleAdd" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="ADD ITEM" textFill="WHITE">
+                              <StackPane.margin>
+                                  <Insets right="10.0" />
+                              </StackPane.margin>
+                          </JFXButton>
+                      </StackPane>
+                      <StackPane alignment="CENTER_LEFT" GridPane.columnIndex="2">
+                          <JFXButton buttonType="RAISED" onAction="#handleDelete" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="DELETE ITEM" textFill="WHITE">
+                              <StackPane.margin>
+                                  <Insets left="10.0" />
+                              </StackPane.margin>
+                          </JFXButton>
+                      </StackPane>
+                      <StackPane alignment="CENTER_LEFT" GridPane.columnIndex="3">
+                          <Text fx:id="totalAmount" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                              <font>
+                                  <Font name="System Bold" size="20.0" />
+                              </font>
+                          </Text>
+                      </StackPane>
+                      <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" GridPane.columnIndex="4">
+                          <JFXCheckBox fx:id="isManual" text="Manual Invoice"/>
+                          <JFXDatePicker fx:id="manualDate" editable="false" promptText="Invoice Date"/>
+                      </VBox>
+                  </GridPane>
+              </top>
+              <bottom>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+                      <JFXButton buttonType="RAISED" onAction="#handleCalculate" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="Calculate" textFill="WHITE" />
+                  <JFXButton buttonType="RAISED" onAction="#handleBillSubmit" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="Submit" textFill="WHITE" />
+                  </HBox>
+              </bottom>
+          </BorderPane>
+        </center>
+    </BorderPane>
+</StackPane>

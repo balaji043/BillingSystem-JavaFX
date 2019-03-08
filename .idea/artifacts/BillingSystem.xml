@@ -1,0 +1,39 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="BillingSystem">
+    <output-path>$PROJECT_DIR$/out/artifacts/BillingSystem</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="sample.Main" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="nativeBundle" value="exe" />
+        <option name="title" value="Billing Systems" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="BillingSystem.jar">
+        <element id="module-output" name="BillingSystem" />
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+      </element>
+      <element id="directory" name="Libraries">
+        <element id="file-copy" path="D:/Jar/ojdbc14.jar" />
+        <element id="file-copy" path="D:/Jar/sqlite-jdbc-3.23.1.jar" />
+        <element id="file-copy" path="D:/Jar/jfoenix-8.0.8.jar" />
+        <element id="file-copy" path="D:/Jar/gson-2.3.1.jar" />
+        <element id="file-copy" path="D:/Jar/annotations-16.0.2.jar" />
+        <element id="file-copy" path="D:/Jar/ooxml-schemas-1.4.jar" />
+        <element id="file-copy" path="D:/Jar/poi-4.0.1.jar" />
+        <element id="file-copy" path="D:/Jar/commons-collections4-4.2.jar" />
+        <element id="file-copy" path="D:/Jar/commons-compress-1.18.jar" />
+        <element id="file-copy" path="D:/Jar/commons-logging-1.2.jar" />
+        <element id="file-copy" path="D:/Jar/xmlbeans-3.0.2.jar" />
+        <element id="file-copy" path="D:/Jar/poi-ooxml-4.0.1.jar" />
+        <element id="file-copy" path="D:/Jar/controlsfx-8.40.14.jar" />
+      </element>
+    </root>
+  </artifact>
+</component>

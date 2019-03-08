@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UI.Login.LoginController">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0">
+        <VBox alignment="CENTER" layoutX="390.0" layoutY="152.0" spacing="50.0">
+            <ImageView fitHeight="128.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../Resources/icons/se.jpeg" />
+            </ImageView>
+            <VBox alignment="CENTER" spacing="50.0">
+                <HBox alignment="CENTER" spacing="10.0">
+                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../Resources/icons/head.png" />
+                    </ImageView>
+                    <JFXTextField fx:id="textFieldUserName" prefHeight="40" prefWidth="200" promptText="UserName" />
+                </HBox>
+                <HBox alignment="CENTER" spacing="10.0">
+                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../../Resources/icons/lock.png" />
+                    </ImageView>
+                    <JFXPasswordField fx:id="textFieldPassword" prefHeight="40" prefWidth="200" promptText="Password" />
+                </HBox>
+                <JFXButton alignment="CENTER" buttonType="RAISED" mnemonicParsing="false" onAction="#handleSignIn" prefHeight="40.0" prefWidth="280.0" styleClass="jfx-button1" text="Sign in" textFill="WHITE" />
+            </VBox>
+        </VBox>
+    </AnchorPane>
+</StackPane>
