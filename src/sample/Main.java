@@ -3,6 +3,7 @@ package sample;
 import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXSnackbar;
+import com.jfoenix.controls.JFXSpinner;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,20 +21,22 @@ import sample.UI.Login.LoginController;
 import sample.UI.Root.RootController;
 import sample.UI.UserPanel.UserPanelController;
 import sample.UI.ViewBills.ViewBillsController;
-import sample.Utils.BillingSystemUtils;
 import sample.Utils.Preferences;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Date;
 
 public class Main extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+
     public boolean isLoggedIn = false;
+
     private RootController rootController = null;
+
     private User user = null;
+
+    private JFXSpinner spinner = new JFXSpinner();
 
     public static void main(String[] args) {
         launch(args);
@@ -41,9 +44,7 @@ public class Main extends Application {
 
     private Scene scene;
 
-    private String theme = Main.class.getResource("Resources/CSS/" +
-            Preferences.getPreferences().getTheme() + "Theme.css")
-            .toExternalForm();
+    private String theme;
 
     @Override
     public void start(Stage primaryStage) {
@@ -52,11 +53,14 @@ public class Main extends Application {
             event.consume();
             handleClose();
         });
-
+        double d = 50;
+        spinner.setMaxSize(d, d);
+        spinner.setPrefSize(d, d);
         DatabaseHelper.create();
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("UI/Root/Root.fxml"));
+
         try {
             loader.load();
             rootController = loader.getController();
@@ -65,21 +69,14 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
-        Preferences preferences = Preferences.getPreferences();
-
-        if (!LocalDate.now().equals(BillingSystemUtils.convertToLocalDateViaInstant(
-                new Date(Long.parseLong(preferences.getDate()))))) {
-            Date t = new Date();
-            preferences.setDate("" + t.getTime());
-            preferences.setInvoice("0");
-        }
         JFXDecorator decorator = new JFXDecorator(primaryStage, rootLayout);
         decorator.setCustomMaximize(true);
         decorator.setMaximized(true);
 
         scene = new Scene(decorator, 1080, 720);
-
-        scene.getStylesheets().add(theme);
+        scene.getStylesheets().add(Main.class.getResource("Resources/CSS/" +
+                Preferences.getPreferences().getTheme() + "Theme.css")
+                .toExternalForm());
 
         primaryStage.setTitle("Billing System");
         primaryStage.setScene(scene);
@@ -238,4 +235,11 @@ public class Main extends Application {
         scene.getStylesheets().add(theme);
     }
 
+    public void addSpinner() {
+        rootLayout.getChildren().add(spinner);
+    }
+
+    public void removeSpinner() {
+        rootLayout.getChildren().remove(spinner);
+    }
 }

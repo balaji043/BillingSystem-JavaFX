@@ -21,11 +21,8 @@ public class Preferences {
     private String ifsc;
     private String phone;
     private String date;
-    private String invoice;
-    private String allBillNO;
     private String limit;
     private String theme;
-    private boolean isIGSTBill;
     private String logoName;
 
     private HashSet<String> descriptions;
@@ -55,13 +52,10 @@ public class Preferences {
         perData.add("SET");
         perData.add("ROL");
         perData.add("BUN");
-        isIGSTBill = false;
         Date d = new Date();
         date = "" + d.getTime();
-        invoice = "0";
-        allBillNO = "0";
         limit = "22";
-        theme = "boot2";
+        theme = "red";
         logoName = "StdEnt";
     }
 
@@ -252,30 +246,6 @@ public class Preferences {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getInvoice() {
-        return invoice;
-    }
-
-    public void setInvoice(String invoice) {
-        this.invoice = invoice;
-    }
-
-    public String getAllBillNO() {
-        return allBillNO;
-    }
-
-    public void setAllBillNO(String allBillNO) {
-        this.allBillNO = allBillNO;
-    }
-
-    public boolean isIGSTBill() {
-        return isIGSTBill;
-    }
-
-    public void setIGSTBill(boolean IGSTBill) {
-        isIGSTBill = IGSTBill;
     }
 
     public String getLogoName() {

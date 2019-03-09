@@ -130,7 +130,13 @@ public class ViewBillsController implements Initializable {
 
     @FXML
     void handleDeleteBill() {
+/*        AlertMaker.showMCBillAlert("Are sure you want to delete this Bill?"
+                , tableView.getSelectionModel().getSelectedItem()
+                , mainApp
+                , checkIGSTBill.isSelected())*/
+
         boolean b;
+
         if (mainApp.getUser().getAccess().equals("admin")) {
             if (tableView.getSelectionModel().getSelectedItem() != null) {
                 if (!AlertMaker.showMCAlert("Confirm delete?"

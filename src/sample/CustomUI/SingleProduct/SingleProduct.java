@@ -6,8 +6,13 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
@@ -28,6 +33,8 @@ public class SingleProduct extends HBox {
     private Text slNo;
 
     private Product product = null;
+
+    private boolean isAdd = false;
 
     public SingleProduct() {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource
@@ -91,14 +98,49 @@ public class SingleProduct extends HBox {
                 || (checkBox.isSelected() && (discount.getText() == null
                 || discount.getText().isEmpty()))) {
 
-            if (name.getText() == null || name.getText().isEmpty()) errorMsg = " Name ";
-            if (hsn.getText() == null || hsn.getText().isEmpty()) errorMsg += " HSN ";
-            if (qty.getText() == null || qty.getText().isEmpty()) errorMsg += " QTY ";
-            if (rate.getText() == null || rate.getText().isEmpty()) errorMsg += " Rate ";
-            if (tax.getValue() == null) errorMsg += " Tax ";
-            if (per.getValue() == null) errorMsg += " PerData ";
+            if (name.getText() == null || name.getText().isEmpty()) {
+                errorMsg = " Name ";
+                name.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
+                        , new CornerRadii(0)
+                        , new Insets(0, 0, 0, 0))));
+            }
+            if (hsn.getText() == null || hsn.getText().isEmpty()) {
+                errorMsg += " HSN ";
+                hsn.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
+                        , new CornerRadii(0)
+                        , new Insets(0, 0, 0, 0))));
+            }
+            if (qty.getText() == null || qty.getText().isEmpty()) {
+                errorMsg += " QTY ";
+                qty.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
+                        , new CornerRadii(0)
+                        , new Insets(0, 0, 0, 0))));
+            }
+            if (rate.getText() == null || rate.getText().isEmpty()) {
+                errorMsg += " Rate ";
+                rate.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
+                        , new CornerRadii(0)
+                        , new Insets(0, 0, 0, 0))));
+            }
+            if (tax.getValue() == null) {
+                errorMsg += " Tax ";
+                tax.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
+                        , new CornerRadii(0)
+                        , new Insets(0, 0, 0, 0))));
+            }
+            if (per.getValue() == null) {
+                errorMsg += " PerData ";
+                per.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
+                        , new CornerRadii(0)
+                        , new Insets(0, 0, 0, 0))));
+            }
             if ((checkBox.isSelected() && (discount.getText() == null
-                    || discount.getText().isEmpty()))) errorMsg += " Discount ";
+                    || discount.getText().isEmpty()))) {
+                errorMsg += " Discount ";
+                discount.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
+                        , new CornerRadii(0)
+                        , new Insets(0, 0, 0, 0))));
+            }
             return slNo.getText() + errorMsg + " are mandatory";
         } else {
             try {
@@ -129,7 +171,12 @@ public class SingleProduct extends HBox {
 
             float r = Integer.parseInt(rate.getText()), d = Float.parseFloat(discount.getText());
             float val = (r * d) / 100;
-            rates = String.format("%.2f", r - val);
+
+            if (isAdd)
+                rates = String.format("%.2f", r + val);
+            else
+                rates = String.format("%.2f", r - val);
+
 
         }
         product = new Product(name.getText(), hsn.getText(), qty.getText(), tax.getValue()
@@ -148,7 +195,7 @@ public class SingleProduct extends HBox {
         slNo.setText("" + s);
     }
 
-    public void setProduct(Product product){
+    public void setProduct(Product product) {
         name.setText(product.getName());
         hsn.setText(product.getHsn());
         qty.setText(product.getQty());
@@ -156,5 +203,9 @@ public class SingleProduct extends HBox {
         amount.setText(product.getTotalAmount());
         tax.setValue(product.getTax());
         per.setValue(product.getPer());
+    }
+
+    public void isDiscountAdd(boolean b) {
+        isAdd = b;
     }
 }

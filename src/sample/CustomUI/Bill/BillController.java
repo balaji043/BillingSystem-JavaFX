@@ -161,7 +161,7 @@ public class BillController {
         for (Product p : products) {
 
             Text sl = new Text();
-            sl.setText(p.getSl());
+            sl.setText("" + p.getSl());
             sl.setStyle("-fx-font-size:8px;");
             StackPane stackPane = new StackPane(sl);
             stackPane.setMinHeight(9);

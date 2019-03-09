@@ -25,7 +25,6 @@ public class Settings implements Initializable {
 
     private HashSet<String> d, p, h;
     private String dOLD, dNEW, pOLD, pNEW, hOLD, hNEW;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         preferences = Preferences.getPreferences();

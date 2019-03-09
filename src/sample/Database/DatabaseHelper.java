@@ -87,12 +87,13 @@ public class DatabaseHelper {
         return okay;
     }
 
+
     public static boolean insertNewBill(@NotNull Bill bill, @NotNull String tableName) {
         okay = false;
         try {
-            String query = "INSERT into " + tableName + " (BillID,INVOICE,DATE" +
-                    ",CustomerName,CustomerID,ADDRESS,GstNO," +
-                    "PHONE,USERNAME) VALUES (?,?,?,?,?,?,?,?,?) ";
+            String query = String
+                    .format("INSERT into %s ( BillID, INVOICE , DATE ,CustomerName,CustomerID,ADDRESS,GstNO,PHONE,USERNAME) VALUES (?,?,?,?,?,?,?,?,?) "
+                            , tableName);
 
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, bill.getBillId());
@@ -151,7 +152,7 @@ public class DatabaseHelper {
             , @NotNull LocalDate a, @NotNull LocalDate b, @NotNull String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
         try {
-            String insert = " SELECT * FROM " + tableName + " WHERE CUSTOMERNAME = ? ";
+            String insert = String.format(" SELECT * FROM %s WHERE CUSTOMERNAME = ? ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
             preparedStatement.setString(1, customer);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -185,7 +186,7 @@ public class DatabaseHelper {
             , @NotNull String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
         try {
-            String insert = " SELECT * FROM " + tableName + " WHERE CUSTOMERNAME = ? ";
+            String insert = String.format(" SELECT * FROM %s WHERE CUSTOMERNAME = ? ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
             preparedStatement.setString(1, customer);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -213,7 +214,7 @@ public class DatabaseHelper {
             , @NotNull String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
         try {
-            String insert = " SELECT * FROM " + tableName + " WHERE INVOICE LIKE ? ";
+            String insert = String.format(" SELECT * FROM %s WHERE INVOICE LIKE ? ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
             preparedStatement.setString(1, searchText);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -344,10 +345,9 @@ public class DatabaseHelper {
             , @NotNull ObservableList<Product> products) {
         okay = false;
         try {
-            String create = "CREATE TABLE IF NOT EXISTS " + billName + " (NAME TEXT NOT NULL , " +
-                    "HSN TEXT NOT NULL , QTY TEXT NOT NULL, " +
-                    "TAX TEXT NOT NULL,RATE TEXT NOT NULL," +
-                    "PER TEXT NOT NULL); ";
+            String create = String
+                    .format("CREATE TABLE IF NOT EXISTS %s (NAME TEXT NOT NULL , HSN TEXT NOT NULL , QTY TEXT NOT NULL, TAX TEXT NOT NULL,RATE TEXT NOT NULL,PER TEXT NOT NULL); "
+                            , billName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(create);
             okay = createTable(create);
             for (Product p : products) {
@@ -440,9 +440,7 @@ public class DatabaseHelper {
     public static boolean insertNewUser(@NotNull User user) {
         okay = false;
         try {
-            String query = "insert or ignore into employee ( name " +
-                    ", id , password , access , username ) " +
-                    " values ( ? , ? , ? , ? , ? ) ";
+            String query = "INSERT into employee ( name , id , password , access , username )  values ( ? , ? , ? , ? , ? ) ";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getId());
@@ -463,11 +461,12 @@ public class DatabaseHelper {
         return okay;
     }
 
+    @SuppressWarnings("")
     public static boolean updateUser(@NotNull User user) {
         okay = false;
         try {
-            String query = "update employee set name = ?,password = ?,access =" +
-                    " ?,username = ? where id = ?";
+            String query = "update employee set name = ?,password = ?,access = ?" +
+                    ",username = ? where id = ?";
 
             preparedStatement = DatabaseHandler.getInstance()
                     .getConnection().prepareStatement(query);
@@ -519,10 +518,11 @@ public class DatabaseHelper {
         return u;
     }
 
+    @SuppressWarnings("Redundant Call to format()")
     public static boolean deleteUser(@NotNull User user) {
         okay = false;
         try {
-            String insert = "DELETE FROM EMPLOYEE where name = ? and username = ? and id = ? ";
+            String insert = " DELETE FROM EMPLOYEE where name = ? and username = ? and id = ? ";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getUserName());
@@ -608,7 +608,7 @@ public class DatabaseHelper {
     public static boolean insertNewCustomer(@NotNull Customer customer) {
         okay = false;
         try {
-            String query = "INSERT OR IGNORE INTO CUSTOMER " +
+            String query = "INSERT INTO CUSTOMER " +
                     "( NAME , PHONE , GSTIN , STREET , CITY , STATE , ZIP" +
                     ", ID) VALUES (?,?,?,?,?,?,?,?)";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
@@ -638,9 +638,7 @@ public class DatabaseHelper {
     public static boolean updateCustomer(@NotNull Customer customer) {
         okay = false;
         try {
-            String query = "UPDATE CUSTOMER SET  NAME = ? , PHONE = ? " +
-                    ", GSTIN = ? , STREET = ? , CITY = ? , STATE = ? , ZIP = ? " +
-                    " WHERE ID = ?";
+            String query = "UPDATE CUSTOMER SET  NAME = ? , PHONE = ? , GSTIN = ? , STREET = ? , CITY = ? , STATE = ? , ZIP = ?  WHERE ID = ?";
 
             preparedStatement = DatabaseHandler.getInstance()
                     .getConnection().prepareStatement(query);
@@ -834,4 +832,26 @@ public class DatabaseHelper {
     }
 
 
+    public static boolean ifInvoiceExist(String s, String tableName) {
+        okay = false;
+        try {
+            String q = String.format("Select * from %s where invoice = ?", tableName);
+            preparedStatement =
+                    DatabaseHandler.getInstance().getConnection().prepareStatement(q);
+            preparedStatement.setString(1, s);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) okay = true;
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+            e.printStackTrace();
+        } finally {
+            try {
+                assert preparedStatement != null;
+                preparedStatement.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return okay;
+    }
 }

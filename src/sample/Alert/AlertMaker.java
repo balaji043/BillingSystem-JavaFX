@@ -92,6 +92,41 @@ public class AlertMaker {
         return optional.isPresent() && optional.get().equals(ButtonType.OK);
     }
 
+    public static boolean showMCBillAlert(String header, Bill body, Main main, boolean isIBill) {
+
+        JFXAlert<ButtonType> alert = new JFXAlert<>(main.getPrimaryStage());
+        alert.setSize(1080, 720);
+
+        JFXDialogLayout dialogLayout = new JFXDialogLayout();
+
+
+        JFXButton okayButton = new JFXButton("Okay");
+        okayButton.setDefaultButton(true);
+        okayButton.setOnAction(e -> {
+            alert.setResult(ButtonType.OK);
+            alert.hideWithAnimation();
+        });
+
+        JFXButton cancelButton = new JFXButton("Cancel");
+        cancelButton.setCancelButton(true);
+        cancelButton.setOnAction(e -> {
+            alert.setResult(ButtonType.CANCEL);
+            alert.hideWithAnimation();
+        });
+
+        dialogLayout.setHeading(new Label(header));
+        dialogLayout.setBody(getPane(body, main, isIBill));
+        dialogLayout.setActions(okayButton, cancelButton);
+
+        alert.setAnimation(JFXAlertAnimation.BOTTOM_ANIMATION);
+        alert.initOwner(main.getPrimaryStage());
+        alert.setContent(dialogLayout);
+
+        Optional<ButtonType> optional = alert.showAndWait();
+
+        return optional.isPresent() && optional.get().equals(ButtonType.OK);
+    }
+
     public static boolean showBill(Bill bill, Main main, boolean isView, boolean isIBill) {
         try {
             JFXAlert<ButtonType> alert = new JFXAlert<>(main.getPrimaryStage());
@@ -248,8 +283,8 @@ public class AlertMaker {
         try {
             JFXAlert<ButtonType> alert = new JFXAlert<>(main.getPrimaryStage());
             JFXDialogLayout dialogLayout = new JFXDialogLayout();
-            dialogLayout.setStyle(Preferences.getPreferences().getTheme().equals("black")
-                    ? "-fx-background-color:rgb(50,50,50);" : "-fx-background-color:white;");
+            dialogLayout.setStyle(String.format("-fx-background-color:%s;", Preferences.getPreferences().getTheme().equals("black")
+                    ? "rgb(50,50,50)" : "white"));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("CustomUI/Settings/Settings.fxml"));
             VBox vBox = loader.load();
