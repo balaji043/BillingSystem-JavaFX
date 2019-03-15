@@ -89,7 +89,7 @@ public class IBill {
 
         //billing address section
 
-        Customer customer = DatabaseHelper.getCustomerInfo(bill.getCustomerId());
+        Customer customer = DatabaseHelper.getCustomerInfo(bill.getCustomerName());
         if (customer != null) {
             lCusName.setText(": " + customer.getName());
             lCusStreet.setText(": " + customer.getStreetAddress()

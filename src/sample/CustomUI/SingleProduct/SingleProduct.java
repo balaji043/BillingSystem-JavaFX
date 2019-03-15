@@ -203,6 +203,7 @@ public class SingleProduct extends HBox {
         amount.setText(product.getTotalAmount());
         tax.setValue(product.getTax());
         per.setValue(product.getPer());
+        amount.setText("Amount : " + product.getTotalAmount());
     }
 
     public void isDiscountAdd(boolean b) {

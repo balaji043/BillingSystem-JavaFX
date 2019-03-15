@@ -1,5 +1,6 @@
 package sample.CustomUI.Bill;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -92,7 +93,7 @@ public class BillController {
 
         //billing address section
 
-        Customer customer = DatabaseHelper.getCustomerInfo(bill.getCustomerId());
+        Customer customer = DatabaseHelper.getCustomerInfo(bill.getCustomerName());
         if (customer != null) {
             lCusName.setText(": " + customer.getName());
             lCusStreet.setText(": " + customer.getStreetAddress()
@@ -154,9 +155,11 @@ public class BillController {
 
         int i = 0;
         Product product = new Product();
-        ObservableList<Product> products = bill.getProducts();
+        ObservableList<Product> products = FXCollections.observableArrayList();
+        products.addAll(bill.getProducts());
         int s = Integer.parseInt(preferences.getLimit()) - products.size() + 1;
         for (; i <= s; i++) products.add(product);
+
         i = 1;
         for (Product p : products) {
 

@@ -14,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.Alert.AlertMaker;
 import sample.Database.DatabaseHelper;
+import sample.Model.Bill;
 import sample.Model.User;
 import sample.UI.Billing.BillingController;
 import sample.UI.CustomerPanel.CustomerPanelController;
@@ -116,7 +117,7 @@ public class Main extends Application {
             rootController.handleViewBill();
     }
 
-    public void initNewBill() {
+    public void initNewBill(Bill bill, boolean isIGstBill) {
         if (isLoggedIn) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("UI/Billing/Billing.fxml"));
@@ -125,6 +126,7 @@ public class Main extends Application {
                 rootController.setContent(root);
                 BillingController rootController = loader.getController();
                 rootController.setMainApp(Main.this);
+                if (bill != null) rootController.setBill(bill, isIGstBill);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -206,6 +208,7 @@ public class Main extends Application {
     }
 
     public void setUser(User user) {
+        rootController.disableAddNewUserButton(!user.getAccess().equalsIgnoreCase("admin"));
         this.user = user;
     }
 

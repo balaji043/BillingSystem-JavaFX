@@ -2,6 +2,9 @@ package sample.Model;
 
 import javafx.collections.ObservableList;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Bill {
     private String billId;
     private String invoice;
@@ -23,11 +26,14 @@ public class Bill {
     private String halfTax;
     private String gross;
     private String userName;
+    private String time;
+    private LocalDate localDate;
+    private Double decimal;
 
     public Bill(String billId, String invoice, String date
             , String customerName, String customerId
             , String address, String mobile
-            , String GSTNo, ObservableList<Product> products,String userName) {
+            , String GSTNo, ObservableList<Product> products, String userName) {
         this.billId = billId;
         this.invoice = invoice;
         this.date = date;
@@ -70,18 +76,19 @@ public class Bill {
         gst12Tota = gst12Hal * 2;
         gst18Tota = gst18Hal * 2;
         gst28Tota = gst28Hal * 2;
-
         gstTotal = gst12Tota + gst18Tota + gst28Tota;
-        gross = "" + String.format ("%.2f", total - gstTotal);
-        halfTax = "" + String.format ("%.2f", gst12Hal + gst18Hal + gst28Hal);
-        totalAmount = "" + String.format ("%.2f", total);
-        totalTaxAmount = "" +String.format ("%.2f", gstTotal);
-        gst12Half = "" + String.format ("%.2f", gst12Hal);
-        gst12Total = "" + String.format ("%.2f", gst12Tota);
-        gst18Half = "" + String.format ("%.2f", gst18Hal);
-        gst18Total = "" + String.format ("%.2f", gst18Tota);
-        gst28Half = "" + String.format ("%.2f", gst28Hal);
-        gst28Total = "" + String.format ("%.2f", gst28Tota);
+        gross = "" + String.format("%.2f", total - gstTotal);
+        halfTax = "" + String.format("%.2f", gst12Hal + gst18Hal + gst28Hal);
+        totalAmount = "" + String.format("%.2f", total);
+        totalTaxAmount = "" + String.format("%.2f", gstTotal);
+        gst12Half = "" + String.format("%.2f", gst12Hal);
+        gst12Total = "" + String.format("%.2f", gst12Tota);
+        gst18Half = "" + String.format("%.2f", gst18Hal);
+        gst18Total = "" + String.format("%.2f", gst18Tota);
+        gst28Half = "" + String.format("%.2f", gst28Hal);
+        gst28Total = "" + String.format("%.2f", gst28Tota);
+        decimal = Double.parseDouble(totalAmount);
+
     }
 
     public String getBillId() {
@@ -162,5 +169,35 @@ public class Bill {
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        this.time = time;
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
+
+    public Double getDecimal() {
+        return decimal;
+    }
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "billId='" + billId + '\'' +
+                ", invoice='" + invoice + '\'' +
+                ", date='" + date + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", totalAmount='" + totalAmount + '\'' +
+                ", gross='" + gross + '\'' +
+                ", userName='" + userName + '\'' +
+                '}';
     }
 }

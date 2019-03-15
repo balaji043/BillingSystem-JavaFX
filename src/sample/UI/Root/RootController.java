@@ -52,8 +52,8 @@ public class RootController implements Initializable {
         drawer.setOverLayVisible(false);
         drawer.setResizableOnDrag(false);
         drawer.setDirection(JFXDrawer.DrawerDirection.RIGHT);
-
         drawer.getSidePane().get(0).setStyle("-fx-background-color:-fx-base;");
+
 
         hamTransition = new HamburgerSlideCloseTransition(ham);
         hamTransition.setRate(-1);
@@ -100,7 +100,6 @@ public class RootController implements Initializable {
         if (mainApp.getUser() != null &&
                 !mainApp.getUser().getAccess().equals("admin")) addNewUser.setDisable(true);
         setAccelerators();
-
     }
 
     public void setContent(StackPane pane) {
@@ -120,7 +119,7 @@ public class RootController implements Initializable {
         i = 1;
         window.setText("New Bill");
         toggle();
-        mainApp.initNewBill();
+        mainApp.initNewBill(null, false);
     }
 
     public void handleViewBill() {
@@ -152,7 +151,7 @@ public class RootController implements Initializable {
     private void handleNewBill1() {
         i = 1;
         window.setText("New Bill");
-        mainApp.initNewBill();
+        mainApp.initNewBill(null, false);
     }
 
     private void handleViewBill1() {
@@ -211,8 +210,12 @@ public class RootController implements Initializable {
     public void handleSettings()  {
         if (AlertMaker.showSettings(mainApp))
             mainApp.snackBar("Success", "Changes Saved Successfully", "green");
-         else
+        else
             mainApp.snackBar("Cancelled", "Settings Change Cancelled", "green");
 
+    }
+
+    public void disableAddNewUserButton(boolean s) {
+        addNewUser.setDisable(s);
     }
 }

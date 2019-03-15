@@ -3,7 +3,6 @@ package sample.Database;
 import com.sun.istack.internal.NotNull;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import sample.Alert.AlertMaker;
 import sample.Model.Bill;
 import sample.Model.Customer;
@@ -20,12 +19,6 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class DatabaseHelper {
-
-    private static PreparedStatement preparedStatement = null;
-
-    private static ResultSet resultSet = null;
-
-    private static boolean okay = false;
 
     public static void create() {
         if (createUserTable()) {
@@ -48,7 +41,8 @@ public class DatabaseHelper {
 
     private static boolean createTable(String createQuery) {
         Connection connection = DatabaseHandler.getInstance().getConnection();
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
         try {
             preparedStatement = connection.prepareStatement(createQuery);
             okay = !preparedStatement.execute();
@@ -66,34 +60,28 @@ public class DatabaseHelper {
     }
 
     private static boolean createBillsTable() {
-        okay = false;
         String create = "CREATE TABLE IF NOT EXISTS BILLS ( " +
                 "BillID TEXT NOT NULL UNIQUE,INVOICE TEXT NOT NULL UNIQUE," +
                 "DATE TEXT NOT NULL, CustomerName TEXT NOT NULL, " +
                 "CustomerID TEXT NOT NULL, ADDRESS TEXT NOT NULL," +
                 "PHONE TEXT NOT NULL, GstNO TEXT NOT NULL,USERNAME TEXT NOT NULL)";
-        okay = createTable(create);
-        return okay;
+        return createTable(create);
     }
 
     private static boolean createIBillsTable() {
-        okay = false;
         String create = "CREATE TABLE IF NOT EXISTS IBILLS ( " +
                 "BillID TEXT NOT NULL UNIQUE,INVOICE TEXT NOT NULL UNIQUE," +
                 "DATE TEXT NOT NULL, CustomerName TEXT NOT NULL, " +
                 "CustomerID TEXT NOT NULL, ADDRESS TEXT NOT NULL," +
                 "PHONE TEXT NOT NULL, GstNO TEXT NOT NULL,USERNAME TEXT NOT NULL)";
-        okay = createTable(create);
-        return okay;
+        return createTable(create);
     }
 
     public static boolean insertNewBill(@NotNull Bill bill, @NotNull String tableName) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
         try {
-            String query = "INSERT into " + tableName + " (BillID,INVOICE,DATE" +
-                    ",CustomerName,CustomerID,ADDRESS,GstNO," +
-                    "PHONE,USERNAME) VALUES (?,?,?,?,?,?,?,?,?) ";
-
+            String query = String.format("INSERT into %s (BillID,INVOICE,DATE,CustomerName,CustomerID,ADDRESS,GstNO,PHONE,USERNAME) VALUES (?,?,?,?,?,?,?,?,?) ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, bill.getBillId());
             preparedStatement.setString(2, bill.getInvoice());
@@ -123,6 +111,7 @@ public class DatabaseHelper {
 
     public static ObservableList<Bill> getBillList(String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
         try {
             String insert = " SELECT * FROM " + tableName + " WHERE TRUE ";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
@@ -137,12 +126,6 @@ public class DatabaseHelper {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            try {
-                assert resultSet != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
         }
         return bill;
     }
@@ -150,11 +133,14 @@ public class DatabaseHelper {
     public static ObservableList<Bill> getBillList(@NotNull String customer
             , @NotNull LocalDate a, @NotNull LocalDate b, @NotNull String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
+        ResultSet resultSet = null;
+
         try {
-            String insert = " SELECT * FROM " + tableName + " WHERE CUSTOMERNAME = ? ";
-            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
-            preparedStatement.setString(1, customer);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = getResultSet(tableName, customer);
+            if (resultSet == null) {
+                System.out.println("null");
+                return bill;
+            }
             while (resultSet.next()) {
                 long l = Long.parseLong(resultSet.getString(3));
                 Date date = new Date(l);
@@ -166,14 +152,8 @@ public class DatabaseHelper {
             AlertMaker.showErrorMessage(e);
         } finally {
             try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-            try {
                 assert resultSet != null;
-                preparedStatement.close();
+                resultSet.close();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -184,24 +164,20 @@ public class DatabaseHelper {
     public static ObservableList<Bill> getBillList(@NotNull String customer
             , @NotNull String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
+        ResultSet resultSet = null;
         try {
-            String insert = " SELECT * FROM " + tableName + " WHERE CUSTOMERNAME = ? ";
-            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
-            preparedStatement.setString(1, customer);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet = getResultSet(tableName, customer);
+            if (resultSet == null) {
+                System.out.println("null");
+                return bill;
+            }
             while (resultSet.next()) bill.add(getBill(resultSet));
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
         } finally {
             try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-            try {
                 assert resultSet != null;
-                preparedStatement.close();
+                resultSet.close();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -209,11 +185,26 @@ public class DatabaseHelper {
         return bill;
     }
 
+    private static ResultSet getResultSet(String tableName, String customer) {
+        PreparedStatement preparedStatement;
+        try {
+            String insert = String.format(" SELECT * FROM %s WHERE CustomerName = ? ", tableName);
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
+            preparedStatement.setString(1, customer);
+            return preparedStatement.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertMaker.showErrorMessage(e);
+            return null;
+        }
+    }
+
     public static ObservableList<Bill> getBillLists(@NotNull String searchText
             , @NotNull String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
         try {
-            String insert = " SELECT * FROM " + tableName + " WHERE INVOICE LIKE ? ";
+            String insert = String.format(" SELECT * FROM %s WHERE INVOICE LIKE ? ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
             preparedStatement.setString(1, searchText);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -227,12 +218,6 @@ public class DatabaseHelper {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            try {
-                assert resultSet != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
         }
         return bill;
     }
@@ -240,6 +225,7 @@ public class DatabaseHelper {
     public static ObservableList<Bill> getBillList(@NotNull LocalDate a, LocalDate b
             , int i, @NotNull String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
         try {
 
             String insert = " SELECT * FROM " + tableName + " WHERE TRUE ";
@@ -249,8 +235,8 @@ public class DatabaseHelper {
                 long l = Long.parseLong(resultSet.getString(3));
                 Date date = new Date(l);
                 LocalDate d = BillingSystemUtils.convertToLocalDateViaInstant(date);
-                if (((i == 0 && !resultSet.getString(7).equals("For Own Use"))
-                        || (i == 1 && resultSet.getString(7).equals("For Own Use"))
+                if (((i == 1 && !resultSet.getString(8).equals("For Own Use"))
+                        || (i == 2 && resultSet.getString(8).equals("For Own Use"))
                         || (i == 3))
                         && ((d.isEqual(a) || d.isEqual(b)) || (d.isAfter(a) && d.isBefore(b))))
                     bill.add(getBill(resultSet));
@@ -265,25 +251,21 @@ public class DatabaseHelper {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            try {
-                assert resultSet != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
         }
         return bill;
     }
 
     public static ObservableList<Bill> getBillList(@NotNull boolean b, @NotNull String tableName) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+
         try {
             String insert = " SELECT * FROM  " + tableName;
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                if (((b && !resultSet.getString(7).equals("For Own Use"))
-                        || (!b && resultSet.getString(7).equals("For Own Use"))))
+                if (((b && !resultSet.getString(8).equals("For Own Use"))
+                        || (!b && resultSet.getString(8).equals("For Own Use"))))
                     bill.add(getBill(resultSet));
             }
         } catch (SQLException e) {
@@ -295,12 +277,6 @@ public class DatabaseHelper {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-            try {
-                assert resultSet != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
         }
         return bill;
     }
@@ -308,7 +284,7 @@ public class DatabaseHelper {
     private static Bill getBill(@NotNull ResultSet resultSet) throws SQLException {
         long l = Long.parseLong(resultSet.getString(3));
         String bi = resultSet.getString(1);
-        return new Bill(resultSet.getString(1)
+        Bill bill = new Bill(resultSet.getString(1)
                 , resultSet.getString(2)
                 , BillingSystemUtils.formatDateTimeString(l)
                 , resultSet.getString(4)
@@ -318,12 +294,15 @@ public class DatabaseHelper {
                 , resultSet.getString(8)
                 , getBillProductList(bi)
                 , resultSet.getString("USERNAME"));
+        bill.setTime(resultSet.getString(3));
+        return bill;
     }
 
     public static boolean deleteBill(@NotNull String billId, @NotNull String tableName) {
-        okay = false;
+        boolean okay = false;
+        PreparedStatement preparedStatement = null;
         try {
-            String delete = "DELETE FROM " + tableName + " WHERE BillID = ? ";
+            String delete = String.format("DELETE FROM %s WHERE BillID = ? ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(delete);
             preparedStatement.setString(1, billId);
             okay = preparedStatement.executeUpdate() > 0 && deleteTable(billId);
@@ -342,7 +321,8 @@ public class DatabaseHelper {
 
     private static boolean createBillProductTable(@NotNull String billName
             , @NotNull ObservableList<Product> products) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
         try {
             String create = "CREATE TABLE IF NOT EXISTS " + billName + " (NAME TEXT NOT NULL , " +
                     "HSN TEXT NOT NULL , QTY TEXT NOT NULL, " +
@@ -368,10 +348,10 @@ public class DatabaseHelper {
     }
 
     private static boolean insertNewProduct(@NotNull String tableName, @NotNull Product product) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
         try {
-            String insert = "INSERT OR IGNORE INTO " + tableName + " (NAME,HSN,QTY,TAX,RATE,PER) " +
-                    " values (?,?,?,?,?,?) ";
+            String insert = String.format("INSERT OR IGNORE INTO %s (NAME,HSN,QTY,TAX,RATE,PER)  values (?,?,?,?,?,?) ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
             preparedStatement.setString(1, product.getName());
             preparedStatement.setString(2, product.getHsn());
@@ -395,6 +375,8 @@ public class DatabaseHelper {
 
     private static ObservableList<Product> getBillProductList(@NotNull String tableName) {
         ObservableList<Product> products = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
             String insert = " SELECT * FROM " + tableName + " WHERE TRUE ";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
@@ -420,7 +402,7 @@ public class DatabaseHelper {
             }
             try {
                 assert resultSet != null;
-                preparedStatement.close();
+                resultSet.close();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -429,16 +411,15 @@ public class DatabaseHelper {
     }
 
     private static boolean createUserTable() {
-        okay = false;
         String create = "CREATE TABLE IF NOT EXISTS Employee (Name TEXT NOT NULL" +
                 ",id TEXT NOT NULL UNIQUE,password TEXT NOT NULL" +
                 ",access TEXT NOT NULL,UserName TEXT NOT NULL)";
-        okay = createTable(create);
-        return okay;
+        return createTable(create);
     }
 
     public static boolean insertNewUser(@NotNull User user) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
         try {
             String query = "insert or ignore into employee ( name " +
                     ", id , password , access , username ) " +
@@ -464,7 +445,9 @@ public class DatabaseHelper {
     }
 
     public static boolean updateUser(@NotNull User user) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
+
         try {
             String query = "update employee set name = ?,password = ?,access =" +
                     " ?,username = ? where id = ?";
@@ -483,8 +466,6 @@ public class DatabaseHelper {
             try {
                 assert preparedStatement != null;
                 preparedStatement.close();
-                assert resultSet != null;
-                resultSet.close();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -494,6 +475,8 @@ public class DatabaseHelper {
 
     public static User getUserInfo(@NotNull String userName) {
         User u = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
             String query = "select * from employee where username = ?";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
@@ -507,20 +490,17 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
         } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-                assert resultSet != null;
-                resultSet.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            assert preparedStatement != null;
+            assert resultSet != null;
+            closePAndRMethod(preparedStatement, resultSet);
         }
         return u;
     }
 
     public static boolean deleteUser(@NotNull User user) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+
+        boolean okay = false;
         try {
             String insert = "DELETE FROM EMPLOYEE where name = ? and username = ? and id = ? ";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
@@ -541,9 +521,10 @@ public class DatabaseHelper {
         return okay;
     }
 
-    public static boolean valid(@NotNull String user, @NotNull String password)
-            throws SQLException {
-        okay = false;
+    public static boolean valid(@NotNull String user, @NotNull String password) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        boolean okay = false;
         Preferences preferences = Preferences.getPreferences();
         try {
             String query = "select *from Employee where username = ? and password = ?";
@@ -559,15 +540,16 @@ public class DatabaseHelper {
             e.printStackTrace();
         } finally {
             assert preparedStatement != null;
-            preparedStatement.close();
             assert resultSet != null;
-            resultSet.close();
+            closePAndRMethod(preparedStatement, resultSet);
         }
         return okay;
     }
 
     public static ObservableList<User> getUserList() {
         ObservableList<User> users = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
             String query = "SELECT * FROM EMPLOYEE WHERE TRUE";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
@@ -582,66 +564,40 @@ public class DatabaseHelper {
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-                assert resultSet != null;
-                resultSet.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            assert preparedStatement != null;
+            assert resultSet != null;
+            closePAndRMethod(preparedStatement, resultSet);
         }
         return users;
     }
 
     private static boolean createCustomerTable() {
-        okay = false;
         String create = "CREATE TABLE IF NOT EXISTS CUSTOMER" +
                 "( NAME TEXT NOT NULL UNIQUE,  PHONE TEXT NOT NULL" +
                 ", GSTIN TEXT NOT NULL, STREET TEXT NOT NULL" +
                 ", CITY TEXT NOT NULL,  STATE TEXT NOT NULL" +
                 ", ZIP TEXT NOT NULL,   ID TEXT NOT NULL UNIQUE )";
-        okay = createTable(create);
-        return okay;
+        return createTable(create);
     }
 
     public static boolean insertNewCustomer(@NotNull Customer customer) {
-        okay = false;
-        try {
-            String query = "INSERT OR IGNORE INTO CUSTOMER " +
-                    "( NAME , PHONE , GSTIN , STREET , CITY , STATE , ZIP" +
-                    ", ID) VALUES (?,?,?,?,?,?,?,?)";
-            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
-            preparedStatement.setString(1, customer.getName());
-            preparedStatement.setString(2, customer.getPhone());
-            preparedStatement.setString(3, customer.getGstIn());
-            preparedStatement.setString(4, customer.getStreetAddress());
-            preparedStatement.setString(5, customer.getCity());
-            preparedStatement.setString(6, customer.getState());
-            preparedStatement.setString(7, customer.getZipCode());
-            preparedStatement.setString(8, customer.getId());
-            okay = preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            AlertMaker.showErrorMessage(e);
-        } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-
-        return okay;
+        String query = "INSERT OR IGNORE INTO CUSTOMER " +
+                "( NAME , PHONE , GSTIN , STREET , CITY , STATE , ZIP" +
+                ", ID) VALUES (?,?,?,?,?,?,?,?)";
+        return getResultOfUpdateOrInsert(query, customer);
     }
 
     public static boolean updateCustomer(@NotNull Customer customer) {
-        okay = false;
-        try {
-            String query = "UPDATE CUSTOMER SET  NAME = ? , PHONE = ? " +
-                    ", GSTIN = ? , STREET = ? , CITY = ? , STATE = ? , ZIP = ? " +
-                    " WHERE ID = ?";
+        String query = "UPDATE CUSTOMER SET  NAME = ? , PHONE = ? " +
+                ", GSTIN = ? , STREET = ? , CITY = ? , STATE = ? , ZIP = ? " +
+                " WHERE ID = ?";
+        return getResultOfUpdateOrInsert(query, customer);
+    }
 
+    private static boolean getResultOfUpdateOrInsert(String query, Customer customer) {
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
+        try {
             preparedStatement = DatabaseHandler.getInstance()
                     .getConnection().prepareStatement(query);
             preparedStatement.setString(1, customer.getName());
@@ -653,23 +609,33 @@ public class DatabaseHelper {
             preparedStatement.setString(7, customer.getZipCode());
             preparedStatement.setString(8, customer.getId());
             okay = preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         } finally {
+            assert preparedStatement != null;
             try {
-                assert preparedStatement != null;
                 preparedStatement.close();
-                assert resultSet != null;
-                resultSet.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         return okay;
     }
 
+    private static void closePAndRMethod(PreparedStatement preparedStatement, ResultSet resultSet) {
+        try {
+            assert preparedStatement != null;
+            preparedStatement.close();
+            assert resultSet != null;
+            resultSet.close();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+    }
+
     public static boolean deleteCustomer(@NotNull Customer customer) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
         try {
             String insert = "DELETE FROM CUSTOMER WHERE ID = ? ";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
@@ -689,9 +655,13 @@ public class DatabaseHelper {
     }
 
     public static Customer getCustomerInfo(@NotNull String customerId) {
+
         Customer customer = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
         try {
-            String query = "SELECT * FROM CUSTOMER WHERE ID = ?";
+            String query = "SELECT * FROM CUSTOMER WHERE NAME = ?";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, customerId);
             resultSet = preparedStatement.executeQuery();
@@ -706,21 +676,20 @@ public class DatabaseHelper {
                     , "" + customerId);
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
+            e.printStackTrace();
         } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-                assert resultSet != null;
-                resultSet.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            assert preparedStatement != null;
+            assert resultSet != null;
+            closePAndRMethod(preparedStatement, resultSet);
         }
         return customer;
     }
 
     public static ObservableList<Customer> getCustomerList() {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
         try {
             String query = "SELECT * FROM CUSTOMER WHERE TRUE";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
@@ -738,20 +707,18 @@ public class DatabaseHelper {
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-                assert resultSet != null;
-                resultSet.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            assert preparedStatement != null;
+            assert resultSet != null;
+            closePAndRMethod(preparedStatement, resultSet);
         }
         return customers;
     }
 
     public static ObservableList<String> getCustomerNameList(@NotNull int gst) {
         ObservableList<String> customers = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
         try {
             String query = "SELECT * FROM CUSTOMER WHERE TRUE";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
@@ -775,45 +742,17 @@ public class DatabaseHelper {
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-                assert resultSet != null;
-                resultSet.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return customers;
-    }
-
-    public static ObservableMap<String, String> getCustomerNameList() {
-        ObservableMap<String, String> customers = FXCollections.observableHashMap();
-        try {
-            String query = "SELECT * FROM CUSTOMER WHERE TRUE";
-            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                customers.put(resultSet.getString("NAME")
-                        , resultSet.getString("ID"));
-            }
-        } catch (Exception e) {
-            AlertMaker.showErrorMessage(e);
-        } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-                assert resultSet != null;
-                resultSet.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            assert preparedStatement != null;
+            assert resultSet != null;
+            closePAndRMethod(preparedStatement, resultSet);
         }
         return customers;
     }
 
     private static boolean deleteTable(@NotNull String tableName) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        boolean okay = false;
+
         try {
             String q = "DROP TABLE IF EXISTS " + tableName;
             preparedStatement =
@@ -835,7 +774,9 @@ public class DatabaseHelper {
 
 
     public static boolean ifInvoiceExist(String s, String tableName) {
-        okay = false;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        boolean okay = false;
         try {
             String q = String.format("Select * from %s where invoice = ?", tableName);
             preparedStatement =
@@ -847,12 +788,9 @@ public class DatabaseHelper {
             AlertMaker.showErrorMessage(e);
             e.printStackTrace();
         } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
+            assert preparedStatement != null;
+            assert resultSet != null;
+            closePAndRMethod(preparedStatement, resultSet);
         }
         return okay;
     }

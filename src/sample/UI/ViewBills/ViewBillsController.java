@@ -48,7 +48,7 @@ public class ViewBillsController implements Initializable {
 
     private ObservableList<Bill> bills = FXCollections.observableArrayList();
 
-    private String billTableName="BILLS";
+    private String billTableName = "BILLS";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -59,6 +59,8 @@ public class ViewBillsController implements Initializable {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
+        checkNonGst.setSelected(true);
+        checkGST.setSelected(true);
         toDate.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -108,7 +110,7 @@ public class ViewBillsController implements Initializable {
                 (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
         File dest = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
         if (dest == null) {
-            mainApp.snackBar("INFO","Operation cancelled","green");
+            mainApp.snackBar("INFO", "Operation cancelled", "green");
         } else {
             JFXSpinner spinner = new JFXSpinner();
             double d = 50;
@@ -159,7 +161,12 @@ public class ViewBillsController implements Initializable {
 
     @FXML
     void handleRefreshBill() {
-        mainApp.initViewBills();
+        if (tableView.getSelectionModel().getSelectedItem() == null) {
+            mainApp.snackBar("INFO", "Select a bill", "green");
+            return;
+        }
+        mainApp.initNewBill(tableView.getSelectionModel().getSelectedItem(), checkIGSTBill.isSelected());
+
     }
 
     private void initTable() {
@@ -169,10 +176,16 @@ public class ViewBillsController implements Initializable {
         tableView.getItems().clear();
         addTableColumn("Customer", "customerName");
         addTableColumn("Invoice", "invoice");
-        addTableColumn("Date", "date");
-        addTableColumn("Invoice Amount", "totalAmount");
-        addTableColumn("User Name", "userName");
+        TableColumn<Bill, LocalDate> column = new TableColumn<>("Date");
+        column.setCellValueFactory(new PropertyValueFactory<>("localDate"));
+        tableView.getColumns().add(column);
+        tableView.getSortOrder().add(column);
 
+        TableColumn<Bill, Double> column1 = new TableColumn<>("Invoice Amount");
+        column1.setCellValueFactory(new PropertyValueFactory<>("decimal"));
+        tableView.getColumns().add(column1);
+
+        addTableColumn("User Name", "userName");
         tableView.sort();
         loadTable();
     }
@@ -197,21 +210,18 @@ public class ViewBillsController implements Initializable {
             else
                 bills = DatabaseHelper.getBillList(fromDate.getValue(), toDate.getValue(), 3
                         , billTableName);
-
         else if (checkGST.isSelected() && !checkNonGst.isSelected())
             bills = DatabaseHelper.getBillList(true, billTableName);
         else if (!checkGST.isSelected() && checkNonGst.isSelected())
             bills = DatabaseHelper.getBillList(false, billTableName);
         else
             bills = DatabaseHelper.getBillList(billTableName);
-
         tableView.getItems().addAll(bills);
     }
 
     private void addTableColumn(String name, String msg) {
         TableColumn<Bill, String> column = new TableColumn<>(name);
         column.setCellValueFactory(new PropertyValueFactory<>(msg));
-        //column.setPrefWidth(width);
         tableView.getColumns().add(column);
     }
 
