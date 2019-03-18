@@ -16,6 +16,7 @@ import sample.Main;
 import sample.Model.Bill;
 import sample.Model.Customer;
 import sample.Model.Product;
+import sample.Utils.BillingSystemUtils;
 import sample.Utils.Preferences;
 
 import java.text.SimpleDateFormat;
@@ -25,9 +26,10 @@ import java.util.Date;
 import java.util.HashSet;
 
 public class BillingController {
+
     public JFXButton add, delete, submit;
-    public JFXCheckBox checkBoxGST, checkIGST, isManual;
-    public JFXComboBox<String> comboBoxCustomer;
+    public JFXCheckBox checkBoxGST, isManual, checkStdBill;
+    public JFXComboBox<String> comboBills, comboBoxCustomer;
     public JFXListView<SingleProduct> listView;
     public JFXDatePicker manualDate;
     public Text labelBillFor, totalAmount;
@@ -52,7 +54,8 @@ public class BillingController {
         borderPane.setDisable(true);
         checkBoxGST.setSelected(true);
         manualDate.setDisable(true);
-
+        comboBills.getItems().addAll("GST", "Non-GST", "I-GST");
+        comboBills.setEditable(false);
         gst = DatabaseHelper.getCustomerNameList(0);
         nonGst = DatabaseHelper.getCustomerNameList(1);
 
@@ -67,7 +70,6 @@ public class BillingController {
                 manualDate.setDisable(true);
 
         });
-        checkIGST.setOnAction(e -> toggleIGST());
 
     }
 
@@ -77,7 +79,6 @@ public class BillingController {
             if (listView.getItems().size() < limit) {
                 SingleProduct product = new SingleProduct();
                 product.setSlNO(listView.getItems().size() + 1);
-                product.isDiscountAdd(!isManual.isSelected());
                 listView.getItems().add(product);
             } else {
                 mainApp.snackBar("INFO", "Can not add more than "
@@ -96,8 +97,9 @@ public class BillingController {
         if (isNewBill) {
             int num = 1;
             String start;
+            if (checkStdBill.isSelected()) start = "J-";
+            else start = "K-";
             if (isManual.isSelected()) {
-                start = "K-";
                 if (manualDate.getValue() == null) {
                     mainApp.snackBar("INFO", "Select a date", "red");
                     return;
@@ -105,7 +107,6 @@ public class BillingController {
                 date = Date.from((manualDate.getValue()).atTime(Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.MILLISECOND)
                         .atZone(ZoneId.systemDefault()).toInstant());
             } else {
-                start = "J-";
                 date = new Date();
             }
             invoice = start + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
@@ -126,12 +127,13 @@ public class BillingController {
         String errorMsg;
         boolean errored = false;
         for (SingleProduct s : p) {
-            s.isDiscountAdd(isManual.isSelected());
+            s.setGST(comboBills.getValue().equalsIgnoreCase("GST"));
             errorMsg = s.isReady();
             if (!errorMsg.equals("s")) {
                 mainApp.snackBar("Check the Following", errorMsg, "red");
                 errored = true;
             }
+
         }
 
         if (errored) {
@@ -172,9 +174,7 @@ public class BillingController {
         handleCalculate();
         if (bill == null) return;
 
-
-        if (ready && AlertMaker.showBill(bill, mainApp, false, checkIGST.isSelected())) {
-
+        if (ready && AlertMaker.showBill(bill, mainApp, false, BillingSystemUtils.getN(comboBills.getValue()))) {
             mainApp.addSpinner();
             boolean success = isNewBill ? DatabaseHelper.insertNewBill(bill, tableName) :
                     DatabaseHelper.deleteBill(billId, tableName)
@@ -217,6 +217,7 @@ public class BillingController {
             borderPane.setDisable(false);
             listView.setExpanded(true);
             listView.setVerticalGap(5.0);
+            tableName = BillingSystemUtils.getTableName(comboBills.getValue());
             if (isNewBill) root.setTop(null);
         }
     }
@@ -236,23 +237,18 @@ public class BillingController {
         }
     }
 
-    public void setBill(Bill bill, boolean isIGstBill) {
+    public void setBill(Bill bill, String isIGstBill) {
         isNewBill = false;
-
-        checkIGST.setSelected(isIGstBill);
-        toggleIGST();
-
         checkBoxGST.setSelected(!bill.getGSTNo().equalsIgnoreCase("for own use"));
         toggleCustomer();
         comboBoxCustomer.getSelectionModel().select(bill.getCustomerName());
+        comboBills.getSelectionModel().select(isIGstBill);
+        comboBills.setDisable(true);
         handleCustomerSubmit();
-
         billId = bill.getBillId();
         invoice = bill.getInvoice();
         date = new Date(Long.parseLong(bill.getTime()));
-
         hBox.getChildren().remove(manualD);
-
         totalAmount.setText("Total Amount : " + bill.getTotalAmount());
         int i = 1;
         for (Product product : bill.getProducts()) {
@@ -261,13 +257,6 @@ public class BillingController {
             product1.setSlNO(i);
             listView.getItems().addAll(product1);
         }
-    }
-
-    private void toggleIGST() {
-        if (checkIGST.isSelected())
-            tableName = "IBills";
-        else
-            tableName = "Bills";
     }
 
     private void toggleCustomer() {

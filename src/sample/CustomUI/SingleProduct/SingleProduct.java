@@ -28,13 +28,13 @@ public class SingleProduct extends HBox {
     @FXML
     private JFXComboBox<String> tax, per;
     @FXML
-    private JFXCheckBox checkBox;
+    private JFXCheckBox checkBoxDiscount, checkBoxAdd;
     @FXML
     private Text slNo;
 
     private Product product = null;
+    private boolean isGST;
 
-    private boolean isAdd = false;
 
     public SingleProduct() {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource
@@ -43,7 +43,7 @@ public class SingleProduct extends HBox {
         fxmlLoader.setController(this);
         try {
             fxmlLoader.load();
-            checkBox.setSelected(false);
+            checkBoxDiscount.setSelected(false);
             discount.setEditable(false);
             discount.setDisable(true);
 
@@ -56,8 +56,8 @@ public class SingleProduct extends HBox {
             per.getValidators().add(requiredFieldValidator);
             discount.getValidators().add(requiredFieldValidator);
 
-            checkBox.setOnAction(e -> {
-                if (checkBox.isSelected()) {
+            checkBoxDiscount.setOnAction(e -> {
+                if (checkBoxDiscount.isSelected()) {
                     discount.setEditable(true);
                     discount.setDisable(false);
                     discount.validate();
@@ -95,7 +95,7 @@ public class SingleProduct extends HBox {
                 || qty.getText() == null || qty.getText().isEmpty()
                 || rate.getText() == null || rate.getText().isEmpty()
                 || tax.getValue() == null || per.getValue() == null)
-                || (checkBox.isSelected() && (discount.getText() == null
+                || (checkBoxDiscount.isSelected() && (discount.getText() == null
                 || discount.getText().isEmpty()))) {
 
             if (name.getText() == null || name.getText().isEmpty()) {
@@ -134,7 +134,7 @@ public class SingleProduct extends HBox {
                         , new CornerRadii(0)
                         , new Insets(0, 0, 0, 0))));
             }
-            if ((checkBox.isSelected() && (discount.getText() == null
+            if ((checkBoxDiscount.isSelected() && (discount.getText() == null
                     || discount.getText().isEmpty()))) {
                 errorMsg += " Discount ";
                 discount.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
@@ -153,7 +153,7 @@ public class SingleProduct extends HBox {
             } catch (Exception e) {
                 return slNo.getText() + " Rate should be in number value";
             }
-            if (checkBox.isSelected()) {
+            if (checkBoxDiscount.isSelected()) {
                 try {
                     Float.parseFloat(discount.getText());
                 } catch (Exception e) {
@@ -167,20 +167,17 @@ public class SingleProduct extends HBox {
 
         String rates = rate.getText();
 
-        if (checkBox.isSelected()) {
-
+        if (checkBoxDiscount.isSelected()) {
             float r = Integer.parseInt(rate.getText()), d = Float.parseFloat(discount.getText());
             float val = (r * d) / 100;
 
-            if (isAdd)
+            if (checkBoxAdd.isSelected())
                 rates = String.format("%.2f", r + val);
             else
                 rates = String.format("%.2f", r - val);
-
-
         }
         product = new Product(name.getText(), hsn.getText(), qty.getText(), tax.getValue()
-                , rates, per.getValue());
+                , rates, per.getValue(), isGST);
 
         amount.setText("Amount : " + product.getTotalAmount());
 
@@ -204,9 +201,10 @@ public class SingleProduct extends HBox {
         tax.setValue(product.getTax());
         per.setValue(product.getPer());
         amount.setText("Amount : " + product.getTotalAmount());
+        isGST = product.isGST();
     }
 
-    public void isDiscountAdd(boolean b) {
-        isAdd = b;
+    public void setGST(boolean GST) {
+        isGST = GST;
     }
 }

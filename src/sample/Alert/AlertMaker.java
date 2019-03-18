@@ -14,6 +14,7 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import sample.CustomUI.Bill.BillController;
 import sample.CustomUI.IBill.IBill;
+import sample.CustomUI.NonGstBill.NonGstBill;
 import sample.CustomUI.Settings.Settings;
 import sample.Main;
 import sample.Model.Bill;
@@ -24,6 +25,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Optional;
 
+@SuppressWarnings("Duplicates")
 public class AlertMaker {
 
     public static void showErrorMessage(Exception ex) {
@@ -92,42 +94,7 @@ public class AlertMaker {
         return optional.isPresent() && optional.get().equals(ButtonType.OK);
     }
 
-    public static boolean showMCBillAlert(String header, Bill body, Main main, boolean isIBill) {
-
-        JFXAlert<ButtonType> alert = new JFXAlert<>(main.getPrimaryStage());
-        alert.setSize(1080, 720);
-
-        JFXDialogLayout dialogLayout = new JFXDialogLayout();
-
-
-        JFXButton okayButton = new JFXButton("Okay");
-        okayButton.setDefaultButton(true);
-        okayButton.setOnAction(e -> {
-            alert.setResult(ButtonType.OK);
-            alert.hideWithAnimation();
-        });
-
-        JFXButton cancelButton = new JFXButton("Cancel");
-        cancelButton.setCancelButton(true);
-        cancelButton.setOnAction(e -> {
-            alert.setResult(ButtonType.CANCEL);
-            alert.hideWithAnimation();
-        });
-
-        dialogLayout.setHeading(new Label(header));
-        dialogLayout.setBody(getPane(body, main, isIBill));
-        dialogLayout.setActions(okayButton, cancelButton);
-
-        alert.setAnimation(JFXAlertAnimation.BOTTOM_ANIMATION);
-        alert.initOwner(main.getPrimaryStage());
-        alert.setContent(dialogLayout);
-
-        Optional<ButtonType> optional = alert.showAndWait();
-
-        return optional.isPresent() && optional.get().equals(ButtonType.OK);
-    }
-
-    public static boolean showBill(Bill bill, Main main, boolean isView, boolean isIBill) {
+    public static boolean showBill(Bill bill, Main main, boolean isView, int isIBill) {
         try {
             JFXAlert<ButtonType> alert = new JFXAlert<>(main.getPrimaryStage());
             alert.setSize(1080, 720);
@@ -180,7 +147,7 @@ public class AlertMaker {
         return false;
     }
 
-    private static VBox getPane(Bill bill, Main mainApp, boolean isIBill) {
+    private static VBox getPane(Bill bill, Main mainApp, int isIBill) {
 
         VBox main = new VBox();
         main.setSpacing(20);
@@ -199,16 +166,28 @@ public class AlertMaker {
         try {
             VBox vBox;
             FXMLLoader loader = new FXMLLoader();
-            if (isIBill) {
-                loader.setLocation(Main.class.getResource("CustomUI/IBill/IBill.fxml"));
-                vBox = loader.load();
-                IBill billingController = loader.getController();
-                billingController.setBill(bill);
-            } else {
-                loader.setLocation(Main.class.getResource("CustomUI/Bill/Bill.fxml"));
-                vBox = loader.load();
-                BillController billingController = loader.getController();
-                billingController.setBill(bill);
+            switch (isIBill) {
+                case 1: {
+                    loader.setLocation(Main.class.getResource("CustomUI/Bill/Bill.fxml"));
+                    vBox = loader.load();
+                    BillController billingController = loader.getController();
+                    billingController.setBill(bill);
+                    break;
+                }
+                case 2: {
+                    loader.setLocation(Main.class.getResource("CustomUI/NonGstBill/NonGstBill.fxml"));
+                    vBox = loader.load();
+                    NonGstBill billingController = loader.getController();
+                    billingController.setBill(bill);
+                    break;
+                }
+                default: {
+                    loader.setLocation(Main.class.getResource("CustomUI/IBill/IBill.fxml"));
+                    vBox = loader.load();
+                    IBill billingController = loader.getController();
+                    billingController.setBill(bill);
+                    break;
+                }
             }
             vBox.getTransforms().add(new Scale(1.7, 1.11));
 
@@ -235,7 +214,8 @@ public class AlertMaker {
         return main;
     }
 
-    private static void print(Bill bill, Stage owner, int i, boolean isIBill) {
+    private static void print(Bill bill, Stage owner, int i, int
+            isIBill) {
         Printer printer = Printer.getDefaultPrinter();
         PrinterJob printerJob = PrinterJob.createPrinterJob();
         PageLayout pageLayout = printer.createPageLayout(Paper.A4
@@ -245,24 +225,39 @@ public class AlertMaker {
         try {
             FXMLLoader loader = new FXMLLoader();
             Node node;
-            if (isIBill) {
-                loader.setLocation(Main.class.getResource("CustomUI/IBill/IBill.fxml"));
-                loader.load();
-                IBill billingController = loader.getController();
-                billingController.setBill(bill);
-                if (i == 1) billingController.setCopyText("( Original Copy )");
-                else billingController.setCopyText("( Duplicate Copy )");
-                node = billingController.getRoot();
-            } else {
-                loader.setLocation(Main.class.getResource("CustomUI/Bill/Bill.fxml"));
-                loader.load();
-                BillController billingController = loader.getController();
-                billingController.setBill(bill);
-                if (i == 1) billingController.setCopyText("( Original Copy )");
-                else billingController.setCopyText("( Duplicate Copy )");
-                node = billingController.getRoot();
-            }
+            switch (isIBill) {
+                case 1: {
+                    loader.setLocation(Main.class.getResource("CustomUI/Bill/Bill.fxml"));
+                    loader.load();
+                    BillController billingController = loader.getController();
+                    billingController.setBill(bill);
+                    if (i == 1) billingController.setCopyText("( Original Copy )");
+                    else billingController.setCopyText("( Duplicate Copy )");
+                    node = billingController.getRoot();
+                    break;
+                }
+                case 2: {
+                    loader.setLocation(Main.class.getResource("CustomUI/NonGstBill/NonGstadaBill.fxml"));
+                    loader.load();
+                    NonGstBill billingController = loader.getController();
+                    billingController.setBill(bill);
+                    if (i == 1) billingController.setCopyText("( Original Copy )");
+                    else billingController.setCopyText("( Duplicate Copy )");
+                    node = billingController.getRoot();
+                    break;
+                }
+                default: {
+                    loader.setLocation(Main.class.getResource("CustomUI/IBill/IBill.fxml"));
+                    loader.load();
+                    IBill billingController = loader.getController();
+                    billingController.setBill(bill);
+                    if (i == 1) billingController.setCopyText("( Original Copy )");
+                    else billingController.setCopyText("( Duplicate Copy )");
+                    node = billingController.getRoot();
 
+                    break;
+                }
+            }
             if (printerJob != null) {
                 printerJob.getJobSettings().setPageLayout(pageLayout);
                 if (printerJob.showPrintDialog(owner))
