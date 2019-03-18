@@ -1,5 +1,6 @@
-package sample.CustomUI.IBill;
+package sample.CustomUI.NonGstBill;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -21,21 +22,14 @@ import sample.Utils.BillingSystemUtils;
 import sample.Utils.Preferences;
 
 @SuppressWarnings("Duplicates")
-public class IBill {
-
-    public ImageView storeLogo;
-
+public class NonGstBill {
     @FXML
     private VBox root, main;
-
     @FXML
     private GridPane pane;
-
     @FXML
     private Text lStoreName, lStoreStreet, lStoreAddandPhone, lStoreGSTin;
 
-    @FXML
-    private Text IGstper, IGSTAmt;
     @FXML
     private Text lCusStreet;
     @FXML
@@ -45,30 +39,25 @@ public class IBill {
     private Text lCusName, lCusMob, lGSTin;
 
     @FXML
-    private Text lTotalAmountNum, lTotalAmountWords, lTotalPlusTaxNum;
+    private Text lTotalAmountWords, lTotalPlusTaxNum;
 
-    @FXML
-    private Text lTaxAmount12, lTaxAmount18, lTaxAmount28;
 
     @FXML
     private Text lBankName, lBankAccNo, lBranchName, lBankIFSC, forStoreName;
 
-
     @FXML
-    private Text lgrossAmount, laCGST, roundedOff;
+    private ImageView storeLogo;
+
     private Preferences preferences = Preferences.getPreferences();
 
     public void setBill(Bill bill) {
 
-        storeLogo.setImage(new Image(Main.class.getResourceAsStream("Resources/icons/"
-                + preferences.getLogoName() + ".png")));
+        storeLogo.setImage(new Image(Main.class.getResourceAsStream("Resources/icons/" + preferences.getLogoName() + ".png")));
 
         //Top Header
-
         lStoreName.setText(preferences.getName());
         lStoreStreet.setText(preferences.getAddress1());
-        lStoreAddandPhone.setText(preferences.getAddress2()
-                + " PH : " + preferences.getPhone());
+        lStoreAddandPhone.setText(preferences.getAddress2() + " PH : " + preferences.getPhone());
         lStoreGSTin.setText("GSTIN : " + preferences.getGstin());
 
         //invoice and date
@@ -103,64 +92,40 @@ public class IBill {
             lCusMob.setText(": " + bill.getMobile());
             lGSTin.setText(": " + bill.getGSTNo());
         }
-
-        //Table View
-
-        //initGridPane(bill);
-
         initGridPane(bill);
-
-        lTotalAmountNum.setText("RS. " + bill.getTotalAmount());
-
-        lTaxAmount12.setText(bill.getGst12Total());
-        lTaxAmount18.setText(bill.getGst18Total());
-        lTaxAmount28.setText(bill.getGst28Total());
-
         //TAX section
-
         //TAX OVERALL TOTAL
-        double t = Float.parseFloat(bill.getTotalAmount()), r = 0.00f;
+        double t = Float.parseFloat(bill.getTotalAmount());
         if ((t - (int) t) != 0.00) {
-            r = (t - (int) t);
             t = Math.ceil(t);
-            r = 1 - r;
         }
-        roundedOff.setText(String.format("%.2f", r));
         lTotalPlusTaxNum.setText("RS. " + t);
-        lgrossAmount.setText(bill.getGross());
-        laCGST.setText(bill.getTotalTaxAmount());
-
-
-        lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int)
-                t) + " Rupees Only )");
-        //Bank Details
-
+        lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int) t) + " Rupees Only )");//Bank Details
         lBankName.setText(preferences.getBank());
         lBranchName.setText(preferences.getBranch());
         lBankAccNo.setText(preferences.getAcc());
         lBankIFSC.setText(preferences.getIfsc());
-
         forStoreName.setText("For " + preferences.getName());
+
+        //Central Half
+
     }
 
     private void initGridPane(Bill bill) {
         GridPane.setRowSpan(pane, 30);
-        IGSTAmt.setText("I-GST\n AMT");
-        IGstper.setText("I-GST\n %");
-
-        IGstper.setTextAlignment(TextAlignment.CENTER);
-        IGSTAmt.setTextAlignment(TextAlignment.CENTER);
 
         int i = 0;
         Product product = new Product();
-        ObservableList<Product> products = bill.getProducts();
+        ObservableList<Product> products = FXCollections.observableArrayList();
+        products.addAll(bill.getProducts());
         int s = Integer.parseInt(preferences.getLimit()) - products.size() + 1;
         for (; i <= s; i++) products.add(product);
+
         i = 1;
         for (Product p : products) {
 
             Text sl = new Text();
-            sl.setText(p.getSl());
+            sl.setText("" + p.getSl());
             sl.setStyle("-fx-font-size:8px;");
             StackPane stackPane = new StackPane(sl);
             stackPane.setMinHeight(9);
@@ -199,21 +164,6 @@ public class IBill {
             per.setStyle("-fx-font-size:8px;");
             pane.add(new StackPane(per), 5, i);
 
-            Text cgstPer = new Text();
-            cgstPer.setText(p.getTax());
-            cgstPer.setStyle("-fx-font-size:8px;");
-            stackPane = new StackPane(cgstPer);
-            stackPane.setPadding(new Insets(0, 10, 0, 0));
-            stackPane.setAlignment(Pos.CENTER_RIGHT);
-            pane.add(stackPane, 6, i);
-
-            Text cgstAmt = new Text();
-            cgstAmt.setText(p.getGstAmount());
-            cgstAmt.setTextAlignment(TextAlignment.RIGHT);
-            cgstAmt.setStyle("-fx-font-size:8px;");
-            stackPane = new StackPane(cgstAmt);
-            stackPane.setAlignment(Pos.CENTER_RIGHT);
-            pane.add(new StackPane(cgstAmt), 7, i);
 
             Text total = new Text();
             total.setText(p.getTotalAmount());
@@ -222,11 +172,9 @@ public class IBill {
             stackPane = new StackPane(total);
             stackPane.setPadding(new Insets(0, 8, 0, 0));
             stackPane.setAlignment(Pos.CENTER_RIGHT);
-            pane.add(stackPane, 8, i);
-
+            pane.add(stackPane, 6, i);
             RowConstraints constraints = new RowConstraints(15);
             pane.getRowConstraints().addAll(constraints);
-
             i++;
         }
         GridPane.setRowSpan(pane, 30);

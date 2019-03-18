@@ -17,6 +17,7 @@ import sample.Database.DatabaseHelper;
 import sample.Database.ExcelHelper;
 import sample.Main;
 import sample.Model.Bill;
+import sample.Utils.BillingSystemUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -27,13 +28,13 @@ import static sample.Alert.AlertMaker.showBill;
 
 public class ViewBillsController implements Initializable {
     @FXML
-    private JFXCheckBox checkGST, checkNonGst, checkIGSTBill;
+    private JFXCheckBox checkGST, checkNonGst;
 
     @FXML
     private JFXDatePicker fromDate, toDate;
 
     @FXML
-    private JFXComboBox<String> customerName;
+    private JFXComboBox<String> customerName, comboBills;
 
     @FXML
     private TableView<Bill> tableView;
@@ -53,6 +54,8 @@ public class ViewBillsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         customerName.setItems(DatabaseHelper.getCustomerNameList(2));
+        comboBills.getItems().addAll("GST", "Non-GST", "I-GST");
+        comboBills.getSelectionModel().selectFirst();
         checkGST.setOnAction(e -> setCustomerName());
         checkNonGst.setOnAction(e -> setCustomerName());
     }
@@ -74,13 +77,6 @@ public class ViewBillsController implements Initializable {
             invoices.add(b.getInvoice());
         }
         TextFields.bindAutoCompletion(searchBox, invoices);
-        checkIGSTBill.setOnAction(e -> {
-            if (checkIGSTBill.isSelected())
-                billTableName = "IBills";
-            else
-                billTableName = "BILLS";
-            loadTable();
-        });
     }
 
     @FXML
@@ -95,7 +91,7 @@ public class ViewBillsController implements Initializable {
             return;
         }
         showBill(tableView.getSelectionModel().getSelectedItem(), mainApp
-                , true, checkIGSTBill.isSelected());
+                , true, BillingSystemUtils.getN(comboBills.getValue()));
     }
 
     @FXML
@@ -132,13 +128,8 @@ public class ViewBillsController implements Initializable {
 
     @FXML
     void handleDeleteBill() {
-/*        AlertMaker.showMCBillAlert("Are sure you want to delete this Bill?"
-                , tableView.getSelectionModel().getSelectedItem()
-                , mainApp
-                , checkIGSTBill.isSelected())*/
-
         boolean b;
-
+        billTableName = BillingSystemUtils.getTableName(comboBills.getValue());
         if (mainApp.getUser().getAccess().equals("admin")) {
             if (tableView.getSelectionModel().getSelectedItem() != null) {
                 if (!AlertMaker.showMCAlert("Confirm delete?"
@@ -165,7 +156,7 @@ public class ViewBillsController implements Initializable {
             mainApp.snackBar("INFO", "Select a bill", "green");
             return;
         }
-        mainApp.initNewBill(tableView.getSelectionModel().getSelectedItem(), checkIGSTBill.isSelected());
+        mainApp.initNewBill(tableView.getSelectionModel().getSelectedItem(), comboBills.getValue());
 
     }
 
@@ -192,6 +183,7 @@ public class ViewBillsController implements Initializable {
 
     private void loadTable() {
         tableView.getItems().clear();
+        billTableName = BillingSystemUtils.getTableName(comboBills.getValue());
         if (searchBox.getText() != null && !searchBox.getText().isEmpty())
             bills = DatabaseHelper.getBillLists("%" + searchBox.getText() + "%", billTableName);
         else if (customerName.getValue() != null)

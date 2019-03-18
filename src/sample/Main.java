@@ -117,7 +117,7 @@ public class Main extends Application {
             rootController.handleViewBill();
     }
 
-    public void initNewBill(Bill bill, boolean isIGstBill) {
+    public void initNewBill(Bill bill, String isIGstBill) {
         if (isLoggedIn) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("UI/Billing/Billing.fxml"));

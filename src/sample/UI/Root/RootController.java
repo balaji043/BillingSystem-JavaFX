@@ -119,7 +119,7 @@ public class RootController implements Initializable {
         i = 1;
         window.setText("New Bill");
         toggle();
-        mainApp.initNewBill(null, false);
+        mainApp.initNewBill(null, "");
     }
 
     public void handleViewBill() {
@@ -151,7 +151,7 @@ public class RootController implements Initializable {
     private void handleNewBill1() {
         i = 1;
         window.setText("New Bill");
-        mainApp.initNewBill(null, false);
+        mainApp.initNewBill(null, "");
     }
 
     private void handleViewBill1() {

@@ -21,6 +21,7 @@ import sample.Model.Product;
 import sample.Utils.BillingSystemUtils;
 import sample.Utils.Preferences;
 
+@SuppressWarnings("Duplicates")
 public class BillController {
     @FXML
     private VBox root, main;
@@ -187,7 +188,7 @@ public class BillController {
             qty.setText(p.getQty());
             stackPane = new StackPane(qty);
             stackPane.setPadding(new Insets(0, 10, 0, 0));
-            stackPane.setAlignment(Pos.CENTER_RIGHT);
+            stackPane.setAlignment(Pos.CENTER);
             pane.add(stackPane, 3, i);
 
             Text rate = new Text();

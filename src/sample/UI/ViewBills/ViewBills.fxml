@@ -7,48 +7,32 @@
 <StackPane fx:id="main" prefHeight="720.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UI.ViewBills.ViewBillsController">
     <BorderPane prefHeight="200.0" prefWidth="200.0">
         <top>
-            <GridPane BorderPane.alignment="CENTER">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="100.0"/>
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="25.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="10.0" prefWidth="100.0"/>
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                    <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                </rowConstraints>
-                <StackPane prefHeight="150.0" prefWidth="200.0">
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </padding>
-                    <JFXCheckBox fx:id="checkGST" minWidth="200.0" prefHeight="40.0" prefWidth="200.0" text="GST IN CUSTOMER" />
-                </StackPane>
-                <StackPane layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
-                    <JFXCheckBox fx:id="checkNonGst" prefHeight="40.0" prefWidth="200.0" text="NON GST CUSTOMER" />
-                </StackPane>
-                <StackPane layoutX="370.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
-                    <JFXDatePicker fx:id="fromDate" prefHeight="40.0" prefWidth="210.0" promptText="FROM" />
-                </StackPane>
-                <StackPane layoutX="10.0" layoutY="40.0" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <JFXDatePicker fx:id="toDate" prefHeight="40.0" prefWidth="210.0" promptText="TO" />
-                </StackPane>
-                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
-                    <JFXComboBox fx:id="customerName" prefHeight="40.0" prefWidth="200.0" promptText="CUSTOMER NAME" />
-                </StackPane>
-                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                    <JFXButton buttonType="RAISED" onAction="#handleSubmit" prefHeight="40.0" prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE" />
-                </StackPane>
-                <StackPane alignment="CENTER_LEFT" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                    <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0" promptText="Search Invoice" />
-                </StackPane>
-                <StackPane GridPane.columnIndex="3">
-                    <JFXCheckBox fx:id="checkIGSTBill" text="IGST Bills"/>
-                </StackPane>
-            <BorderPane.margin>
-               <Insets top="20.0" />
-            </BorderPane.margin>
-            </GridPane>
+            <HBox alignment="TOP_CENTER" spacing="50.0">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="30.0"/>
+                </padding>
+                <VBox spacing="20.0">
+                    <JFXCheckBox fx:id="checkGST" minWidth="200.0" prefHeight="40.0" prefWidth="200.0"
+                                 text="GST IN CUSTOMER"/>
+                    <JFXDatePicker fx:id="fromDate" prefHeight="40.0" prefWidth="210.0" promptText="FROM"/>
+                </VBox>
+                <VBox spacing="20.0">
+                    <JFXCheckBox fx:id="checkNonGst" prefHeight="40.0" prefWidth="200.0"
+                                 text="NON GST CUSTOMER"/>
+                    <JFXDatePicker fx:id="toDate" prefHeight="40.0" prefWidth="210.0" promptText="TO"/>
+                </VBox>
+                <VBox spacing="20.0">
+                    <JFXComboBox fx:id="customerName" prefHeight="40.0" prefWidth="200.0"
+                                 promptText="CUSTOMER NAME"/>
+                    <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0"
+                                  promptText="Search Invoice"/>
+                </VBox>
+                <VBox spacing="20.0">
+                    <JFXComboBox fx:id="comboBills" prefWidth="200.0" promptText="Select Bills Type"/>
+                    <JFXButton buttonType="RAISED" onAction="#handleSubmit" prefHeight="40.0" prefWidth="200.0"
+                               ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE"/>
+                </VBox>
+            </HBox>
         </top>
         <center>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">

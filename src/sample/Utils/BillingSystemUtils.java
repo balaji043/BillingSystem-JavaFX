@@ -57,4 +57,38 @@ public class BillingSystemUtils {
     public static String formatDateTimeString(Long time) {
         return DATE_TIME_FORMAT.format(new Date(time));
     }
+
+    public static String getTableName(String value) {
+        switch (value) {
+            case "GST": {
+                return "BILLS";
+            }
+            case "Non-GST": {
+                return "NONGST";
+            }
+            case "I-GST": {
+                return "IBILLS";
+            }
+            default: {
+                return "BILLS";
+            }
+        }
+    }
+
+    public static int getN(String value) {
+        switch (value) {
+            case "GST": {
+                return 1;
+            }
+            case "Non-GST": {
+                return 2;
+            }
+            case "I-GST": {
+                return 3;
+            }
+            default: {
+                return 1;
+            }
+        }
+    }
 }

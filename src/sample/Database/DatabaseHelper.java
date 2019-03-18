@@ -31,11 +31,8 @@ public class DatabaseHelper {
         if (createCustomerTable()) {
             System.out.println("Customer Table Created or Already Exists");
         }
-        if (createBillsTable()) {
+        if (createBillTables()) {
             System.out.println("Bills Table Created or Already Exists");
-        }
-        if (createIBillsTable()) {
-            System.out.println("IBills Table Created or Already Exists");
         }
     }
 
@@ -59,8 +56,8 @@ public class DatabaseHelper {
         return okay;
     }
 
-    private static boolean createBillsTable() {
-        String create = "CREATE TABLE IF NOT EXISTS BILLS ( " +
+    private static boolean createBillTable(String tableName) {
+        String create = "CREATE TABLE IF NOT EXISTS " + tableName + " ( " +
                 "BillID TEXT NOT NULL UNIQUE,INVOICE TEXT NOT NULL UNIQUE," +
                 "DATE TEXT NOT NULL, CustomerName TEXT NOT NULL, " +
                 "CustomerID TEXT NOT NULL, ADDRESS TEXT NOT NULL," +
@@ -68,13 +65,11 @@ public class DatabaseHelper {
         return createTable(create);
     }
 
-    private static boolean createIBillsTable() {
-        String create = "CREATE TABLE IF NOT EXISTS IBILLS ( " +
-                "BillID TEXT NOT NULL UNIQUE,INVOICE TEXT NOT NULL UNIQUE," +
-                "DATE TEXT NOT NULL, CustomerName TEXT NOT NULL, " +
-                "CustomerID TEXT NOT NULL, ADDRESS TEXT NOT NULL," +
-                "PHONE TEXT NOT NULL, GstNO TEXT NOT NULL,USERNAME TEXT NOT NULL)";
-        return createTable(create);
+    private static boolean createBillTables() {
+        boolean b = createBillTable("BILLS");
+        b = b && createBillTable("IBILLS");
+        b = b && createBillTable("NonGst".toUpperCase());
+        return b;
     }
 
     public static boolean insertNewBill(@NotNull Bill bill, @NotNull String tableName) {
@@ -387,7 +382,8 @@ public class DatabaseHelper {
                 product = new Product(
                         resultSet.getString(1), resultSet.getString(2)
                         , resultSet.getString(3), resultSet.getString(4)
-                        , resultSet.getString(5), resultSet.getString(6));
+                        , resultSet.getString(5), resultSet.getString(6)
+                        , tableName.equals("BILLS"));
                 product.setSl("" + (i++));
                 products.add(product);
             }
