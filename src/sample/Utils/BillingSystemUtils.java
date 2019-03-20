@@ -75,19 +75,16 @@ public class BillingSystemUtils {
         }
     }
 
-    public static int getN(String value) {
+    public static boolean getN(String value) {
         switch (value) {
             case "GST": {
-                return 1;
-            }
-            case "Non-GST": {
-                return 2;
+                return false;
             }
             case "I-GST": {
-                return 3;
+                return true;
             }
             default: {
-                return 1;
+                return false;
             }
         }
     }

@@ -4,8 +4,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
@@ -13,7 +11,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import sample.Database.DatabaseHelper;
-import sample.Main;
 import sample.Model.Bill;
 import sample.Model.Customer;
 import sample.Model.Product;
@@ -22,8 +19,6 @@ import sample.Utils.Preferences;
 
 @SuppressWarnings("Duplicates")
 public class IBill {
-
-    public ImageView storeLogo;
 
     @FXML
     private VBox root, main;
@@ -59,9 +54,6 @@ public class IBill {
     private Preferences preferences = Preferences.getPreferences();
 
     public void setBill(Bill bill) {
-
-        storeLogo.setImage(new Image(Main.class.getResourceAsStream("Resources/icons/"
-                + preferences.getLogoName() + ".png")));
 
         //Top Header
 

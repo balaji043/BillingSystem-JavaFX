@@ -32,7 +32,7 @@ public class Preferences {
 
     // Constructor
     private Preferences() {
-        name = "Standard Enterprises";
+        name = "Krishna Enterprises";
         address1 = "JALAL KUDI STREET";
         address2 = "Chatram Trichy";
         gstin = "ADADS456465412";
@@ -246,14 +246,6 @@ public class Preferences {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getLogoName() {
-        return logoName;
-    }
-
-    public void setLogoName(String logoName) {
-        this.logoName = logoName;
     }
 
 }

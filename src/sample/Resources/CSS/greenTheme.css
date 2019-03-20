@@ -1,0 +1,241 @@
+.root {
+    -fx-background: white;
+    -fx-base: white;
+    -fx-font-family: "Tahoma";
+}
+
+.background1 {
+    -fx-background-color: green;
+}
+
+/****************COMBO BOX*********************/
+
+.combo-box-popup .list-view .list-cell:filled:hover {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: darkgreen;
+    -fx-text-fill: white;
+}
+
+.combo-box-base:hover {
+    -fx-background-color: #e6e6e6;
+    -fx-text-fill: -fx-text-base-color;
+}
+
+.jfx-combo-box {
+    -jfx-unfocus-color: #7ED07F;
+    -jfx-focus-color: #6ed08d;
+    -fx-prompt-text-fill: black;
+    -jfx-label-float: true;
+}
+
+/****************TEXT FIELD*********************/
+
+.jfx-text-field {
+    -jfx-unfocus-color: lightgreen;
+    -jfx-focus-color: darkgreen;
+    -fx-prompt-text-fill: black;
+    -jfx-label-float: true;
+}
+
+.text-field:hover {
+    -fx-background-color: #e6e6e6;
+    -fx-text-fill: black;
+}
+
+/****************PASSWORD FIELD*********************/
+
+.jfx-password-field {
+    -jfx-unfocus-color: lightgreen;
+    -jfx-focus-color: darkgreen;
+    -fx-prompt-text-fill: black;
+    -jfx-label-float: true;
+}
+
+/****************CHECK BOX********************/
+
+.jfx-check-box {
+    -jfx-checked-color: darkgreen;
+    -jfx-unchecked-color: lightgreen;
+    -fx-text-fill: black;
+}
+
+/****************BUTTON*********************/
+
+.jfx-button1 {
+    -fx-background-color: darkgreen;
+    -jfx-rippler-fill: #D0CF37;
+    -jfx-button-type: RAISED;
+}
+
+.jfx-button2 {
+    -fx-background-color: darkgreen;
+    jfx-rippler-fill: white;
+    -jfx-button-type: FLAT;
+}
+
+.jfx-button2:hover {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-background-color: aliceblue;
+    -fx-alignment: CENTER;
+}
+
+.jfx-button:hover {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: black;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+/****************DIALOG PANE*********************/
+
+.dialog-pane .button {
+    -fx-background-color: lightgreen;
+    -jfx-rippler-fill: darkgreen;
+    -jfx-button-type: RAISED;
+    -fx-text-fill: black;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: black;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -jfx-button-type: RAISED;
+}
+
+/****************HAM BURGER*********************/
+
+.jfx-hamburger StackPane {
+    -fx-background-color: white;
+}
+
+/****************DATE PICKER*********************/
+
+.jfx-date-picker .text-field {
+    -fx-prompt-text-fill: black;
+    -fx-text-fill: green;
+    -jfx-unfocus-color: lightgreen;
+    -jfx-focus-color: darkgreen;
+    -jfx-overlay: true;
+
+}
+
+.jfx-date-picker {
+    -jfx-default-color: #D0CF37;
+}
+
+/****************LIST VIEW*********************/
+
+.pretty-list-view > .virtual-flow > .scroll-bar,
+.pretty-list-view > .virtual-flow > .scroll-bar .decrement-arrow,
+.pretty-list-view > .virtual-flow > .scroll-bar .increment-arrow,
+.pretty-list-view > .virtual-flow > .scroll-bar .decrement-button,
+.pretty-list-view > .virtual-flow > .scroll-bar .increment-button {
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+.pretty-list-view .pretty-scroll-bar:vertical .thumb {
+    -fx-background-insets: 0 2 0 0;
+}
+
+.pretty-list-view .pretty-scroll-bar:horizontal .thumb {
+    -fx-background-insets: 0 0 2 0;
+}
+
+.pretty-list-view .pretty-scroll-bar .decrement-arrow, .pretty-list-view .pretty-scroll-bar .increment-arrow {
+    -fx-pref-width: 0;
+    -fx-pref-height: 0;
+}
+
+.pretty-list-view .pretty-scroll-bar {
+    -fx-background-color: transparent;
+    -fx-pref-width: 12;
+    -fx-pref-height: 12;
+    -fx-padding: 2;
+}
+
+.jfx-list-cell :selected {
+    -fx-text-color: black;
+}
+
+.jfx-list-view {
+    -fx-background-insets: 0;
+    -fx-cell-vertical-margin: 10px;
+    -fx-vertical-gap: 10px;
+}
+
+.pretty-list-view .pretty-scroll-bar .thumb {
+    -fx-background-radius: 1000;
+    -fx-pref-width: 12;
+    -fx-pref-height: 12;
+}
+
+.list-view .list-cell:odd {
+    -fx-background-color: white;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: white;
+}
+
+.list-view .list-cell:selected:odd, .list-view .list-cell:selected:even {
+    -fx-background-color: #e6f7ff;
+}
+
+/****************TABLE VIEW*********************/
+
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+    -fx-background-color: white;
+    -fx-size: 50px;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: center;
+}
+
+.table-row-cell:filled:hover {
+    -fx-background-color: #0099cc;
+    -fx-size: 50px;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: center;
+}
+
+.table-view:row-selection {
+    -fx-background-color: #e6f7ff;
+    -fx-fixed-cell-size: 50px;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: center;
+}
+
+.table-view .table-column {
+    -fx-text-alignment: center;
+    -fx-alignment: CENTER
+}
+
+.scroll-bar > .increment-button > .increment-arrow,
+.scroll-bar > .decrement-button > .decrement-arrow {
+    -fx-background-color: -fx-mark-highlight-color, green;
+    -fx-pref-width: 15;
+    -fx-pref-height: 8;
+}
+
+.scroll-bar > .increment-button:hover > .increment-arrow,
+.scroll-bar > .decrement-button:hover > .decrement-arrow {
+    -fx-background-color: -fx-mark-highlight-color, green;
+}
+
+.scroll-bar > .increment-button:pressed > .increment-arrow,
+.scroll-bar > .decrement-button:pressed > .decrement-arrow {
+    -fx-background-color: -fx-mark-highlight-color, black;
+}

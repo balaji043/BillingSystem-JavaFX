@@ -17,7 +17,6 @@
                 <JFXComboBox fx:id="comboBoxCustomer" editable="true" prefHeight="40.0" prefWidth="200.0"
                              promptText="Customer"/>
                 <JFXComboBox fx:id="comboBills" labelFloat="true" promptText="Select Bill Type"/>
-                <JFXCheckBox fx:id="checkStdBill" layoutX="859.0" layoutY="50.0" text="StdEnt Bill"/>
                 <JFXButton fx:id="submit" onAction="#handleCustomerSubmit" prefHeight="40.0" prefWidth="200.0"
                            styleClass="jfx-button1" text="Submit" textFill="WHITE"/>
             </HBox>

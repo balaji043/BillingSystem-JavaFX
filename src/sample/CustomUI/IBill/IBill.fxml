@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <VBox alignment="CENTER" maxHeight="840.0" maxWidth="600.0" minHeight="840.0" minWidth="600.0" prefHeight="840.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.CustomUI.IBill.IBill">
     <VBox fx:id="root" maxHeight="835.0" maxWidth="560.0" minHeight="835.0" minWidth="560.0" prefHeight="835.0" prefWidth="560.0">
         <GridPane gridLinesVisible="true">
@@ -32,7 +26,7 @@
                 </rowConstraints>
                 <StackPane alignment="TOP_RIGHT">
                     <ImageView fx:id="storeLogo" cache="true" fitHeight="61.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../Resources/icons/StdEnt.png" />
+                        <Image url="@../../Resources/icons/KrisEnt.png"/>
                     </ImageView>
                 </StackPane>
                 <StackPane alignment="CENTER_LEFT" GridPane.columnIndex="1">

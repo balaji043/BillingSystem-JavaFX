@@ -68,7 +68,6 @@ public class DatabaseHelper {
     private static boolean createBillTables() {
         boolean b = createBillTable("BILLS");
         b = b && createBillTable("IBILLS");
-        b = b && createBillTable("NonGst".toUpperCase());
         return b;
     }
 

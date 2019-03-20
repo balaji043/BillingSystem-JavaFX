@@ -27,6 +27,7 @@ import java.util.ResourceBundle;
 import static sample.Alert.AlertMaker.showBill;
 
 public class ViewBillsController implements Initializable {
+    public JFXButton edit;
     @FXML
     private JFXCheckBox checkGST, checkNonGst;
 
@@ -54,7 +55,7 @@ public class ViewBillsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         customerName.setItems(DatabaseHelper.getCustomerNameList(2));
-        comboBills.getItems().addAll("GST", "Non-GST", "I-GST");
+        comboBills.getItems().addAll("GST", "I-GST");
         comboBills.getSelectionModel().selectFirst();
         checkGST.setOnAction(e -> setCustomerName());
         checkNonGst.setOnAction(e -> setCustomerName());
@@ -71,6 +72,9 @@ public class ViewBillsController implements Initializable {
                     setDisable(empty || date.compareTo(fromDate.getValue()) < 0);
             }
         });
+        if (!mainApp.getUser().getAccess().equals("admin")) {
+            edit.setDisable(true);
+        }
         initTable();
         ObservableList<String> invoices = FXCollections.observableArrayList();
         for (Bill b : bills) {

@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
+@SuppressWarnings("Duplicates")
 public class Settings implements Initializable {
     private Preferences preferences;
 
@@ -19,12 +20,13 @@ public class Settings implements Initializable {
     @FXML
     JFXTextField storeName, address1, address2, gstNO, bankName, branchName, accNo, iFSCode, phone, limit;
     @FXML
-    JFXComboBox<String> description, perData, the, hsnData,logoComboBox;
+    JFXComboBox<String> description, perData, the, hsnData;
 
-    private String[] themes = {"red", "blue", "black"};
+    private String[] themes = {"red", "blue", "green"};
 
     private HashSet<String> d, p, h;
     private String dOLD, dNEW, pOLD, pNEW, hOLD, hNEW;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         preferences = Preferences.getPreferences();
@@ -44,8 +46,6 @@ public class Settings implements Initializable {
         iFSCode.setText(preferences.getIfsc());
         phone.setText(preferences.getPhone());
         limit.setText(preferences.getLimit());
-        logoComboBox.getItems().addAll("KrisEnt","StdEnt");
-        logoComboBox.setValue(preferences.getLogoName());
 
         setDescription();
         setPerData();
@@ -101,7 +101,6 @@ public class Settings implements Initializable {
         preferences.setDescriptions(d);
         preferences.setPerData(p);
         preferences.setTheme(the.getValue());
-        preferences.setLogoName(logoComboBox.getValue());
         Preferences.setPreference(preferences);
     }
 

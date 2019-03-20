@@ -28,7 +28,7 @@ import java.util.HashSet;
 public class BillingController {
 
     public JFXButton add, delete, submit;
-    public JFXCheckBox checkBoxGST, isManual, checkStdBill;
+    public JFXCheckBox checkBoxGST, isManual;
     public JFXComboBox<String> comboBills, comboBoxCustomer;
     public JFXListView<SingleProduct> listView;
     public JFXDatePicker manualDate;
@@ -54,7 +54,7 @@ public class BillingController {
         borderPane.setDisable(true);
         checkBoxGST.setSelected(true);
         manualDate.setDisable(true);
-        comboBills.getItems().addAll("GST", "Non-GST", "I-GST");
+        comboBills.getItems().addAll("GST", "I-GST");
         comboBills.setEditable(false);
         gst = DatabaseHelper.getCustomerNameList(0);
         nonGst = DatabaseHelper.getCustomerNameList(1);
@@ -96,9 +96,7 @@ public class BillingController {
 
         if (isNewBill) {
             int num = 1;
-            String start;
-            if (checkStdBill.isSelected()) start = "J-";
-            else start = "K-";
+            String start = "K-";
             if (isManual.isSelected()) {
                 if (manualDate.getValue() == null) {
                     mainApp.snackBar("INFO", "Select a date", "red");
@@ -243,7 +241,6 @@ public class BillingController {
         isNewBill = false;
         checkBoxGST.setSelected(!bill.getGSTNo().equalsIgnoreCase("for own use"));
         toggleCustomer();
-        outerTopHBox.getChildren().remove(checkStdBill);
         comboBoxCustomer.getSelectionModel().select(bill.getCustomerName());
         comboBills.getSelectionModel().select(isIGstBill);
         handleCustomerSubmit();
