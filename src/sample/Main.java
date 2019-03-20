@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -61,7 +62,8 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("UI/Root/Root.fxml"));
-
+        primaryStage.getIcons().add(new Image(Main.class.
+                getResourceAsStream("Resources/icons/StdEnt.png")));
         try {
             loader.load();
             rootController = loader.getController();
@@ -79,7 +81,7 @@ public class Main extends Application {
                 Preferences.getPreferences().getTheme() + "Theme.css")
                 .toExternalForm());
 
-        primaryStage.setTitle("Billing System");
+        primaryStage.setTitle("Standard Enterprises");
         primaryStage.setScene(scene);
         primaryStage.show();
 
