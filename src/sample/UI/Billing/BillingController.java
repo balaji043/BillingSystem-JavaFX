@@ -16,7 +16,6 @@ import sample.Main;
 import sample.Model.Bill;
 import sample.Model.Customer;
 import sample.Model.Product;
-import sample.Utils.BillingSystemUtils;
 import sample.Utils.Preferences;
 
 import java.text.SimpleDateFormat;
@@ -28,8 +27,8 @@ import java.util.HashSet;
 public class BillingController {
 
     public JFXButton add, delete, submit;
-    public JFXCheckBox checkBoxGST, isManual, checkStdBill;
-    public JFXComboBox<String> comboBills, comboBoxCustomer;
+    public JFXCheckBox checkBoxGST, isManual;
+    public JFXComboBox<String> comboBoxCustomer;
     public JFXListView<SingleProduct> listView;
     public JFXDatePicker manualDate;
     public Text labelBillFor, totalAmount;
@@ -41,7 +40,7 @@ public class BillingController {
     private Bill bill = null;
     private boolean isNewBill = true, ready = false;
     private Date date;
-    private String billId, invoice, tableName = "Bills";
+    private String billId, invoice;
     private ObservableList<String> gst = FXCollections.observableArrayList(), nonGst = FXCollections.observableArrayList();
     private Preferences preferences = Preferences.getPreferences();
     private int limit = Integer.parseInt(preferences.getLimit());
@@ -54,8 +53,6 @@ public class BillingController {
         borderPane.setDisable(true);
         checkBoxGST.setSelected(true);
         manualDate.setDisable(true);
-        comboBills.getItems().addAll("GST", "Non-GST", "I-GST");
-        comboBills.setEditable(false);
         gst = DatabaseHelper.getCustomerNameList(0);
         nonGst = DatabaseHelper.getCustomerNameList(1);
 
@@ -96,9 +93,7 @@ public class BillingController {
 
         if (isNewBill) {
             int num = 1;
-            String start;
-            if (checkStdBill.isSelected()) start = "J-";
-            else start = "K-";
+            String start = "J-";
             if (isManual.isSelected()) {
                 if (manualDate.getValue() == null) {
                     mainApp.snackBar("INFO", "Select a date", "red");
@@ -110,7 +105,7 @@ public class BillingController {
                 date = new Date();
             }
             invoice = start + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
-            while (DatabaseHelper.ifInvoiceExist(invoice, tableName)) {
+            while (DatabaseHelper.ifInvoiceExist(invoice)) {
                 invoice = start + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
                 num++;
             }
@@ -127,7 +122,6 @@ public class BillingController {
         String errorMsg;
         boolean errored = false;
         for (SingleProduct s : p) {
-            s.setGST(comboBills.getValue().equalsIgnoreCase("GST"));
             errorMsg = s.isReady();
             if (!errorMsg.equals("s")) {
                 mainApp.snackBar("Check the Following", errorMsg, "red");
@@ -174,11 +168,11 @@ public class BillingController {
         handleCalculate();
         if (bill == null) return;
 
-        if (ready && AlertMaker.showBill(bill, mainApp, false, BillingSystemUtils.getN(comboBills.getValue()))) {
+        if (ready && AlertMaker.showBill(bill, mainApp, false)) {
             mainApp.addSpinner();
-            boolean success = isNewBill ? DatabaseHelper.insertNewBill(bill, tableName) :
-                    DatabaseHelper.deleteBill(billId, tableName)
-                            && DatabaseHelper.insertNewBill(bill, tableName);
+            boolean success = isNewBill ? DatabaseHelper.insertNewBill(bill) :
+                    DatabaseHelper.deleteBill(billId)
+                            && DatabaseHelper.insertNewBill(bill);
             if (success) {
                 mainApp.snackBar("Success", bill.getInvoice() +
                         " Bill is saved successfully!", "green");
@@ -209,8 +203,7 @@ public class BillingController {
 
     @FXML
     void handleCustomerSubmit() {
-        if (comboBoxCustomer.getValue() != null && !comboBoxCustomer.getValue().isEmpty() &&
-                comboBills.getValue() != null && !comboBills.getValue().isEmpty()) {
+        if (comboBoxCustomer.getValue() != null && !comboBoxCustomer.getValue().isEmpty()) {
             customer = DatabaseHelper.getCustomerInfo(comboBoxCustomer.getValue());
             if (customer == null) return;
             labelBillFor.setText("" + customer.getName().toUpperCase());
@@ -219,7 +212,6 @@ public class BillingController {
             listView.setExpanded(true);
             listView.setVerticalGap(5.0);
 
-            tableName = BillingSystemUtils.getTableName(comboBills.getValue());
             if (isNewBill) root.setTop(null);
         }
     }
@@ -239,13 +231,11 @@ public class BillingController {
         }
     }
 
-    public void setBill(Bill bill, String isIGstBill) {
+    public void setBill(Bill bill) {
         isNewBill = false;
         checkBoxGST.setSelected(!bill.getGSTNo().equalsIgnoreCase("for own use"));
         toggleCustomer();
-        outerTopHBox.getChildren().remove(checkStdBill);
         comboBoxCustomer.getSelectionModel().select(bill.getCustomerName());
-        comboBills.getSelectionModel().select(isIGstBill);
         handleCustomerSubmit();
         billId = bill.getBillId();
         invoice = bill.getInvoice();

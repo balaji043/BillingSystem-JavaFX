@@ -117,7 +117,7 @@ public class Main extends Application {
             rootController.handleViewBill();
     }
 
-    public void initNewBill(Bill bill, String isIGstBill) {
+    public void initNewBill(Bill bill) {
         if (isLoggedIn) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("UI/Billing/Billing.fxml"));
@@ -126,7 +126,7 @@ public class Main extends Application {
                 rootController.setContent(root);
                 BillingController rootController = loader.getController();
                 rootController.setMainApp(Main.this);
-                if (bill != null) rootController.setBill(bill, isIGstBill);
+                if (bill != null) rootController.setBill(bill);
             } catch (IOException e) {
                 e.printStackTrace();
             }

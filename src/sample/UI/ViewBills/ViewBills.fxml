@@ -17,18 +17,14 @@
                     <JFXDatePicker fx:id="fromDate" prefHeight="40.0" prefWidth="210.0" promptText="FROM"/>
                 </VBox>
                 <VBox spacing="20.0">
-                    <JFXCheckBox fx:id="checkNonGst" prefHeight="40.0" prefWidth="200.0"
-                                 text="NON GST CUSTOMER"/>
+                    <JFXCheckBox fx:id="checkNonGst" prefHeight="40.0" prefWidth="200.0" text="NON GST CUSTOMER"/>
                     <JFXDatePicker fx:id="toDate" prefHeight="40.0" prefWidth="210.0" promptText="TO"/>
                 </VBox>
                 <VBox spacing="20.0">
-                    <JFXComboBox fx:id="customerName" prefHeight="40.0" prefWidth="200.0"
-                                 promptText="CUSTOMER NAME"/>
-                    <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0"
-                                  promptText="Search Invoice"/>
+                    <JFXComboBox fx:id="customerName" prefHeight="40.0" prefWidth="200.0" promptText="CUSTOMER NAME"/>
+                    <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0" promptText="Search Invoice"/>
                 </VBox>
-                <VBox spacing="20.0">
-                    <JFXComboBox fx:id="comboBills" prefWidth="200.0" promptText="Select Bills Type"/>
+                <VBox alignment="CENTER" spacing="20.0">
                     <JFXButton buttonType="RAISED" onAction="#handleSubmit" prefHeight="40.0" prefWidth="200.0"
                                ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE"/>
                 </VBox>

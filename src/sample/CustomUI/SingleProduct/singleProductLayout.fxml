@@ -18,12 +18,11 @@
       </HBox.margin></JFXTextField>
     <JFXTextField fx:id="hsn" prefHeight="40.0" prefWidth="175.0" promptText="HSN" />
     <JFXTextField fx:id="qty" prefHeight="40.0" prefWidth="175.0" promptText="QTY" />
-    <JFXComboBox fx:id="tax" prefHeight="40.0" prefWidth="175.0" promptText="TAX PER" />
     <JFXTextField fx:id="rate" prefHeight="40.0" prefWidth="175.0" promptText="RATE" />
     <JFXComboBox fx:id="per" prefHeight="40.0" prefWidth="175.0" promptText="PER" />
     <VBox alignment="CENTER" spacing="10.0">
-        <JFXCheckBox fx:id="checkBoxDiscount" prefWidth="126.0" text="Discount"/>
         <JFXCheckBox fx:id="checkBoxAdd" prefWidth="126.0" text="Add"/>
+        <JFXCheckBox fx:id="checkBoxDiscount" prefWidth="126.0" text="Minus"/>
     </VBox>
    <JFXTextField fx:id="discount" prefHeight="40.0" prefWidth="175.0" promptText="DISCOUNT" />
    <Label fx:id="amount" prefHeight="40.0" prefWidth="200.0" text="Amount">

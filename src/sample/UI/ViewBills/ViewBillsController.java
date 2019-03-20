@@ -17,7 +17,6 @@ import sample.Database.DatabaseHelper;
 import sample.Database.ExcelHelper;
 import sample.Main;
 import sample.Model.Bill;
-import sample.Utils.BillingSystemUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -34,7 +33,7 @@ public class ViewBillsController implements Initializable {
     private JFXDatePicker fromDate, toDate;
 
     @FXML
-    private JFXComboBox<String> customerName, comboBills;
+    private JFXComboBox<String> customerName;
 
     @FXML
     private TableView<Bill> tableView;
@@ -49,13 +48,9 @@ public class ViewBillsController implements Initializable {
 
     private ObservableList<Bill> bills = FXCollections.observableArrayList();
 
-    private String billTableName = "BILLS";
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         customerName.setItems(DatabaseHelper.getCustomerNameList(2));
-        comboBills.getItems().addAll("GST", "Non-GST", "I-GST");
-        comboBills.getSelectionModel().selectFirst();
         checkGST.setOnAction(e -> setCustomerName());
         checkNonGst.setOnAction(e -> setCustomerName());
     }
@@ -91,7 +86,7 @@ public class ViewBillsController implements Initializable {
             return;
         }
         showBill(tableView.getSelectionModel().getSelectedItem(), mainApp
-                , true, BillingSystemUtils.getN(comboBills.getValue()));
+                , true);
     }
 
     @FXML
@@ -129,14 +124,12 @@ public class ViewBillsController implements Initializable {
     @FXML
     void handleDeleteBill() {
         boolean b;
-        billTableName = BillingSystemUtils.getTableName(comboBills.getValue());
         if (mainApp.getUser().getAccess().equals("admin")) {
             if (tableView.getSelectionModel().getSelectedItem() != null) {
                 if (!AlertMaker.showMCAlert("Confirm delete?"
                         , "Are sure you want to delete?", mainApp))
                     return;
-                b = DatabaseHelper.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId()
-                        , billTableName);
+                b = DatabaseHelper.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId());
                 if (b)
                     mainApp.snackBar("Success", "Bill is Successfully Deleted", "green");
                 else
@@ -156,7 +149,7 @@ public class ViewBillsController implements Initializable {
             mainApp.snackBar("INFO", "Select a bill", "green");
             return;
         }
-        mainApp.initNewBill(tableView.getSelectionModel().getSelectedItem(), comboBills.getValue());
+        mainApp.initNewBill(tableView.getSelectionModel().getSelectedItem());
 
     }
 
@@ -183,31 +176,28 @@ public class ViewBillsController implements Initializable {
 
     private void loadTable() {
         tableView.getItems().clear();
-        billTableName = BillingSystemUtils.getTableName(comboBills.getValue());
+
         if (searchBox.getText() != null && !searchBox.getText().isEmpty())
-            bills = DatabaseHelper.getBillLists("%" + searchBox.getText() + "%", billTableName);
+            bills = DatabaseHelper.getBillLists("%" + searchBox.getText() + "%");
         else if (customerName.getValue() != null)
             if (fromDate.getValue() != null && toDate != null)
                 bills = DatabaseHelper.getBillList(customerName.getValue()
-                        , fromDate.getValue(), toDate.getValue(), billTableName);
+                        , fromDate.getValue(), toDate.getValue());
             else
-                bills = DatabaseHelper.getBillList(customerName.getValue(), billTableName);
+                bills = DatabaseHelper.getBillList(customerName.getValue());
         else if (fromDate.getValue() != null && toDate != null)
             if (checkGST.isSelected() && !checkNonGst.isSelected())
-                bills = DatabaseHelper.getBillList(fromDate.getValue(), toDate.getValue(), 1
-                        , billTableName);
+                bills = DatabaseHelper.getBillList(fromDate.getValue(), toDate.getValue(), 1);
             else if (!checkGST.isSelected() && checkNonGst.isSelected())
-                bills = DatabaseHelper.getBillList(fromDate.getValue(), toDate.getValue(), 2
-                        , billTableName);
+                bills = DatabaseHelper.getBillList(fromDate.getValue(), toDate.getValue(), 2);
             else
-                bills = DatabaseHelper.getBillList(fromDate.getValue(), toDate.getValue(), 3
-                        , billTableName);
+                bills = DatabaseHelper.getBillList(fromDate.getValue(), toDate.getValue(), 3);
         else if (checkGST.isSelected() && !checkNonGst.isSelected())
-            bills = DatabaseHelper.getBillList(true, billTableName);
+            bills = DatabaseHelper.getBillList(true);
         else if (!checkGST.isSelected() && checkNonGst.isSelected())
-            bills = DatabaseHelper.getBillList(false, billTableName);
+            bills = DatabaseHelper.getBillList(false);
         else
-            bills = DatabaseHelper.getBillList(billTableName);
+            bills = DatabaseHelper.getBillList();
         tableView.getItems().addAll(bills);
     }
 

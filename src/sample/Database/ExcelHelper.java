@@ -60,14 +60,11 @@ public class ExcelHelper {
                 row.createCell(0).setCellValue(bill.getInvoice());
                 row.createCell(1).setCellValue(bill.getCustomerName());
                 row.createCell(2).setCellValue(bill.getDate());
-                row.createCell(3).setCellValue(bill.getTotalTaxAmount());
-                row.createCell(4).setCellValue(bill.getGst12Total());
-                row.createCell(5).setCellValue(bill.getGst18Total());
-                row.createCell(6).setCellValue(bill.getGst28Total());
-                row.createCell(7).setCellValue(bill.getTotalAmount());
-                row.createCell(8).setCellValue(bill.getGSTNo());
-                row.createCell(9).setCellValue(bill.getMobile());
-                row.createCell(10).setCellValue(bill.getUserName());
+
+                row.createCell(3).setCellValue(bill.getTotalAmount());
+                row.createCell(4).setCellValue(bill.getGSTNo());
+                row.createCell(5).setCellValue(bill.getMobile());
+                row.createCell(6).setCellValue(bill.getUserName());
                 rowNum++;
             }
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
