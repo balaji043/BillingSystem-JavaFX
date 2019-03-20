@@ -110,7 +110,6 @@ public class AlertMaker {
                 });
                 okayButton.setDefaultButton(true);
                 dialogLayout.setActions(okayButton);
-
             } else {
                 JFXButton okayButton = new JFXButton("Submit");
                 okayButton.setOnAction(e -> {
@@ -127,8 +126,8 @@ public class AlertMaker {
                 okayButton.setDefaultButton(true);
 
                 dialogLayout.setActions(okayButton, cancelButton);
-
             }
+
             dialogLayout.setHeading(new Label("Bills"));
 
             dialogLayout.setBody(getPane(bill, main, isIBill));
@@ -214,8 +213,7 @@ public class AlertMaker {
         return main;
     }
 
-    private static void print(Bill bill, Stage owner, int i, int
-            isIBill) {
+    private static void print(Bill bill, Stage owner, int i, int isIBill) {
         Printer printer = Printer.getDefaultPrinter();
         PrinterJob printerJob = PrinterJob.createPrinterJob();
         PageLayout pageLayout = printer.createPageLayout(Paper.A4
@@ -237,7 +235,7 @@ public class AlertMaker {
                     break;
                 }
                 case 2: {
-                    loader.setLocation(Main.class.getResource("CustomUI/NonGstBill/NonGstadaBill.fxml"));
+                    loader.setLocation(Main.class.getResource("CustomUI/NonGstBill/NonGstBill.fxml"));
                     loader.load();
                     NonGstBill billingController = loader.getController();
                     billingController.setBill(bill);

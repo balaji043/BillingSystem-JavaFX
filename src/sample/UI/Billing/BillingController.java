@@ -34,7 +34,7 @@ public class BillingController {
     public JFXDatePicker manualDate;
     public Text labelBillFor, totalAmount;
     public BorderPane borderPane, root;
-    public HBox hBox;
+    public HBox hBox, outerTopHBox;
     public VBox manualD;
     private Main mainApp;
     private Customer customer = null;
@@ -209,7 +209,8 @@ public class BillingController {
 
     @FXML
     void handleCustomerSubmit() {
-        if (comboBoxCustomer.getValue() != null && !comboBoxCustomer.getValue().isEmpty()) {
+        if (comboBoxCustomer.getValue() != null && !comboBoxCustomer.getValue().isEmpty() &&
+                comboBills.getValue() != null && !comboBills.getValue().isEmpty()) {
             customer = DatabaseHelper.getCustomerInfo(comboBoxCustomer.getValue());
             if (customer == null) return;
             labelBillFor.setText("" + customer.getName().toUpperCase());
@@ -217,6 +218,7 @@ public class BillingController {
             borderPane.setDisable(false);
             listView.setExpanded(true);
             listView.setVerticalGap(5.0);
+
             tableName = BillingSystemUtils.getTableName(comboBills.getValue());
             if (isNewBill) root.setTop(null);
         }
@@ -241,15 +243,15 @@ public class BillingController {
         isNewBill = false;
         checkBoxGST.setSelected(!bill.getGSTNo().equalsIgnoreCase("for own use"));
         toggleCustomer();
+        outerTopHBox.getChildren().remove(checkStdBill);
         comboBoxCustomer.getSelectionModel().select(bill.getCustomerName());
         comboBills.getSelectionModel().select(isIGstBill);
-        comboBills.setDisable(true);
         handleCustomerSubmit();
         billId = bill.getBillId();
         invoice = bill.getInvoice();
         date = new Date(Long.parseLong(bill.getTime()));
         hBox.getChildren().remove(manualD);
-        totalAmount.setText("Total Amount : " + bill.getTotalAmount());
+        totalAmount.setText(bill.getTotalAmount());
         int i = 1;
         for (Product product : bill.getProducts()) {
             SingleProduct product1 = new SingleProduct();
