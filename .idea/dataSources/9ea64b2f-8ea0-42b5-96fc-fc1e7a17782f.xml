@@ -95,13 +95,11 @@
     <index id="49" parent="6" name="sqlite_autoindex_BILLS_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>BillID</ColNames>
-      <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
     <index id="50" parent="6" name="sqlite_autoindex_BILLS_2">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>INVOICE</ColNames>
-      <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
     <key id="51" parent="6">
@@ -1025,13 +1023,11 @@
     <index id="235" parent="36" name="sqlite_autoindex_CUSTOMER_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>NAME</ColNames>
-      <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
     <index id="236" parent="36" name="sqlite_autoindex_CUSTOMER_2">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
-      <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
     <key id="237" parent="36">
@@ -1070,7 +1066,6 @@
     <index id="244" parent="37" name="sqlite_autoindex_Employee_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
-      <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
     <key id="245" parent="37">
@@ -1125,13 +1120,11 @@
     <index id="255" parent="38" name="sqlite_autoindex_IBILLS_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>BillID</ColNames>
-      <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
     <index id="256" parent="38" name="sqlite_autoindex_IBILLS_2">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>INVOICE</ColNames>
-      <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
     <key id="257" parent="38">
