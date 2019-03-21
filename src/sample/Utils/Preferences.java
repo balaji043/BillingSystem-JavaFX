@@ -23,7 +23,6 @@ public class Preferences {
     private String date;
     private String limit;
     private String theme;
-    private String logoName;
 
     private HashSet<String> descriptions;
     private HashSet<String> perData;
@@ -55,8 +54,7 @@ public class Preferences {
         Date d = new Date();
         date = "" + d.getTime();
         limit = "22";
-        theme = "red";
-        logoName = "StdEnt";
+        theme = "green";
     }
 
     private static void initConfig() {
