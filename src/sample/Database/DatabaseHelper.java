@@ -650,6 +650,7 @@ public class DatabaseHelper {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, customerId);
             resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) return null;
             customer = new Customer(
                     "" + resultSet.getString("NAME")
                     , "" + resultSet.getString("PHONE")

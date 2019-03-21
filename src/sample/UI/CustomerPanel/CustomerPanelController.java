@@ -115,7 +115,8 @@ public class CustomerPanelController implements Initializable {
             Customer customer = userTableView.getSelectionModel().getSelectedItem();
             boolean okay;
             okay = AlertMaker.showMCAlert("Confirm delete?"
-                    , "Are you sure you want to delete" + customer.getName() + "'s data"
+                    , "If you delete now, then the Data shown in the bills of this customer will be the ones saved at" +
+                            " the time of bill submission.\n" + customer.getName() + "'s data"
                     , mainApp);
             if (okay) {
                 if (DatabaseHelper.deleteCustomer(customer)) {
