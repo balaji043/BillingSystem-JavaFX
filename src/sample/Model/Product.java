@@ -13,7 +13,6 @@ public class Product extends RecursiveTreeObject<Product> {
     private String per;
 
     private String totalAmount;
-    private String singleOrg;
 
     public boolean ready;
 
@@ -33,15 +32,13 @@ public class Product extends RecursiveTreeObject<Product> {
         this.name = name;
         this.hsn = hsn;
         this.qty = qty;
-        this.rate = "" + (Math.ceil(Double.parseDouble(rate)));
+        this.rate = rate;
         this.per = per;
 
         float q = Integer.parseInt(qty);
         float r = Float.parseFloat(this.rate);
         float originalAmount = q * r;
 
-
-        singleOrg = rate;
 
         totalAmount = String.format("%.2f", originalAmount);
         ready = true;
@@ -84,8 +81,5 @@ public class Product extends RecursiveTreeObject<Product> {
         return totalAmount;
     }
 
-    public String getSingleOrg() {
-        return singleOrg;
-    }
 
 }

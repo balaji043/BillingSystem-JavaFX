@@ -28,7 +28,7 @@
                     <RowConstraints maxHeight="15.0" minHeight="80.0" prefHeight="15.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
                 <StackPane alignment="TOP_RIGHT">
-                    <ImageView fx:id="storeLogo" cache="true" fitHeight="61.0" fitWidth="91.0" pickOnBounds="true"
+                    <ImageView cache="true" fitHeight="61.0" fitWidth="91.0" pickOnBounds="true"
                                preserveRatio="true">
                         <Image url="@../../Resources/icons/StdEnt.png"/>
                     </ImageView>
@@ -86,53 +86,69 @@
                 <rowConstraints>
                     <RowConstraints vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <StackPane alignment="CENTER_LEFT" maxHeight="75.0" prefWidth="200.0">
+                <StackPane alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308">
                     <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        <Insets/>
                     </GridPane.margin>
-                    <GridPane prefHeight="104.0" prefWidth="265.0">
-                        <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="81.0"/>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0" prefWidth="194.0"/>
-                        </columnConstraints>
-                        <rowConstraints>
-                            <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
-                        </rowConstraints>
-                        <VBox spacing="5.0">
-                            <Text text="Invoice">
-                                <font>
-                                    <Font size="8.0"/>
-                                </font>
-                            </Text>
-                            <Text text="Date">
-                                <font>
-                                    <Font size="8.0"/>
-                                </font>
-                            </Text>
-                            <Text text="Mode of Payment">
-                                <font>
-                                    <Font size="8.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                        <VBox spacing="5.0" GridPane.columnIndex="1">
-                            <Text fx:id="lInvoiceNo" text=": J-0012019">
-                                <font>
-                                    <Font size="8.0"/>
-                                </font>
-                            </Text>
-                            <Text fx:id="lDate" text=": 02-02-2019">
-                                <font>
-                                    <Font size="8.0"/>
-                                </font>
-                            </Text>
-                            <Text text=": CASH / CREDIT">
-                                <font>
-                                    <Font size="8.0"/>
-                                </font>
-                            </Text>
-                        </VBox>
-                    </GridPane>
+                    <VBox alignment="CENTER">
+                        <GridPane maxHeight="100.0" maxWidth="254.0" prefHeight="104.0" prefWidth="265.0"
+                                  style="-fx-bORDER-color: BLACK;">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0"
+                                                   prefWidth="81.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="194.0" minWidth="10.0"
+                                                   prefWidth="194.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <VBox spacing="5.0">
+                                <Text text="Invoice">
+                                    <font>
+                                        <Font size="8.0"/>
+                                    </font>
+                                </Text>
+                                <Text text="Date">
+                                    <font>
+                                        <Font size="8.0"/>
+                                    </font>
+                                </Text>
+                                <Text text="Mode of Payment">
+                                    <font>
+                                        <Font size="8.0"/>
+                                    </font>
+                                </Text>
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                </GridPane.margin>
+                            </VBox>
+                            <VBox spacing="5.0" GridPane.columnIndex="1">
+                                <Text fx:id="lInvoiceNo" text=": J-0012019">
+                                    <font>
+                                        <Font size="8.0"/>
+                                    </font>
+                                </Text>
+                                <Text fx:id="lDate" text=": 02-02-2019">
+                                    <font>
+                                        <Font size="8.0"/>
+                                    </font>
+                                </Text>
+                                <Text text=": CASH / CREDIT">
+                                    <font>
+                                        <Font size="8.0"/>
+                                    </font>
+                                </Text>
+                                <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                </GridPane.margin>
+                            </VBox>
+                        </GridPane>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="COMPOSITION SCHEME BILL">
+                            <font>
+                                <Font size="10.0"/>
+                            </font>
+                        </Text>
+                    </VBox>
                 </StackPane>
                 <StackPane alignment="CENTER_LEFT" maxHeight="75.0" minWidth="75.0" prefHeight="75.0" prefWidth="200.0"
                            GridPane.columnIndex="1">
@@ -291,16 +307,18 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="473.0" minWidth="10.0" prefWidth="126.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="40.0" minHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
-            <StackPane prefHeight="15.0" prefWidth="447.0">
+            <StackPane prefHeight="15.0" prefWidth="447.0" GridPane.rowIndex="1">
                 <Text text="Total Net Amount for this Invoice">
                     <font>
                         <Font name="System Bold Italic" size="10.0"/>
                     </font>
                 </Text>
             </StackPane>
-            <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="148.0" GridPane.columnIndex="1">
+            <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="148.0" GridPane.columnIndex="1"
+                       GridPane.rowIndex="1">
                 <Text fx:id="lTotalPlusTaxNum" text="Rs. 694.00" textAlignment="RIGHT">
                     <font>
                         <Font name="System Bold" size="11.0"/>
@@ -310,6 +328,36 @@
                     </StackPane.margin>
                 </Text>
             </StackPane>
+            <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                <GridPane.margin>
+                    <Insets right="10.0"/>
+                </GridPane.margin>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Amount">
+                    <font>
+                        <Font size="10.0"/>
+                    </font>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rounded Off">
+                    <font>
+                        <Font size="10.0"/>
+                    </font>
+                </Text>
+            </VBox>
+            <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                <GridPane.margin>
+                    <Insets right="20.0"/>
+                </GridPane.margin>
+                <Text fx:id="billAmount" strokeType="OUTSIDE" strokeWidth="0.0" text="693.12">
+                    <font>
+                        <Font size="10.0"/>
+                    </font>
+                </Text>
+                <Text fx:id="roundedOff" strokeType="OUTSIDE" strokeWidth="0.0" text="0.88">
+                    <font>
+                        <Font size="10.0"/>
+                    </font>
+                </Text>
+            </VBox>
         </GridPane>
         <GridPane alignment="CENTER" maxHeight="25.0" maxWidth="586.0" minHeight="25.0" prefHeight="25.0"
                   prefWidth="586.0" style="-fx-border-color: black;">

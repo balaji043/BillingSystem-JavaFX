@@ -5,8 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
@@ -14,14 +12,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import sample.Database.DatabaseHelper;
-import sample.Main;
 import sample.Model.Bill;
 import sample.Model.Customer;
 import sample.Model.Product;
 import sample.Utils.BillingSystemUtils;
 import sample.Utils.Preferences;
 
-@SuppressWarnings("Duplicates")
 public class NonGstBill {
     @FXML
     private VBox root, main;
@@ -29,30 +25,23 @@ public class NonGstBill {
     private GridPane pane;
     @FXML
     private Text lStoreName, lStoreStreet, lStoreAddandPhone, lStoreGSTin;
-
     @FXML
     private Text lCusStreet;
     @FXML
     private Text lInvoiceNo, lDate, lCopy;
-
     @FXML
     private Text lCusName, lCusMob, lGSTin;
-
+    @FXML
+    private Text billAmount, roundedOff;
     @FXML
     private Text lTotalAmountWords, lTotalPlusTaxNum;
-
-
     @FXML
     private Text lBankName, lBankAccNo, lBranchName, lBankIFSC, forStoreName;
 
-    @FXML
-    private ImageView storeLogo;
-
     private Preferences preferences = Preferences.getPreferences();
 
-    public void setBill(Bill bill) {
 
-        storeLogo.setImage(new Image(Main.class.getResourceAsStream("Resources/icons/" + preferences.getLogoName() + ".png")));
+    public void setBill(Bill bill) {
 
         //Top Header
         lStoreName.setText(preferences.getName());
@@ -96,10 +85,11 @@ public class NonGstBill {
         //TAX section
         //TAX OVERALL TOTAL
         double t = Float.parseFloat(bill.getTotalAmount());
-        if ((t - (int) t) != 0.00) {
-            t = Math.ceil(t);
-        }
-        lTotalPlusTaxNum.setText("RS. " + t);
+
+        billAmount.setText(bill.getTotalAmount());
+        roundedOff.setText(String.format("%.2f", 1 - (t - (int) t)));
+        t = Math.ceil(t);
+        lTotalPlusTaxNum.setText(String.format("RS. %.2f", t));
         lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int) t) + " Rupees Only )");//Bank Details
         lBankName.setText(preferences.getBank());
         lBranchName.setText(preferences.getBranch());
@@ -118,7 +108,7 @@ public class NonGstBill {
         Product product = new Product();
         ObservableList<Product> products = FXCollections.observableArrayList();
         products.addAll(bill.getProducts());
-        int s = Integer.parseInt(preferences.getLimit()) - products.size() + 1;
+        int s = Integer.parseInt(preferences.getLimit()) - products.size() + 1 + 7;
         for (; i <= s; i++) products.add(product);
 
         i = 1;
@@ -152,7 +142,7 @@ public class NonGstBill {
             pane.add(stackPane, 3, i);
 
             Text rate = new Text();
-            rate.setText(p.getSingleOrg());
+            rate.setText(p.getRate());
             rate.setStyle("-fx-font-size:8px;");
             stackPane = new StackPane(rate);
             stackPane.setPadding(new Insets(0, 10, 0, 0));
