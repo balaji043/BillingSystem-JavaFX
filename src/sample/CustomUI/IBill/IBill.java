@@ -79,7 +79,6 @@ public class IBill {
         else
             lDate.setText(": " + bill.getDate());
 
-
         //billing address section
 
         Customer customer = DatabaseHelper.getCustomerInfo(bill.getCustomerName());

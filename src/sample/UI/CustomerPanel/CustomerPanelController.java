@@ -115,7 +115,8 @@ public class CustomerPanelController implements Initializable {
             Customer customer = userTableView.getSelectionModel().getSelectedItem();
             boolean okay;
             okay = AlertMaker.showMCAlert("Confirm delete?"
-                    , "Are you sure you want to delete" + customer.getName() + "'s data"
+                    , "If you delete now, then the Data shown in the bills of this customer will be the ones saved at" +
+                            " the time of bill submission.\n" + customer.getName() + "'s data"
                     , mainApp);
             if (okay) {
                 if (DatabaseHelper.deleteCustomer(customer)) {
@@ -210,7 +211,7 @@ public class CustomerPanelController implements Initializable {
                 (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
         File dest = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
         if (dest == null) {
-            mainApp.snackBar("INFO","Operation Cancelled","green");
+            mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
             JFXSpinner spinner = new JFXSpinner();
             double d = 50;
@@ -243,7 +244,7 @@ public class CustomerPanelController implements Initializable {
                 (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
         File dest = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
         if (dest == null) {
-            mainApp.snackBar("INFO","Operation Cancelled","green");
+            mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
             JFXSpinner spinner = new JFXSpinner();
             double d = 50;
@@ -252,8 +253,8 @@ public class CustomerPanelController implements Initializable {
             borderPane.getChildren().add(spinner);
             if (ExcelHelper.writeExcelCustomer(dest, all))
                 mainApp.snackBar("Success"
-                    , "Customer Data Written to Excel"
-                    , "green");
+                        , "Customer Data Written to Excel"
+                        , "green");
             else
                 mainApp.snackBar("Failed"
                         , "Customer Data is NOT written to Excel"
