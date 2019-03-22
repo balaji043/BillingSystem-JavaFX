@@ -25,7 +25,7 @@
                     <RowConstraints maxHeight="15.0" minHeight="80.0" prefHeight="15.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <StackPane alignment="TOP_RIGHT">
-                    <ImageView fx:id="storeLogo" cache="true" fitHeight="61.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
+                    <ImageView cache="true" fitHeight="61.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../../Resources/icons/KrisEnt.png"/>
                     </ImageView>
                 </StackPane>

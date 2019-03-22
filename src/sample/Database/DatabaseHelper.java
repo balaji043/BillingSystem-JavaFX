@@ -381,8 +381,7 @@ public class DatabaseHelper {
                 product = new Product(
                         resultSet.getString(1), resultSet.getString(2)
                         , resultSet.getString(3), resultSet.getString(4)
-                        , resultSet.getString(5), resultSet.getString(6)
-                        , tableName.equals("BILLS"));
+                        , resultSet.getString(5), resultSet.getString(6));
                 product.setSl("" + (i++));
                 products.add(product);
             }
@@ -747,13 +746,11 @@ public class DatabaseHelper {
 
     private static boolean deleteTable(@NotNull String tableName) {
         PreparedStatement preparedStatement = null;
-        boolean okay = false;
 
         try {
             String q = "DROP TABLE IF EXISTS " + tableName;
-            preparedStatement =
-                    DatabaseHandler.getInstance().getConnection().prepareStatement(q);
-            okay = !preparedStatement.execute();
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(q);
+            return preparedStatement.executeUpdate() > 0;
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
             e.printStackTrace();
@@ -765,21 +762,22 @@ public class DatabaseHelper {
                 e1.printStackTrace();
             }
         }
-        return okay;
+        return false;
     }
 
-
-    public static boolean ifInvoiceExist(String s, String tableName) {
+    public static boolean ifInvoiceExist(String s) {
+        String[] tableNames = {"Bills", "IBills"};
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         boolean okay = false;
         try {
-            String q = String.format("Select * from %s where invoice = ?", tableName);
-            preparedStatement =
-                    DatabaseHandler.getInstance().getConnection().prepareStatement(q);
-            preparedStatement.setString(1, s);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) okay = true;
+            for (String tableName : tableNames) {
+                String q = String.format("Select invoice from %s where invoice = ?", tableName);
+                preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(q);
+                preparedStatement.setString(1, s);
+                resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) okay = true;
+            }
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
             e.printStackTrace();

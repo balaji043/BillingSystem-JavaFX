@@ -17,7 +17,6 @@ public class Product extends RecursiveTreeObject<Product> {
     private String singleOrg;
     private String gstAmount;
     public boolean ready;
-    private boolean isGST;
 
     public Product() {
         sl = "";
@@ -34,14 +33,13 @@ public class Product extends RecursiveTreeObject<Product> {
     }
 
     public Product(String name, String hsn, String qty
-            , String tax, String rate, String per, boolean isGST) {
+            , String tax, String rate, String per) {
         this.name = name;
         this.hsn = hsn;
         this.qty = qty;
         this.tax = tax;
         this.rate = rate;
         this.per = per;
-        this.isGST = isGST;
 
         float q = Integer.parseInt(qty);
 
@@ -53,9 +51,8 @@ public class Product extends RecursiveTreeObject<Product> {
 
         float gstAmount = originalAmount - originalAmount * (100 / (100 + t));
 
-        if (isGST)
-            singleOrg = String.format("%.2f", r - (r - r * (100 / (100 + t))));
-        else singleOrg = rate;
+        singleOrg = String.format("%.2f", r - (r - r * (100 / (100 + t))));
+
         halfTaxPer = String.format("%.2f", t / 2);
         halfTaxAmt = String.format("%.2f", gstAmount / 2);
         totalAmount = String.format("%.2f", originalAmount);
@@ -124,7 +121,4 @@ public class Product extends RecursiveTreeObject<Product> {
         return gstAmount;
     }
 
-    public boolean isGST() {
-        return isGST;
-    }
 }

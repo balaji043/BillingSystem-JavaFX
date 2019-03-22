@@ -37,7 +37,7 @@ public class RootController implements Initializable {
     @FXML
     private JFXHamburger ham;
     @FXML
-    public JFXButton addNewUser,r,s;
+    public JFXButton addNewUser, r, s;
 
     private int i = 0;
     private Main mainApp;
@@ -63,10 +63,10 @@ public class RootController implements Initializable {
         int i = 25;
         r.setGraphic(new ImageView(new Image(Main.class.
                 getResourceAsStream("Resources/icons/refreshWhite.png")
-                ,i,i,false,true)));
+                , i, i, false, true)));
         s.setGraphic(new ImageView(new Image(Main.class.
                 getResourceAsStream("Resources/icons/gear.png")
-                ,i,i,false,true)));
+                , i, i, false, true)));
     }
 
     private void setAccelerators() {
@@ -203,11 +203,11 @@ public class RootController implements Initializable {
                 handleLogout();
             }
         }
-        mainApp.snackBar("Refreshed","page refreshed successfully","green");
+        mainApp.snackBar("Refreshed", "page refreshed successfully", "green");
     }
 
     @FXML
-    public void handleSettings()  {
+    public void handleSettings() {
         if (AlertMaker.showSettings(mainApp))
             mainApp.snackBar("Success", "Changes Saved Successfully", "green");
         else

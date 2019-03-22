@@ -33,7 +33,7 @@ public class SingleProduct extends HBox {
     private Text slNo;
 
     private Product product = null;
-    private boolean isGST;
+
     private RequiredFieldValidator requiredFieldValidator = new RequiredFieldValidator("*");
 
 
@@ -151,12 +151,12 @@ public class SingleProduct extends HBox {
                 return slNo.getText() + " Qty Rate Discount should be in numeral value";
             }
             try {
-                Integer.parseInt(rate.getText());
+                Float.parseFloat(rate.getText());
             } catch (Exception e) {
                 rate.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
                         , new CornerRadii(0)
                         , new Insets(0, 0, 0, 0))));
-                return slNo.getText() + " Rate should be in number value";
+                return slNo.getText() + " Rate should be in number or decimal value";
             }
             if (checkBoxDiscount.isSelected() || checkBoxAdd.isSelected()) {
                 try {
@@ -189,7 +189,7 @@ public class SingleProduct extends HBox {
 
 
         product = new Product(name.getText(), hsn.getText(), qty.getText(), tax.getValue()
-                , rates, per.getValue(), isGST);
+                , rates, per.getValue());
 
         amount.setText("Amount : " + product.getTotalAmount());
 
@@ -213,11 +213,6 @@ public class SingleProduct extends HBox {
         tax.setValue(product.getTax());
         per.setValue(product.getPer());
         amount.setText("Amount : " + product.getTotalAmount());
-        isGST = product.isGST();
-    }
-
-    public void setGST(boolean GST) {
-        isGST = GST;
     }
 
     private void toggle() {

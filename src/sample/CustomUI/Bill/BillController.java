@@ -26,35 +26,26 @@ public class BillController {
     private GridPane pane;
     @FXML
     private Text lStoreName, lStoreStreet, lStoreAddandPhone, lStoreGSTin;
-
     @FXML
     private Text cGstper, cGSTAmt, sGSTPer, sGSTAmt;
     @FXML
     private Text lCusStreet;
     @FXML
     private Text lInvoiceNo, lDate, lCopy;
-
     @FXML
     private Text lCusName, lCusMob, lGSTin;
-
     @FXML
     private Text lTotalAmountNum, lTotalAmountWords, lTotalPlusTaxNum;
-
     @FXML
     private Text lTaxAmount12, lTaxAmount18, lTaxAmount28;
-
     @FXML
     private Text lTax6perCAmount, lTax8perCAmount, lTax12perCAmount;
-
     @FXML
     private Text lTax6perSAmount, lTax8perSAmount, lTax12perSAmount;
-
     @FXML
     private Text lBankName, lBankAccNo, lBranchName, lBankIFSC, forStoreName;
-
     @FXML
     private Text lgrossAmount, laSGST, laCGST, roundedOff;
-
 
     private Preferences preferences = Preferences.getPreferences();
 
@@ -113,7 +104,7 @@ public class BillController {
         roundedOff.setText(String.format("%.2f", r));
         lTotalPlusTaxNum.setText("RS. " + t);
         lgrossAmount.setText(bill.getGross());
-        lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int)t) + " Rupees Only )");//Bank Details
+        lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int) t) + " Rupees Only )");//Bank Details
         lBankName.setText(preferences.getBank());
         lBranchName.setText(preferences.getBranch());
         lBankAccNo.setText(preferences.getAcc());

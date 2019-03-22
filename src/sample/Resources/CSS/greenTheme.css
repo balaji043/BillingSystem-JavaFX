@@ -66,22 +66,22 @@
 /****************BUTTON*********************/
 
 .jfx-button1 {
-    -fx-background-color: darkgreen;
-    -jfx-rippler-fill: #D0CF37;
+    -fx-background-color: forestgreen;
+    -jfx-rippler-fill: darkgreen;
     -jfx-button-type: RAISED;
 }
 
 .jfx-button2 {
-    -fx-background-color: darkgreen;
+    -fx-background-color: green;
     jfx-rippler-fill: white;
     -jfx-button-type: FLAT;
 }
 
 .jfx-button2:hover {
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-background-radius: 5px, 5px, 5px, px;
     -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
-    -fx-background-color: aliceblue;
+    -jfx-button-type: RAISED;
     -fx-alignment: CENTER;
 }
 

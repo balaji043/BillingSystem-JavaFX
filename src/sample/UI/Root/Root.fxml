@@ -12,27 +12,23 @@
         <BorderPane prefHeight="50.0" prefWidth="200.0" styleClass="background1" BorderPane.alignment="CENTER_RIGHT">
             <left>
                 <HBox alignment="CENTER_LEFT" style="-fx-background-color: white;">
-                    <children>
-                        <ImageView fitHeight="50.0" fitWidth="200.0" onMouseClicked="#handleHome" pickOnBounds="true"
-                                   preserveRatio="true">
-                            <Image url="@../../Resources/icons/KrisEnt.png"/>
-                        </ImageView>
-                        <VBox>
-                            <children>
-                                <Label prefHeight="36.0" prefWidth="120.0" text="KRISHNA" textAlignment="JUSTIFY"
-                                       textFill="RED" textOverrun="CLIP" underline="true">
-                                    <font>
-                                        <Font name="System Bold" size="25.0"/>
-                                    </font>
-                                </Label>
-                                <Label text="ENTERPRISES" textFill="RED" underline="true">
-                                    <font>
-                                        <Font name="System Bold" size="18.0"/>
-                                    </font>
-                                </Label>
-                            </children>
-                        </VBox>
-                    </children>
+                    <ImageView fitHeight="50.0" fitWidth="200.0" onMouseClicked="#handleHome" pickOnBounds="true"
+                               preserveRatio="true">
+                        <Image url="@../../Resources/icons/KrisEnt.png"/>
+                    </ImageView>
+                    <VBox>
+                        <Label prefHeight="36.0" prefWidth="120.0" text="KRISHNA" textAlignment="JUSTIFY"
+                               textFill="RED" textOverrun="CLIP" underline="true">
+                            <font>
+                                <Font name="System Bold" size="25.0"/>
+                            </font>
+                        </Label>
+                        <Label text="ENTERPRISES" textFill="RED" underline="true">
+                            <font>
+                                <Font name="System Bold" size="18.0"/>
+                            </font>
+                        </Label>
+                    </VBox>
                 </HBox>
             </left>
             <padding>
@@ -48,8 +44,10 @@
             </center>
             <right>
                 <HBox alignment="CENTER" spacing="50.0">
-               <JFXButton fx:id="s" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0" styleClass="jfx-button1" />
-               <JFXButton fx:id="r" onAction="#handleRefresh" prefHeight="35.0" prefWidth="35.0" styleClass="jfx-button1" />
+                    <JFXButton fx:id="s" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0"
+                               styleClass="jfx-button2"/>
+                    <JFXButton fx:id="r" onAction="#handleRefresh" prefHeight="35.0" prefWidth="35.0"
+                               styleClass="jfx-button2"/>
                     <JFXHamburger fx:id="ham" />
                 </HBox>
             </right>

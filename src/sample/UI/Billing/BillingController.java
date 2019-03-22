@@ -108,7 +108,7 @@ public class BillingController {
                 date = new Date();
             }
             invoice = start + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
-            while (DatabaseHelper.ifInvoiceExist(invoice, tableName)) {
+            while (DatabaseHelper.ifInvoiceExist(invoice)) {
                 invoice = start + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
                 num++;
             }
@@ -125,7 +125,6 @@ public class BillingController {
         String errorMsg;
         boolean errored = false;
         for (SingleProduct s : p) {
-            s.setGST(comboBills.getValue().equalsIgnoreCase("GST"));
             errorMsg = s.isReady();
             if (!errorMsg.equals("s")) {
                 mainApp.snackBar("Check the Following", errorMsg, "red");
