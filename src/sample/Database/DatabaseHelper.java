@@ -737,13 +737,11 @@ public class DatabaseHelper {
 
     private static boolean deleteTable(@NotNull String tableName) {
         PreparedStatement preparedStatement = null;
-        boolean okay = false;
-
         try {
             String q = "DROP TABLE IF EXISTS " + tableName;
             preparedStatement =
                     DatabaseHandler.getInstance().getConnection().prepareStatement(q);
-            okay = !preparedStatement.execute();
+            return preparedStatement.executeUpdate() > 0;
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
             e.printStackTrace();
@@ -755,9 +753,8 @@ public class DatabaseHelper {
                 e1.printStackTrace();
             }
         }
-        return okay;
+        return false;
     }
-
 
     public static boolean ifInvoiceExist(String s) {
         PreparedStatement preparedStatement = null;

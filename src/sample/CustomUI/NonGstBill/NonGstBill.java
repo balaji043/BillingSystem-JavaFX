@@ -108,7 +108,7 @@ public class NonGstBill {
         Product product = new Product();
         ObservableList<Product> products = FXCollections.observableArrayList();
         products.addAll(bill.getProducts());
-        int s = Integer.parseInt(preferences.getLimit()) - products.size() + 1 + 7;
+        int s = Integer.parseInt(preferences.getLimit()) - products.size() + 1 + 5;
         for (; i <= s; i++) products.add(product);
 
         i = 1;
