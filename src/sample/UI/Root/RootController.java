@@ -70,7 +70,6 @@ public class RootController implements Initializable {
     }
 
     private void setAccelerators() {
-
         HashMap<KeyCodeCombination, Runnable> keyCodeCombinationRunnableHashMap = new HashMap<>();
         keyCodeCombinationRunnableHashMap.put(new KeyCodeCombination(KeyCode.TAB
                 , KeyCombination.CONTROL_DOWN), this::toggle);

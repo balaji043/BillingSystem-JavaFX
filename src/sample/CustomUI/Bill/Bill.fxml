@@ -25,7 +25,7 @@
                     <RowConstraints maxHeight="15.0" minHeight="80.0" prefHeight="15.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <StackPane alignment="TOP_RIGHT">
-                    <ImageView fx:id="storeLogo" cache="true" fitHeight="61.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
+                    <ImageView cache="true" fitHeight="61.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../../Resources/icons/KrisEnt.png"/>
                     </ImageView>
                 </StackPane>
@@ -211,101 +211,106 @@
                 </StackPane>
             </GridPane>
         </GridPane>
-        <GridPane fx:id="pane" maxWidth="560.0" minWidth="546.0" prefHeight="24.0" prefWidth="546.0" style="-fx-border-color: black;">
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="23.0" prefWidth="23.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="49.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="10.0" prefWidth="40.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="60.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-            <StackPane>
-                <Text text="S.NO">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane prefHeight="22.0" prefWidth="108.0" GridPane.columnIndex="1">
-                <Text text="Description">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
-                <Text text="HSN">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="3">
-                <Text text="QTY">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="4">
-                <Text text="Rate">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="5">
-                <Text text="PER">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="6">
-            <Text fx:id="cGstper" strokeType="OUTSIDE" strokeWidth="0.0" text="C-GST PER" textAlignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="8.0" />
-               </font>
-            </Text>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="7">
-                <Text fx:id="cGSTAmt" text="C-GST AMT" textAlignment="CENTER">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="8">
-                <Text fx:id="sGSTPer" text="S-GST %" textAlignment="CENTER">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="9">
-                <Text fx:id="sGSTAmt" text="S-GST AMT" textAlignment="CENTER">
-                    <font>
-                        <Font name="System Bold" size="8.0" />
-                    </font>
-                </Text>
-            </StackPane>
-            <StackPane GridPane.columnIndex="10">
-                  <Text text="Total Amount">
-                      <font>
-                          <Font name="System Bold" size="8.0" />
-                      </font>
-                  </Text>
-            </StackPane>
-        </GridPane>
+        <StackPane>
+            <StackPane fx:id="bgImage" opacity="0.3"/>
+            <GridPane fx:id="pane" maxWidth="560.0" minWidth="546.0" prefHeight="24.0" prefWidth="546.0"
+                      style="-fx-border-color: black;">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="40.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="23.0" prefWidth="23.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="49.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="10.0" prefWidth="40.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="60.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="22.0" prefHeight="22.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <StackPane>
+                    <Text text="S.NO">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="22.0" prefWidth="108.0" GridPane.columnIndex="1">
+                    <Text text="Description">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
+                    <Text text="HSN">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="3">
+                    <Text text="QTY">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="4">
+                    <Text text="Rate">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="5">
+                    <Text text="PER">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="6">
+                    <Text fx:id="cGstper" strokeType="OUTSIDE" strokeWidth="0.0" text="C-GST PER"
+                          textAlignment="CENTER">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="7">
+                    <Text fx:id="cGSTAmt" text="C-GST AMT" textAlignment="CENTER">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="8">
+                    <Text fx:id="sGSTPer" text="S-GST %" textAlignment="CENTER">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="9">
+                    <Text fx:id="sGSTAmt" text="S-GST AMT" textAlignment="CENTER">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+                <StackPane GridPane.columnIndex="10">
+                    <Text text="Total Amount">
+                        <font>
+                            <Font name="System Bold" size="8.0"/>
+                        </font>
+                    </Text>
+                </StackPane>
+            </GridPane>
+        </StackPane>
         <GridPane gridLinesVisible="true" maxWidth="586.0" prefHeight="20.0" prefWidth="586.0">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="473.0" minWidth="10.0" prefWidth="424.0" />

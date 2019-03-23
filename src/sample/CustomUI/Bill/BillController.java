@@ -5,13 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import sample.Database.DatabaseHelper;
+import sample.Main;
 import sample.Model.Bill;
 import sample.Model.Customer;
 import sample.Model.Product;
@@ -20,6 +19,8 @@ import sample.Utils.Preferences;
 
 @SuppressWarnings("Duplicates")
 public class BillController {
+    @FXML
+    private StackPane bgImage;
     @FXML
     private VBox root, main;
     @FXML
@@ -50,7 +51,13 @@ public class BillController {
     private Preferences preferences = Preferences.getPreferences();
 
     public void setBill(Bill bill) {
-
+        Image image = new Image(Main.class.getResourceAsStream("Resources/icons/motor.jpg")
+                , 200, 200, false, true);
+        BackgroundImage myBI = new BackgroundImage(image,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT);
+        bgImage.setBackground(new Background(myBI));
+        bgImage.setOpacity(0.1);
 
         //Top Header
         lStoreName.setText(preferences.getName());
