@@ -149,7 +149,12 @@ public class ViewBillsController implements Initializable {
             mainApp.snackBar("INFO", "Select a bill", "green");
             return;
         }
-        mainApp.initNewBill(tableView.getSelectionModel().getSelectedItem());
+        Bill bill = tableView.getSelectionModel().getSelectedItem();
+        if (DatabaseHelper.getCustomerInfo(bill.getCustomerName()) == null) {
+            mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Cannot Modify the bill for now", "red");
+            return;
+        }
+        mainApp.initNewBill(bill);
     }
 
     private void initTable() {

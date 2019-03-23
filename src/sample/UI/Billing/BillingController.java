@@ -205,7 +205,10 @@ public class BillingController {
     void handleCustomerSubmit() {
         if (comboBoxCustomer.getValue() != null && !comboBoxCustomer.getValue().isEmpty()) {
             customer = DatabaseHelper.getCustomerInfo(comboBoxCustomer.getValue());
-            if (customer == null) return;
+            if (customer == null) {
+                mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Choose a Valid Customer", "red");
+                return;
+            }
             labelBillFor.setText("" + customer.getName().toUpperCase());
             borderPane.setVisible(true);
             borderPane.setDisable(false);
