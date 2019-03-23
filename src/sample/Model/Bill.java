@@ -16,11 +16,11 @@ public class Bill {
     private String GSTNo;
     private ObservableList<Product> products;
     private String totalAmount;
+    private String total;
 
     private String userName;
     private String time;
     private LocalDate localDate;
-    private Double decimal;
 
     public Bill(String billId, String invoice, String date
             , String customerName, String customerId
@@ -43,8 +43,7 @@ public class Bill {
             total = total + Float.parseFloat(product.getTotalAmount());
         }
         totalAmount = "" + String.format("%.2f", total);
-        decimal = Double.parseDouble(totalAmount);
-
+        this.total = String.format("%.2f", Math.ceil(Double.parseDouble(getTotalAmount())));
     }
 
     public String getBillId() {
@@ -104,8 +103,8 @@ public class Bill {
         return localDate;
     }
 
-    public Double getDecimal() {
-        return decimal;
+    public String getTotal() {
+        return total;
     }
 
     @Override

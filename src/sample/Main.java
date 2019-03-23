@@ -128,7 +128,10 @@ public class Main extends Application {
                 rootController.setContent(root);
                 BillingController rootController = loader.getController();
                 rootController.setMainApp(Main.this);
-                if (bill != null) rootController.setBill(bill);
+                if (bill != null) {
+                    rootController.setBill(bill);
+                    this.rootController.window.setText("Edit Bill");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

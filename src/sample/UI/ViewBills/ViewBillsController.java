@@ -150,7 +150,6 @@ public class ViewBillsController implements Initializable {
             return;
         }
         mainApp.initNewBill(tableView.getSelectionModel().getSelectedItem());
-
     }
 
     private void initTable() {
@@ -160,13 +159,14 @@ public class ViewBillsController implements Initializable {
         tableView.getItems().clear();
         addTableColumn("Customer", "customerName");
         addTableColumn("Invoice", "invoice");
+
         TableColumn<Bill, LocalDate> column = new TableColumn<>("Date");
         column.setCellValueFactory(new PropertyValueFactory<>("localDate"));
         tableView.getColumns().add(column);
         tableView.getSortOrder().add(column);
 
         TableColumn<Bill, Double> column1 = new TableColumn<>("Invoice Amount");
-        column1.setCellValueFactory(new PropertyValueFactory<>("decimal"));
+        column1.setCellValueFactory(new PropertyValueFactory<>("total"));
         tableView.getColumns().add(column1);
 
         addTableColumn("User Name", "userName");

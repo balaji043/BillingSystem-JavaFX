@@ -131,14 +131,16 @@ public class NonGstBill {
             Text hsn = new Text();
             hsn.setText(p.getHsn());
             hsn.setStyle("-fx-font-size:8px;");
-            pane.add(new StackPane(hsn), 2, i);
+            stackPane = new StackPane(hsn);
+            stackPane.setAlignment(Pos.CENTER_RIGHT);
+            pane.add(stackPane, 2, i);
 
             Text qty = new Text();
             qty.setStyle("-fx-font-size:8px;");
             qty.setText(p.getQty());
             stackPane = new StackPane(qty);
             stackPane.setPadding(new Insets(0, 10, 0, 0));
-            stackPane.setAlignment(Pos.CENTER);
+            stackPane.setAlignment(Pos.CENTER_RIGHT);
             pane.add(stackPane, 3, i);
 
             Text rate = new Text();
@@ -152,7 +154,9 @@ public class NonGstBill {
             Text per = new Text();
             per.setText(p.getPer());
             per.setStyle("-fx-font-size:8px;");
-            pane.add(new StackPane(per), 5, i);
+            stackPane = new StackPane(per);
+            stackPane.setAlignment(Pos.CENTER);
+            pane.add(stackPane, 5, i);
 
 
             Text total = new Text();
