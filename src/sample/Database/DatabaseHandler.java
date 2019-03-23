@@ -28,7 +28,7 @@ class DatabaseHandler {
     private static void createConnection()  {
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:billing.sqlite"
+            conn = DriverManager.getConnection("jdbc:sqlite:standard.sqlite"
                     ,"scott"
                     ,"tiger");
         }catch (Exception e){

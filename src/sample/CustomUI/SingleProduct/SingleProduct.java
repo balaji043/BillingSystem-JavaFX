@@ -33,6 +33,7 @@ public class SingleProduct extends HBox {
     private Text slNo;
 
     private Product product = null;
+
     private RequiredFieldValidator requiredFieldValidator = new RequiredFieldValidator("*");
 
 
@@ -159,7 +160,7 @@ public class SingleProduct extends HBox {
                 return slNo.getText() + " Qty Rate Discount should be in numeral value";
             }
             try {
-                Integer.parseInt(rate.getText());
+                Float.parseFloat(rate.getText());
             } catch (Exception e) {
                 rate.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
                         , new CornerRadii(0)
