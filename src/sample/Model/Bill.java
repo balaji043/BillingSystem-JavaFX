@@ -28,7 +28,7 @@ public class Bill {
     private String userName;
     private String time;
     private LocalDate localDate;
-    private Double decimal;
+    private String total;
 
     public Bill(String billId, String invoice, String date
             , String customerName, String customerId
@@ -87,8 +87,7 @@ public class Bill {
         gst18Total = "" + String.format("%.2f", gst18Tota);
         gst28Half = "" + String.format("%.2f", gst28Hal);
         gst28Total = "" + String.format("%.2f", gst28Tota);
-        decimal = Double.parseDouble(totalAmount);
-
+        this.total = String.format("%.2f", Math.ceil(Double.parseDouble(totalAmount)));
     }
 
     public String getBillId() {
@@ -184,8 +183,8 @@ public class Bill {
         return localDate;
     }
 
-    public Double getDecimal() {
-        return decimal;
+    public String getTotal() {
+        return total;
     }
 
     @Override

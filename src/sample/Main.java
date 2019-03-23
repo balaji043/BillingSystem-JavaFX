@@ -130,7 +130,10 @@ public class Main extends Application {
                 rootController.setContent(root);
                 BillingController rootController = loader.getController();
                 rootController.setMainApp(Main.this);
-                if (bill != null) rootController.setBill(bill, isIGstBill);
+                if (bill != null) {
+                    rootController.setBill(bill, isIGstBill);
+                    this.rootController.window.setText("Edit Bill");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

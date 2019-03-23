@@ -26,8 +26,10 @@ import java.util.ResourceBundle;
 
 import static sample.Alert.AlertMaker.showBill;
 
+@SuppressWarnings("Duplicates")
 public class ViewBillsController implements Initializable {
-    public JFXButton edit;
+    @FXML
+    private JFXButton edit;
     @FXML
     private JFXCheckBox checkGST, checkNonGst;
 
@@ -160,7 +162,13 @@ public class ViewBillsController implements Initializable {
             mainApp.snackBar("INFO", "Select a bill", "green");
             return;
         }
-        mainApp.initNewBill(tableView.getSelectionModel().getSelectedItem(), comboBills.getValue());
+        Bill bill = tableView.getSelectionModel().getSelectedItem();
+        if (DatabaseHelper.getCustomerInfo(bill.getCustomerName()) == null) {
+            mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Cannot Modify the bill for now", "red");
+            return;
+        }
+
+        mainApp.initNewBill(bill, comboBills.getValue());
 
     }
 
@@ -177,7 +185,7 @@ public class ViewBillsController implements Initializable {
         tableView.getSortOrder().add(column);
 
         TableColumn<Bill, Double> column1 = new TableColumn<>("Invoice Amount");
-        column1.setCellValueFactory(new PropertyValueFactory<>("decimal"));
+        column1.setCellValueFactory(new PropertyValueFactory<>("total"));
         tableView.getColumns().add(column1);
 
         addTableColumn("User Name", "userName");

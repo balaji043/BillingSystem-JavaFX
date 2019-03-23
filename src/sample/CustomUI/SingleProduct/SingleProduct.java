@@ -209,7 +209,6 @@ public class SingleProduct extends HBox {
         hsn.setText(product.getHsn());
         qty.setText(product.getQty());
         rate.setText(product.getRate());
-        amount.setText(product.getTotalAmount());
         tax.setValue(product.getTax());
         per.setValue(product.getPer());
         amount.setText("Amount : " + product.getTotalAmount());

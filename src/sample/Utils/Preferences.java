@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class Preferences {
 
-    private static final String FILE_PATH = "BillingConfig.txt";
+    private static final String FILE_PATH = "KrishnaConfig.txt";
 
     private String name;
     private String address1;

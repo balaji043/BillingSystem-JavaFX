@@ -5,12 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import sample.Database.DatabaseHelper;
-import sample.Main;
 import sample.Model.Bill;
 import sample.Model.Customer;
 import sample.Model.Product;
@@ -19,8 +20,6 @@ import sample.Utils.Preferences;
 
 @SuppressWarnings("Duplicates")
 public class BillController {
-    @FXML
-    private StackPane bgImage;
     @FXML
     private VBox root, main;
     @FXML
@@ -51,14 +50,6 @@ public class BillController {
     private Preferences preferences = Preferences.getPreferences();
 
     public void setBill(Bill bill) {
-        Image image = new Image(Main.class.getResourceAsStream("Resources/icons/motor.jpg")
-                , 200, 200, false, true);
-        BackgroundImage myBI = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-                BackgroundSize.DEFAULT);
-        bgImage.setBackground(new Background(myBI));
-        bgImage.setOpacity(0.1);
-
         //Top Header
         lStoreName.setText(preferences.getName());
         lStoreStreet.setText(preferences.getAddress1());
@@ -159,6 +150,7 @@ public class BillController {
             sl.setText("" + p.getSl());
             sl.setStyle("-fx-font-size:8px;");
             StackPane stackPane = new StackPane(sl);
+            stackPane.setAlignment(Pos.CENTER);
             stackPane.setMinHeight(9);
             pane.add(stackPane, 0, i);
 
@@ -172,14 +164,16 @@ public class BillController {
             Text hsn = new Text();
             hsn.setText(p.getHsn());
             hsn.setStyle("-fx-font-size:8px;");
-            pane.add(new StackPane(hsn), 2, i);
+            stackPane = new StackPane(hsn);
+            stackPane.setAlignment(Pos.CENTER_RIGHT);
+            pane.add(stackPane, 2, i);
 
             Text qty = new Text();
             qty.setStyle("-fx-font-size:8px;");
             qty.setText(p.getQty());
             stackPane = new StackPane(qty);
             stackPane.setPadding(new Insets(0, 10, 0, 0));
-            stackPane.setAlignment(Pos.CENTER);
+            stackPane.setAlignment(Pos.CENTER_RIGHT);
             pane.add(stackPane, 3, i);
 
             Text rate = new Text();
@@ -193,14 +187,16 @@ public class BillController {
             Text per = new Text();
             per.setText(p.getPer());
             per.setStyle("-fx-font-size:8px;");
-            pane.add(new StackPane(per), 5, i);
+            stackPane = new StackPane(per);
+            stackPane.setAlignment(Pos.CENTER);
+            pane.add(stackPane, 5, i);
 
             Text cgstPer = new Text();
             cgstPer.setText(p.getHalfTaxPer());
             cgstPer.setStyle("-fx-font-size:8px;");
             stackPane = new StackPane(cgstPer);
             stackPane.setPadding(new Insets(0, 10, 0, 0));
-            stackPane.setAlignment(Pos.CENTER_RIGHT);
+            stackPane.setAlignment(Pos.CENTER);
             pane.add(stackPane, 6, i);
 
             Text cgstAmt = new Text();
@@ -214,7 +210,9 @@ public class BillController {
             Text sgstPer = new Text();
             sgstPer.setText(p.getHalfTaxPer());
             sgstPer.setStyle("-fx-font-size:8px;");
-            pane.add(new StackPane(sgstPer), 8, i);
+            stackPane = new StackPane(sgstPer);
+            stackPane.setAlignment(Pos.CENTER);
+            pane.add(stackPane, 8, i);
 
             Text sgstAmt = new Text();
             sgstAmt.setTextAlignment(TextAlignment.RIGHT);
