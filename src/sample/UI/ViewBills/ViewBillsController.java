@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 
 import static sample.Alert.AlertMaker.showBill;
 
+@SuppressWarnings("Duplicates")
 public class ViewBillsController implements Initializable {
     @FXML
     private JFXCheckBox checkGST, checkNonGst;
@@ -47,10 +48,17 @@ public class ViewBillsController implements Initializable {
     private Main mainApp;
 
     private ObservableList<Bill> bills = FXCollections.observableArrayList();
+    private ObservableList<String> gst, nonGst, all;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        customerName.setItems(DatabaseHelper.getCustomerNameList(2));
+
+        gst = DatabaseHelper.getCustomerNameList(0);
+        nonGst = DatabaseHelper.getCustomerNameList(1);
+        all = DatabaseHelper.getCustomerNameList(3);
+
+        TextFields.bindAutoCompletion(customerName.getEditor(), customerName.getItems());
+
         checkGST.setOnAction(e -> setCustomerName());
         checkNonGst.setOnAction(e -> setCustomerName());
     }
@@ -184,7 +192,7 @@ public class ViewBillsController implements Initializable {
 
         if (searchBox.getText() != null && !searchBox.getText().isEmpty())
             bills = DatabaseHelper.getBillLists("%" + searchBox.getText() + "%");
-        else if (customerName.getValue() != null)
+        else if (customerName.getValue() != null && all.contains(customerName.getValue()))
             if (fromDate.getValue() != null && toDate != null)
                 bills = DatabaseHelper.getBillList(customerName.getValue()
                         , fromDate.getValue(), toDate.getValue());
@@ -214,11 +222,10 @@ public class ViewBillsController implements Initializable {
 
     private void setCustomerName() {
         if (checkGST.isSelected() && !checkNonGst.isSelected())
-            customerName.setItems(DatabaseHelper.getCustomerNameList(0));
+            customerName.setItems(gst);
         else if (!checkGST.isSelected() && checkNonGst.isSelected())
-            customerName.setItems(DatabaseHelper.getCustomerNameList(1));
+            customerName.setItems(nonGst);
         else
-            customerName.setItems(DatabaseHelper.getCustomerNameList(2));
+            customerName.setItems(all);
     }
-
 }

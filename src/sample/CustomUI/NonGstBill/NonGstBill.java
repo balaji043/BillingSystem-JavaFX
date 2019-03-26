@@ -87,7 +87,10 @@ public class NonGstBill {
         double t = Float.parseFloat(bill.getTotalAmount());
 
         billAmount.setText(bill.getTotalAmount());
-        roundedOff.setText(String.format("%.2f", 1 - (t - (int) t)));
+        if (t - (int) t != 0)
+            roundedOff.setText(String.format("%.2f", 1 - (t - (int) t)));
+        else
+            roundedOff.setText("0.00");
         t = Math.ceil(t);
         lTotalPlusTaxNum.setText(String.format("RS. %.2f", t));
         lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int) t) + " Rupees Only )");//Bank Details
