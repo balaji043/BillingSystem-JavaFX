@@ -53,10 +53,16 @@ public class ViewBillsController implements Initializable {
     private ObservableList<Bill> bills = FXCollections.observableArrayList();
 
     private String billTableName = "BILLS";
+    private ObservableList<String> gst, nonGst, all;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        customerName.setItems(DatabaseHelper.getCustomerNameList(2));
+        gst = DatabaseHelper.getCustomerNameList(0);
+        nonGst = DatabaseHelper.getCustomerNameList(1);
+        all = DatabaseHelper.getCustomerNameList(3);
+        customerName.setItems(gst);
+        TextFields.bindAutoCompletion(customerName.getEditor(), customerName.getItems());
+
         comboBills.getItems().addAll("GST", "I-GST");
         comboBills.getSelectionModel().selectFirst();
         checkGST.setOnAction(e -> setCustomerName());
@@ -198,7 +204,7 @@ public class ViewBillsController implements Initializable {
         billTableName = BillingSystemUtils.getTableName(comboBills.getValue());
         if (searchBox.getText() != null && !searchBox.getText().isEmpty())
             bills = DatabaseHelper.getBillLists("%" + searchBox.getText() + "%", billTableName);
-        else if (customerName.getValue() != null)
+        else if (customerName.getValue() != null && all.contains(customerName.getValue()))
             if (fromDate.getValue() != null && toDate != null)
                 bills = DatabaseHelper.getBillList(customerName.getValue()
                         , fromDate.getValue(), toDate.getValue(), billTableName);
@@ -231,11 +237,11 @@ public class ViewBillsController implements Initializable {
 
     private void setCustomerName() {
         if (checkGST.isSelected() && !checkNonGst.isSelected())
-            customerName.setItems(DatabaseHelper.getCustomerNameList(0));
+            customerName.setItems(gst);
         else if (!checkGST.isSelected() && checkNonGst.isSelected())
-            customerName.setItems(DatabaseHelper.getCustomerNameList(1));
+            customerName.setItems(nonGst);
         else
-            customerName.setItems(DatabaseHelper.getCustomerNameList(2));
+            customerName.setItems(all);
     }
 
 }

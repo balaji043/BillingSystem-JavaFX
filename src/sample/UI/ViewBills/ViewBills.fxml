@@ -17,15 +17,13 @@
                     <JFXDatePicker fx:id="fromDate" prefHeight="40.0" prefWidth="210.0" promptText="FROM"/>
                 </VBox>
                 <VBox spacing="20.0">
-                    <JFXCheckBox fx:id="checkNonGst" prefHeight="40.0" prefWidth="200.0"
-                                 text="NON GST CUSTOMER"/>
+                    <JFXCheckBox fx:id="checkNonGst" prefHeight="40.0" prefWidth="200.0" text="NON GST CUSTOMER"/>
                     <JFXDatePicker fx:id="toDate" prefHeight="40.0" prefWidth="210.0" promptText="TO"/>
                 </VBox>
                 <VBox spacing="20.0">
-                    <JFXComboBox fx:id="customerName" prefHeight="40.0" prefWidth="200.0"
+                    <JFXComboBox fx:id="customerName" editable="true" prefHeight="40.0" prefWidth="200.0"
                                  promptText="CUSTOMER NAME"/>
-                    <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0"
-                                  promptText="Search Invoice"/>
+                    <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0" promptText="Search Invoice"/>
                 </VBox>
                 <VBox spacing="20.0">
                     <JFXComboBox fx:id="comboBills" prefWidth="200.0" promptText="Select Bills Type"/>
@@ -60,9 +58,8 @@
                   <JFXButton buttonType="RAISED" layoutX="390.0" layoutY="15.0" onAction="#handleDownload" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="Download Bills" textFill="WHITE" />
                     </StackPane>
                     <StackPane layoutX="970.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
-                        <JFXButton buttonType="RAISED" fx:id="edit" onAction="#handleRefreshBill" prefHeight="40.0"
-                                   prefWidth="200.0"
-                                   styleClass="jfx-button1" text="Edit" textFill="WHITE"/>
+                        <JFXButton fx:id="edit" buttonType="RAISED" onAction="#handleRefreshBill" prefHeight="40.0"
+                                   prefWidth="200.0" styleClass="jfx-button1" text="Edit" textFill="WHITE"/>
                     </StackPane>
                     <StackPane layoutX="10.0" layoutY="60.0" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <JFXButton buttonType="RAISED" onAction="#handleDeleteBill" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="Delete Bill" textFill="WHITE" />

@@ -173,9 +173,13 @@ public class BillingController {
 
         if (ready && AlertMaker.showBill(bill, mainApp, false, BillingSystemUtils.getN(comboBills.getValue()))) {
             mainApp.addSpinner();
-            boolean success = isNewBill ? DatabaseHelper.insertNewBill(bill, tableName) :
-                    DatabaseHelper.deleteBill(billId, tableName)
-                            && DatabaseHelper.insertNewBill(bill, tableName);
+            boolean success = false;
+            if (isNewBill)
+                success = DatabaseHelper.insertNewBill(bill, tableName);
+            else if (DatabaseHelper.deleteBill(billId, tableName))
+                success = DatabaseHelper.insertNewBill(bill, tableName);
+
+
             if (success) {
                 mainApp.snackBar("Success", bill.getInvoice() +
                         " Bill is saved successfully!", "green");
