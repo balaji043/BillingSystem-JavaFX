@@ -44,7 +44,8 @@ public class ExcelHelper {
             row.createCell(2).setCellValue("Date");
             row.createCell(3).setCellValue("Total Amount");
             row.createCell(4).setCellValue("Phone NO");
-            row.createCell(5).setCellValue("Prepared By");
+            row.createCell(5).setCellValue("Place");
+            row.createCell(6).setCellValue("Prepared By");
 
             rowNum++;
             for (int columnIndex = 0; columnIndex <= 10; columnIndex++) {
@@ -57,7 +58,8 @@ public class ExcelHelper {
                 row.createCell(2).setCellValue(bill.getDate());
                 row.createCell(3).setCellValue(bill.getTotalAmount());
                 row.createCell(4).setCellValue(bill.getMobile());
-                row.createCell(5).setCellValue(bill.getUserName());
+                row.createCell(5).setCellValue(bill.getAddress().split("\n")[2]);
+                row.createCell(6).setCellValue(bill.getUserName());
                 rowNum++;
             }
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);

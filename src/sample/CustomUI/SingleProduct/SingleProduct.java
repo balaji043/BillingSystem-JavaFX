@@ -188,7 +188,7 @@ public class SingleProduct extends HBox {
         String rates = rate.getText();
 
         if (checkBoxDiscount.isSelected() || checkBoxAdd.isSelected()) {
-            float r = Integer.parseInt(rate.getText()), d = Float.parseFloat(discount.getText());
+            float r = Float.parseFloat(rate.getText()), d = Float.parseFloat(discount.getText());
             float val = (r * d) / 100;
             if (checkBoxAdd.isSelected())
                 rates = String.format("%.2f", r + val);
@@ -196,7 +196,6 @@ public class SingleProduct extends HBox {
                 rates = String.format("%.2f", r - val);
             else
                 return "Check Discount";
-            System.out.println(r + " " + d + " " + val + " " + rates);
         }
         product = new Product(name.getText(), hsn.getText(), qty.getText()
                 , rates, per.getValue());
