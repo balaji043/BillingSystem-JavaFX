@@ -176,7 +176,7 @@ public class SingleProduct extends HBox {
         String rates = rate.getText();
 
         if (checkBoxDiscount.isSelected() || checkBoxAdd.isSelected()) {
-            float r = Integer.parseInt(rate.getText()), d = Float.parseFloat(discount.getText());
+            float r = Float.parseFloat(rate.getText()), d = Float.parseFloat(discount.getText());
             float val = (r * d) / 100;
 
             if (checkBoxAdd.isSelected() && !checkBoxDiscount.isSelected())
