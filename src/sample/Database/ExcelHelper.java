@@ -56,7 +56,7 @@ public class ExcelHelper {
                 row.createCell(0).setCellValue(bill.getInvoice());
                 row.createCell(1).setCellValue(bill.getCustomerName());
                 row.createCell(2).setCellValue(bill.getDate());
-                row.createCell(3).setCellValue(bill.getTotalAmount());
+                row.createCell(7).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
                 row.createCell(4).setCellValue(bill.getMobile());
                 row.createCell(5).setCellValue(bill.getAddress().split("\n")[2]);
                 row.createCell(6).setCellValue(bill.getUserName());
