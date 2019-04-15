@@ -32,6 +32,7 @@ public class ExcelHelper {
             } catch (Exception e) {
                 workbook = new XSSFWorkbook();
             }
+
             try {
                 sheet = workbook.createSheet("History");
             } catch (Exception e) {
@@ -53,9 +54,10 @@ public class ExcelHelper {
             row.createCell(11).setCellValue("Prepared By");
 
             rowNum++;
-            for (int columnIndex = 0; columnIndex <= 10; columnIndex++) {
+
+            for (int columnIndex = 0; columnIndex <= 10; columnIndex++)
                 sheet.autoSizeColumn(columnIndex);
-            }
+
             for (Bill bill : bills) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(bill.getInvoice());
@@ -65,7 +67,7 @@ public class ExcelHelper {
                 row.createCell(4).setCellValue(bill.getGst12Total());
                 row.createCell(5).setCellValue(bill.getGst18Total());
                 row.createCell(6).setCellValue(bill.getGst28Total());
-                row.createCell(7).setCellValue(bill.getTotalAmount());
+                row.createCell(7).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
                 row.createCell(8).setCellValue(bill.getGSTNo());
                 row.createCell(9).setCellValue(bill.getMobile());
                 row.createCell(10).setCellValue(bill.getAddress().split("\n")[2]);
@@ -90,14 +92,14 @@ public class ExcelHelper {
             String FILE_NAME = dest.getAbsolutePath();
             FileInputStream excel;
             XSSFWorkbook workbook;
-            XSSFSheet sheet;
-
             try {
                 excel = new FileInputStream(dest);
                 workbook = new XSSFWorkbook(excel);
             } catch (Exception e) {
                 workbook = new XSSFWorkbook();
             }
+
+            XSSFSheet sheet;
             try {
                 sheet = workbook.createSheet("Customer");
             } catch (Exception e) {
