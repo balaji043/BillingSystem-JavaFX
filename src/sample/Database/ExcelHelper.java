@@ -57,7 +57,7 @@ public class ExcelHelper {
 
             for (int columnIndex = 0; columnIndex <= 10; columnIndex++)
                 sheet.autoSizeColumn(columnIndex);
-
+            String place = "";
             for (Bill bill : bills) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(bill.getInvoice());
@@ -70,8 +70,14 @@ public class ExcelHelper {
                 row.createCell(7).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
                 row.createCell(8).setCellValue(bill.getGSTNo());
                 row.createCell(9).setCellValue(bill.getMobile());
-                row.createCell(10).setCellValue(bill.getAddress().split("\n")[2]);
+                try {
+                    place = bill.getAddress().split("\n")[2];
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                row.createCell(10).setCellValue(place);
                 row.createCell(11).setCellValue(bill.getUserName());
+                place = "";
                 rowNum++;
             }
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
