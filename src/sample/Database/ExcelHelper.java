@@ -51,15 +51,22 @@ public class ExcelHelper {
             for (int columnIndex = 0; columnIndex <= 10; columnIndex++) {
                 sheet.autoSizeColumn(columnIndex);
             }
+            String place = "";
             for (Bill bill : bills) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(bill.getInvoice());
                 row.createCell(1).setCellValue(bill.getCustomerName());
                 row.createCell(2).setCellValue(bill.getDate());
-                row.createCell(7).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
+                row.createCell(3).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
                 row.createCell(4).setCellValue(bill.getMobile());
-                row.createCell(5).setCellValue(bill.getAddress().split("\n")[2]);
+                try {
+                    place = bill.getAddress().split("\n")[2];
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                row.createCell(5).setCellValue(place);
                 row.createCell(6).setCellValue(bill.getUserName());
+                place = "";
                 rowNum++;
             }
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
