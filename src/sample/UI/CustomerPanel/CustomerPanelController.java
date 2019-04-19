@@ -1,7 +1,6 @@
 package sample.UI.CustomerPanel;
 
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.collections.FXCollections;
@@ -214,11 +213,6 @@ public class CustomerPanelController implements Initializable {
         if (dest == null) {
             mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
-            JFXSpinner spinner = new JFXSpinner();
-            double d = 50;
-            spinner.setMaxSize(d, d);
-            spinner.setPrefSize(d, d);
-            borderPane.getChildren().add(spinner);
             if (ExcelHelper.writeExcelCustomer(dest, all))
                 mainApp.snackBar("Success"
                         , "Customer Data Written to Excel"
@@ -227,7 +221,6 @@ public class CustomerPanelController implements Initializable {
                 mainApp.snackBar("Failed"
                         , "Customer Data is NOT written to Excel"
                         , "red");
-            borderPane.getChildren().remove(spinner);
         }
     }
 
@@ -290,13 +283,18 @@ public class CustomerPanelController implements Initializable {
             gstIn.setEditable(true);
             gstIn.getValidators().add(validator);
             gstIn.validate();
+            if (gstIn.getText().equalsIgnoreCase("For Own Use"))
+                gstIn.setText("");
+
         } else {
             gstIn.setDisable(true);
             gstIn.setEditable(false);
             gstIn.resetValidation();
+            if (!gstIn.getText().equalsIgnoreCase("For Own Use"))
+                gstIn.setText("For Own Use");
+
         }
     }
-
     private void setCustomer() {
         getCustomers();
         userTableView.getItems().clear();

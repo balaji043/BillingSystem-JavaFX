@@ -131,39 +131,42 @@ public class ViewBillsController implements Initializable {
 
     @FXML
     void handleDeleteBill() {
-        if (mainApp.getUser().getAccess().equals("admin")) {
-            if (tableView.getSelectionModel().getSelectedItem() != null) {
-                if (!AlertMaker.showMCAlert("Confirm delete?"
-                        , "Are sure you want to delete?", mainApp))
-                    return;
-                boolean b = DatabaseHelper.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId());
-                if (b)
-                    mainApp.snackBar("Success", "Bill is Successfully Deleted", "green");
-                else
-                    mainApp.snackBar("Failed", "Bill is Not Deleted", "red");
-                loadTable();
-            } else {
-                mainApp.snackBar("INFO", "Select a bill to delete", "green");
-            }
+        if (!mainApp.getUser().getAccess().equals("admin")) {
+            mainApp.snackBar("INFO", "Requires admin Access", "red");
+            return;
+        }
+        if (tableView.getSelectionModel().getSelectedItem() != null) {
+            if (!AlertMaker.showMCAlert("Confirm delete?"
+                    , "Are sure you want to delete?", mainApp))
+                return;
+            boolean b = DatabaseHelper.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId());
+            if (b)
+                mainApp.snackBar("Success", "Bill is Successfully Deleted", "green");
+            else
+                mainApp.snackBar("Failed", "Bill is Not Deleted", "red");
+            loadTable();
         } else {
-            mainApp.snackBar("INFO", "Requires admin access", "green");
+            mainApp.snackBar("INFO", "Select a bill to delete", "green");
         }
     }
 
     @FXML
     void handleModifyBill() {
-        if (mainApp.getUser().getAccess().equals("admin")) {
-            if (tableView.getSelectionModel().getSelectedItem() == null) {
-                mainApp.snackBar("INFO", "Select a bill", "green");
-                return;
-            }
-            Bill bill = tableView.getSelectionModel().getSelectedItem();
-            if (DatabaseHelper.getCustomerInfo(bill.getCustomerName()) == null) {
-                mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Cannot Modify the bill for now", "red");
-                return;
-            }
-            mainApp.initNewBill(bill);
+        if (!mainApp.getUser().getAccess().equals("admin")) {
+            mainApp.snackBar("INFO", "Requires admin Access", "red");
+            return;
         }
+        if (tableView.getSelectionModel().getSelectedItem() == null) {
+            mainApp.snackBar("INFO", "Select a bill", "green");
+            return;
+        }
+        Bill bill = tableView.getSelectionModel().getSelectedItem();
+        if (DatabaseHelper.getCustomerInfo(bill.getCustomerName()) == null) {
+            mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Cannot Modify the bill for now", "red");
+            return;
+        }
+        mainApp.initNewBill(bill);
+
     }
 
     private void initTable() {
