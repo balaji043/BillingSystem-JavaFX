@@ -31,16 +31,14 @@ branches:
 	2. Krishna Enterprises:  GST Bills.
 
 screenshots:
-
-	1. Login Page:
-	![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/icons/StdEnt.png "Optional title")
-	2. New Bill:
-	![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/icons/StdEnt.png "Optional title")
-	3. View Bill:
-	![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/icons/StdEnt.png "Optional title")
-	4. Customer Panel:
-	![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/icons/StdEnt.png "Optional title")
-	5. User Panel:
-	![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/icons/StdEnt.png "Optional title")
-	6. Settings:
-  ![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/icons/StdEnt.png "Optional title")
+  ![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/Screenshots/Screenshot%20(125).png "Optional title")
+  
+  ![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/Screenshots/Screenshot%20(126).png "Optional title")
+  
+  ![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/Screenshots/Screenshot%20(127).png "Optional title")
+  
+  ![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/Screenshots/Screenshot%20(128).png "Optional title")
+  
+  ![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/Screenshots/Screenshot%20(129).png "Optional title")
+  
+  ![Alt Image text](https://github.com/balaji043/BillingSystem/blob/master/src/sample/Resources/Screenshots/Screenshot%20(132).png "Optional title")
