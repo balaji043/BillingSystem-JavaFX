@@ -179,7 +179,7 @@ public class SingleProduct extends HBox {
             }
         }
 
-        if (name.getText().length() >= 30) {
+        if (name.getText().length() >= 50) {
             name.setBackground(new Background(new BackgroundFill(Color.valueOf("#ffcccc")
                     , new CornerRadii(0)
                     , new Insets(0, 0, 0, 0))));
