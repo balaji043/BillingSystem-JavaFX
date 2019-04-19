@@ -143,20 +143,6 @@ public class CustomerPanelController implements Initializable {
         boolean submitted = false;
         if (isNewCustomer) {
             if (check()) {
-                if (phone.getText().length() != 10 && checkNum(phone.getText())) {
-                    mainApp.snackBar("Info", "Enter Correct Phone", "red");
-                    return;
-                }
-                if (!checkGST.isSelected()) {
-                    gstIn.setText("For Own Use");
-                } else {
-                    if (gstIn.getText().length() != 15) {
-                        mainApp.snackBar("Info", "Enter Correct length of GSTIN NO Entered : "
-                                + gstIn.getText().length(), "red");
-                        return;
-                    }
-                }
-
                 Customer customer = new Customer(cnName.getText(), phone.getText(), gstIn.getText()
                         , "" + address1.getText(), "" + address2.getText(), state.getText(), zip.getText()
                         , "CUS" + new SimpleDateFormat("yyyyMMddHHSSS").format(new Date()));
@@ -169,19 +155,7 @@ public class CustomerPanelController implements Initializable {
             }
         } else {
             if (check()) {
-                if (phone.getText().length() != 10 && checkNum(phone.getText())) {
-                    mainApp.snackBar("Info", "Enter Correct Phone", "red");
-                    return;
-                }
-                if (!checkGST.isSelected()) {
-                    gstIn.setText("For Own Use");
-                } else {
-                    if (gstIn.getText().length() != 15) {
-                        mainApp.snackBar("Info", "Enter Correct length of GSTIN NO Entered : "
-                                + gstIn.getText().length(), "red");
-                        return;
-                    }
-                }
+
                 Customer newCustomer = new Customer(cnName.getText()
                         , "" + phone.getText(), "" + gstIn.getText()
                         , "" + address1.getText(), "" + address2.getText()
@@ -205,19 +179,10 @@ public class CustomerPanelController implements Initializable {
 
     @FXML
     void handleImport() {
-        mainApp.snackBar("", "Choose File", "green");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll
-                (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
-        File dest = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+        File dest = chooseFile();
         if (dest == null) {
-            mainApp.snackBar("INFO","Operation Cancelled","green");
+            mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
-            JFXSpinner spinner = new JFXSpinner();
-            double d = 50;
-            spinner.setMaxSize(d, d);
-            spinner.setPrefSize(d, d);
-            borderPane.getChildren().add(spinner);
             if (ExcelDatabaseHelper.writeDBCustomer(dest)) {
                 mainApp.snackBar("Success"
                         , "Stock History Data Written to Excel"
@@ -227,9 +192,16 @@ public class CustomerPanelController implements Initializable {
                         , "Stock History Data is NOT written to Excel"
                         , "red");
             }
-            borderPane.getChildren().remove(spinner);
         }
         init();
+    }
+
+    private File chooseFile() {
+        mainApp.snackBar("", "Choose File", "green");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll
+                (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
+        return fileChooser.showSaveDialog(mainApp.getPrimaryStage());
     }
 
     @FXML
@@ -238,13 +210,9 @@ public class CustomerPanelController implements Initializable {
             mainApp.snackBar("", "Nothing to Import", "red");
             return;
         }
-        mainApp.snackBar("", "Choose File", "green");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll
-                (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
-        File dest = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+        File dest = chooseFile();
         if (dest == null) {
-            mainApp.snackBar("INFO","Operation Cancelled","green");
+            mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
             JFXSpinner spinner = new JFXSpinner();
             double d = 50;
@@ -253,8 +221,8 @@ public class CustomerPanelController implements Initializable {
             borderPane.getChildren().add(spinner);
             if (ExcelHelper.writeExcelCustomer(dest, all))
                 mainApp.snackBar("Success"
-                    , "Customer Data Written to Excel"
-                    , "green");
+                        , "Customer Data Written to Excel"
+                        , "green");
             else
                 mainApp.snackBar("Failed"
                         , "Customer Data is NOT written to Excel"
@@ -285,14 +253,26 @@ public class CustomerPanelController implements Initializable {
     }
 
     private boolean check() {
-        if (cnName.getText() == null || cnName.getText().isEmpty()
-                || phone.getText() == null || phone.getText().isEmpty()) {
-            if (cnName.getText() == null || cnName.getText().isEmpty()) cnName.validate();
-            if (phone.getText() == null || phone.getText().isEmpty()) phone.validate();
+
+        if (cnName.getText() == null || cnName.getText().isEmpty()) {
+            cnName.validate();
             return false;
-        } else {
-            return true;
         }
+        if (phone.getText() != null && !phone.getText().isEmpty() && (phone.getText().length() != 10 || checkNum(phone.getText()))) {
+            mainApp.snackBar("Info", "Enter Correct Phone", "red");
+            return false;
+        }
+
+        if (checkGST.isSelected()) {
+            if (gstIn.getText().length() != 15) {
+                mainApp.snackBar("Info", "Enter Correct length of GSTIN NO Entered : "
+                        + gstIn.getText().length(), "red");
+                return false;
+            }
+        } else {
+            gstIn.setText("For Own Use");
+        }
+        return true;
     }
 
     private boolean checkNum(String s) {

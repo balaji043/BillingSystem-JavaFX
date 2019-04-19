@@ -56,8 +56,8 @@
                   <JFXButton buttonType="RAISED" layoutX="390.0" layoutY="15.0" onAction="#handleDownload" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="Download Bills" textFill="WHITE" />
                     </StackPane>
                     <StackPane layoutX="970.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
-                        <JFXButton buttonType="RAISED" onAction="#handleRefreshBill" prefHeight="40.0" prefWidth="200.0"
-                                   styleClass="jfx-button1" text="Edit" textFill="WHITE"/>
+                        <JFXButton buttonType="RAISED" onAction="#handleModifyBill" prefHeight="40.0" prefWidth="200.0"
+                                   styleClass="jfx-button1" text="Modify Bill" textFill="WHITE"/>
                     </StackPane>
                     <StackPane layoutX="10.0" layoutY="60.0" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                         <JFXButton buttonType="RAISED" onAction="#handleDeleteBill" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1" text="Delete Bill" textFill="WHITE" />

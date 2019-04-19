@@ -131,13 +131,12 @@ public class ViewBillsController implements Initializable {
 
     @FXML
     void handleDeleteBill() {
-        boolean b;
         if (mainApp.getUser().getAccess().equals("admin")) {
             if (tableView.getSelectionModel().getSelectedItem() != null) {
                 if (!AlertMaker.showMCAlert("Confirm delete?"
                         , "Are sure you want to delete?", mainApp))
                     return;
-                b = DatabaseHelper.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId());
+                boolean b = DatabaseHelper.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId());
                 if (b)
                     mainApp.snackBar("Success", "Bill is Successfully Deleted", "green");
                 else
@@ -152,17 +151,19 @@ public class ViewBillsController implements Initializable {
     }
 
     @FXML
-    void handleRefreshBill() {
-        if (tableView.getSelectionModel().getSelectedItem() == null) {
-            mainApp.snackBar("INFO", "Select a bill", "green");
-            return;
+    void handleModifyBill() {
+        if (mainApp.getUser().getAccess().equals("admin")) {
+            if (tableView.getSelectionModel().getSelectedItem() == null) {
+                mainApp.snackBar("INFO", "Select a bill", "green");
+                return;
+            }
+            Bill bill = tableView.getSelectionModel().getSelectedItem();
+            if (DatabaseHelper.getCustomerInfo(bill.getCustomerName()) == null) {
+                mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Cannot Modify the bill for now", "red");
+                return;
+            }
+            mainApp.initNewBill(bill);
         }
-        Bill bill = tableView.getSelectionModel().getSelectedItem();
-        if (DatabaseHelper.getCustomerInfo(bill.getCustomerName()) == null) {
-            mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Cannot Modify the bill for now", "red");
-            return;
-        }
-        mainApp.initNewBill(bill);
     }
 
     private void initTable() {
