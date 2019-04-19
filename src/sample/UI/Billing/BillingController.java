@@ -38,7 +38,7 @@ public class BillingController {
     public VBox manualD;
     private Main mainApp;
     private Customer customer = null;
-    private Bill bill = null;
+    private Bill bill = null, oldBill = null;
     private boolean isNewBill = true, ready = false;
     private Date date;
     private String billId, invoice, tableName = "Bills";
@@ -95,8 +95,20 @@ public class BillingController {
 
 
         if (isNewBill) {
-            int num = 1;
-            String start = "K-";
+
+            if (isManual.isSelected()) {
+                if (manualDate.getValue() != null) {
+                    date = Date.from((manualDate.getValue()).atTime(Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.MILLISECOND)
+                            .atZone(ZoneId.systemDefault()).toInstant());
+                } else {
+                    mainApp.snackBar("INFO", "Select a date", "red");
+                    return;
+                }
+            } else {
+                date = new Date();
+            }
+            getBillId();
+        } else {
             if (isManual.isSelected()) {
                 if (manualDate.getValue() == null) {
                     mainApp.snackBar("INFO", "Select a date", "red");
@@ -104,15 +116,12 @@ public class BillingController {
                 }
                 date = Date.from((manualDate.getValue()).atTime(Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.MILLISECOND)
                         .atZone(ZoneId.systemDefault()).toInstant());
+                getBillId();
             } else {
-                date = new Date();
+                billId = oldBill.getBillId();
+                invoice = oldBill.getInvoice();
+                date = new Date(Long.parseLong(oldBill.getTime()));
             }
-            invoice = start + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
-            while (DatabaseHelper.ifInvoiceExist(invoice)) {
-                invoice = start + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
-                num++;
-            }
-            billId = "Bill" + new SimpleDateFormat("yyyyMMddHHSSS").format(date) + num;
         }
         ready = false;
         ObservableList<SingleProduct> p = listView.getItems();
@@ -163,6 +172,16 @@ public class BillingController {
 
         totalAmount.setText(bill.getTotalAmount());
         ready = true;
+    }
+
+    private void getBillId() {
+        int num = 1;
+        invoice = "J-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
+        while (DatabaseHelper.ifInvoiceExist(invoice)) {
+            invoice = "J-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
+            num++;
+        }
+        billId = "Bill" + new SimpleDateFormat("yyyyMMddHHSSS").format(date) + num;
     }
 
     @FXML
@@ -245,6 +264,7 @@ public class BillingController {
 
     public void setBill(Bill bill, String isIGstBill) {
         isNewBill = false;
+        oldBill = bill;
         checkBoxGST.setSelected(!bill.getGSTNo().equalsIgnoreCase("for own use"));
         toggleCustomer();
         comboBoxCustomer.getSelectionModel().select(bill.getCustomerName());
@@ -253,7 +273,7 @@ public class BillingController {
         billId = bill.getBillId();
         invoice = bill.getInvoice();
         date = new Date(Long.parseLong(bill.getTime()));
-        hBox.getChildren().remove(manualD);
+        //hBox.getChildren().remove(manualD);
         totalAmount.setText(bill.getTotalAmount());
         int i = 1;
         for (Product product : bill.getProducts()) {

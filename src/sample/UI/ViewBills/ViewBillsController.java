@@ -140,6 +140,10 @@ public class ViewBillsController implements Initializable {
 
     @FXML
     void handleDeleteBill() {
+        if (!mainApp.getUser().getAccess().equals("admin")) {
+            mainApp.snackBar("INFO", "Requires admin Access", "red");
+            return;
+        }
         boolean b;
         billTableName = BillingSystemUtils.getTableName(comboBills.getValue());
         if (mainApp.getUser().getAccess().equals("admin")) {
@@ -163,7 +167,11 @@ public class ViewBillsController implements Initializable {
     }
 
     @FXML
-    void handleRefreshBill() {
+    void handleModifyBill() {
+        if (!mainApp.getUser().getAccess().equals("admin")) {
+            mainApp.snackBar("INFO", "Requires admin Access", "red");
+            return;
+        }
         if (tableView.getSelectionModel().getSelectedItem() == null) {
             mainApp.snackBar("INFO", "Select a bill", "green");
             return;

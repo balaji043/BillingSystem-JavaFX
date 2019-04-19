@@ -63,7 +63,7 @@ public class ExcelHelper {
                 row.createCell(0).setCellValue(bill.getInvoice());
                 row.createCell(1).setCellValue(bill.getCustomerName());
                 row.createCell(2).setCellValue(bill.getDate());
-                row.createCell(3).setCellValue(bill.getTotalTaxAmount());
+                row.createCell(3).setCellValue(bill.getGross());
                 row.createCell(4).setCellValue(bill.getGst12Total());
                 row.createCell(5).setCellValue(bill.getGst18Total());
                 row.createCell(6).setCellValue(bill.getGst28Total());

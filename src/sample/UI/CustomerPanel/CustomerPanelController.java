@@ -1,7 +1,6 @@
 package sample.UI.CustomerPanel;
 
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.collections.FXCollections;
@@ -143,19 +142,6 @@ public class CustomerPanelController implements Initializable {
         boolean submitted = false;
         if (isNewCustomer) {
             if (check()) {
-                if (phone.getText().length() != 10 && checkNum(phone.getText())) {
-                    mainApp.snackBar("Info", "Enter Correct Phone", "red");
-                    return;
-                }
-                if (!checkGST.isSelected()) {
-                    gstIn.setText("For Own Use");
-                } else {
-                    if (gstIn.getText().length() != 15) {
-                        mainApp.snackBar("Info", "Enter Correct length of GSTIN NO Entered : "
-                                + gstIn.getText().length(), "red");
-                        return;
-                    }
-                }
 
                 Customer customer = new Customer(cnName.getText(), phone.getText(), gstIn.getText()
                         , "" + address1.getText(), "" + address2.getText(), state.getText(), zip.getText()
@@ -169,19 +155,7 @@ public class CustomerPanelController implements Initializable {
             }
         } else {
             if (check()) {
-                if (phone.getText().length() != 10 && checkNum(phone.getText())) {
-                    mainApp.snackBar("Info", "Enter Correct Phone", "red");
-                    return;
-                }
-                if (!checkGST.isSelected()) {
-                    gstIn.setText("For Own Use");
-                } else {
-                    if (gstIn.getText().length() != 15) {
-                        mainApp.snackBar("Info", "Enter Correct length of GSTIN NO Entered : "
-                                + gstIn.getText().length(), "red");
-                        return;
-                    }
-                }
+
                 Customer newCustomer = new Customer(cnName.getText()
                         , "" + phone.getText(), "" + gstIn.getText()
                         , "" + address1.getText(), "" + address2.getText()
@@ -203,21 +177,21 @@ public class CustomerPanelController implements Initializable {
         }
     }
 
-    @FXML
-    void handleImport() {
+    private File chooseFile() {
         mainApp.snackBar("", "Choose File", "green");
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll
                 (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
-        File dest = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+        return fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+    }
+
+    @FXML
+    void handleImport() {
+
+        File dest = chooseFile();
         if (dest == null) {
             mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
-            JFXSpinner spinner = new JFXSpinner();
-            double d = 50;
-            spinner.setMaxSize(d, d);
-            spinner.setPrefSize(d, d);
-            borderPane.getChildren().add(spinner);
             if (ExcelDatabaseHelper.writeDBCustomer(dest)) {
                 mainApp.snackBar("Success"
                         , "Stock History Data Written to Excel"
@@ -227,7 +201,6 @@ public class CustomerPanelController implements Initializable {
                         , "Stock History Data is NOT written to Excel"
                         , "red");
             }
-            borderPane.getChildren().remove(spinner);
         }
         init();
     }
@@ -238,19 +211,11 @@ public class CustomerPanelController implements Initializable {
             mainApp.snackBar("", "Nothing to Import", "red");
             return;
         }
-        mainApp.snackBar("", "Choose File", "green");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll
-                (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
-        File dest = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+
+        File dest = chooseFile();
         if (dest == null) {
             mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
-            JFXSpinner spinner = new JFXSpinner();
-            double d = 50;
-            spinner.setMaxSize(d, d);
-            spinner.setPrefSize(d, d);
-            borderPane.getChildren().add(spinner);
             if (ExcelHelper.writeExcelCustomer(dest, all))
                 mainApp.snackBar("Success"
                         , "Customer Data Written to Excel"
@@ -259,7 +224,6 @@ public class CustomerPanelController implements Initializable {
                 mainApp.snackBar("Failed"
                         , "Customer Data is NOT written to Excel"
                         , "red");
-            borderPane.getChildren().remove(spinner);
         }
     }
 
@@ -285,14 +249,31 @@ public class CustomerPanelController implements Initializable {
     }
 
     private boolean check() {
-        if (cnName.getText() == null || cnName.getText().isEmpty()
-                || phone.getText() == null || phone.getText().isEmpty()) {
-            if (cnName.getText() == null || cnName.getText().isEmpty()) cnName.validate();
-            if (phone.getText() == null || phone.getText().isEmpty()) phone.validate();
+
+        if (cnName.getText() == null || cnName.getText().isEmpty()) {
+            cnName.validate();
             return false;
-        } else {
-            return true;
         }
+
+        if (checkGST.isSelected()) {
+            if (phone.getText() == null || phone.getText().isEmpty()) {
+                phone.validate();
+            }
+            if (gstIn.getText().length() != 15) {
+                mainApp.snackBar("Info", "Enter Correct length of GSTIN NO Entered : "
+                        + gstIn.getText().length(), "red");
+                return false;
+            }
+        } else {
+            gstIn.setText("For Own Use");
+        }
+        if (phone.getText() != null && !phone.getText().isEmpty()) {
+            if (phone.getText().length() != 10 || !checkNum(phone.getText())) {
+                mainApp.snackBar("Info", "Enter Correct Phone", "red");
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean checkNum(String s) {
@@ -310,10 +291,16 @@ public class CustomerPanelController implements Initializable {
             gstIn.setEditable(true);
             gstIn.getValidators().add(validator);
             gstIn.validate();
+            if (gstIn.getText().equalsIgnoreCase("For Own Use")) {
+                gstIn.setText("");
+            }
         } else {
             gstIn.setDisable(true);
             gstIn.setEditable(false);
             gstIn.resetValidation();
+            if (!gstIn.getText().equalsIgnoreCase("For Own Use")) {
+                gstIn.setText("For Own Use");
+            }
         }
     }
 
