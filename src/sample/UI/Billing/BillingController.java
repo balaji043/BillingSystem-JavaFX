@@ -176,9 +176,9 @@ public class BillingController {
 
     private void getBillId() {
         int num = 1;
-        invoice = "J-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
+        invoice = "K-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
         while (DatabaseHelper.ifInvoiceExist(invoice)) {
-            invoice = "J-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
+            invoice = "K-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
             num++;
         }
         billId = "Bill" + new SimpleDateFormat("yyyyMMddHHSSS").format(date) + num;
