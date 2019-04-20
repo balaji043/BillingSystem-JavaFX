@@ -299,9 +299,12 @@ public class DatabaseHelper {
             String delete = String.format("DELETE FROM %s WHERE BillID = ? ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(delete);
             preparedStatement.setString(1, billId);
-            okay = preparedStatement.executeUpdate() > 0 && deleteTable(billId);
+            okay = preparedStatement.executeUpdate() > 0;
+            preparedStatement.close();
+            okay = okay && deleteTable(billId);
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
+            e.printStackTrace();
         } finally {
             try {
                 assert preparedStatement != null;
@@ -750,7 +753,14 @@ public class DatabaseHelper {
         try {
             String q = "DROP TABLE IF EXISTS " + tableName;
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(q);
-            return preparedStatement.executeUpdate() > 0;
+            boolean okay;
+            try {
+                okay = preparedStatement.executeUpdate() > 0;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return true;
+            }
+            return okay;
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
             e.printStackTrace();
