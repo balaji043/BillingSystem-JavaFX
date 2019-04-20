@@ -173,9 +173,9 @@ public class BillingController {
 
     private void getBillId() {
         int num = 1;
-        invoice = "K-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
+        invoice = "J-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
         while (DatabaseHelper.ifInvoiceExist(invoice)) {
-            invoice = "K-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
+            invoice = "J-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
             num++;
         }
         billId = "Bill" + new SimpleDateFormat("yyyyMMddHHSSS").format(date) + num;
@@ -190,7 +190,7 @@ public class BillingController {
         if (ready && AlertMaker.showBill(bill, mainApp, false)) {
             mainApp.addSpinner();
             boolean success = isNewBill ? DatabaseHelper.insertNewBill(bill) :
-                    DatabaseHelper.deleteBill(billId)
+                    DatabaseHelper.deleteBill(oldBill.getBillId())
                             && DatabaseHelper.insertNewBill(bill);
             if (success) {
                 mainApp.snackBar("Success", bill.getInvoice() +
