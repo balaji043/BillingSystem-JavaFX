@@ -289,7 +289,8 @@ public class DatabaseHelper {
             String delete = String.format("DELETE FROM %s WHERE BillID = ? ", "NonGstBills");
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(delete);
             preparedStatement.setString(1, billId);
-            okay = preparedStatement.executeUpdate() > 0 && deleteTable(billId);
+            okay = preparedStatement.executeUpdate() > 0;
+            okay = okay && deleteTable(billId);
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
         } finally {
@@ -737,11 +738,18 @@ public class DatabaseHelper {
 
     private static boolean deleteTable(@NotNull String tableName) {
         PreparedStatement preparedStatement = null;
+
         try {
             String q = "DROP TABLE IF EXISTS " + tableName;
-            preparedStatement =
-                    DatabaseHandler.getInstance().getConnection().prepareStatement(q);
-            return preparedStatement.executeUpdate() > 0;
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(q);
+            boolean okay;
+            try {
+                okay = preparedStatement.executeUpdate() > 0;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return true;
+            }
+            return okay;
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
             e.printStackTrace();
