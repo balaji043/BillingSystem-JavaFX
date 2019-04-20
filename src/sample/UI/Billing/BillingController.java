@@ -195,7 +195,7 @@ public class BillingController {
             boolean success = false;
             if (isNewBill)
                 success = DatabaseHelper.insertNewBill(bill, tableName);
-            else if (DatabaseHelper.deleteBill(billId, tableName))
+            else if (DatabaseHelper.deleteBill(oldBill.getBillId(), tableName))
                 success = DatabaseHelper.insertNewBill(bill, tableName);
 
 

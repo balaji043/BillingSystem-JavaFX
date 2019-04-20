@@ -170,7 +170,7 @@ public class SingleProduct extends HBox {
             }
         }
 
-        if (name.getText().length() >= 50)
+        if (name.getText().length() >= 30)
             return slNo.getText() + " Name cannot exceeds length 30 or higher";
 
         String rates = rate.getText();
