@@ -1,0 +1,79 @@
+package sample.UI.NewPurchaseBill;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXListView;
+import javafx.collections.ObservableList;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import sample.Alert.AlertMaker;
+import sample.CustomUI.SinglePurchaseBill.SinglePurchaseBill;
+import sample.Database.DatabaseHelper_PurchaseBill;
+import sample.Main;
+
+public class NewPurchaseBill {
+
+    public JFXButton addBTN, deleteBTN, submitBTN;
+    public JFXListView<SinglePurchaseBill> listView;
+    private Main mainApp;
+
+    public void setMainApp(Main mainApp) {
+        this.mainApp = mainApp;
+        int i = 35;
+        ImageView view1 = null, view2 = null;
+        try {
+            view1 = new ImageView(new Image(Main.class.
+                    getResourceAsStream("Resources/icons/add.png")
+                    , i, i, true, true));
+            view2 = new ImageView(new Image(Main.class.
+                    getResourceAsStream("Resources/icons/delete.png")
+                    , i, i, true, true));
+
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        if (view1 != null)
+            addBTN.setGraphic(view1);
+        if (view2 != null)
+            deleteBTN.setGraphic(view2);
+
+    }
+
+    public void handleAddBill() {
+        SinglePurchaseBill purchaseBill = new SinglePurchaseBill();
+        purchaseBill.setSlNoText(String.format("%2d", listView.getItems().size() + 1));
+        listView.getItems().add(purchaseBill);
+    }
+
+    public void handleDeleteBill() {
+        if (listView.getSelectionModel().getSelectedItem() == null) {
+            mainApp.snackBar("INFO", "Select a row First", "green");
+        } else {
+            listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
+        }
+    }
+
+    public void handleSubmit() {
+        boolean ready = true, result;
+        int noOfPurchaseBills = listView.getItems().size();
+        for (SinglePurchaseBill b : listView.getItems()) {
+            ready = ready && b.isReady();
+        }
+        if (ready) {
+            ObservableList<SinglePurchaseBill> s = listView.getItems();
+            for (SinglePurchaseBill bill : s) {
+                try {
+                    result = DatabaseHelper_PurchaseBill.insertNewPurchaseBill(bill.getPurchaseBill());
+                    ready = ready && result;
+                } catch (Exception e) {
+                    result = false;
+                }
+                if (result)
+                    listView.getItems().remove(bill);
+            }
+            mainApp.snackBar("SUCCESS", "Successfully Added " + noOfPurchaseBills + " Purchased Bills", "green");
+            if (ready)
+                listView.getItems().clear();
+        } else
+            mainApp.snackBar("INFO", "Check the Fields marked in Red", "red");
+    }
+}

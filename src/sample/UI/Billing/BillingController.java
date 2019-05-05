@@ -11,7 +11,8 @@ import javafx.scene.text.Text;
 import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
 import sample.CustomUI.SingleProduct.SingleProduct;
-import sample.Database.DatabaseHelper;
+import sample.Database.DatabaseHelper_Bills;
+import sample.Database.DatabaseHelper_Cutomer;
 import sample.Main;
 import sample.Model.Bill;
 import sample.Model.Customer;
@@ -56,8 +57,8 @@ public class BillingController {
         manualDate.setDisable(true);
         comboBills.getItems().addAll("GST", "I-GST");
         comboBills.setEditable(false);
-        gst = DatabaseHelper.getCustomerNameList(0);
-        nonGst = DatabaseHelper.getCustomerNameList(1);
+        gst = DatabaseHelper_Cutomer.getCustomerNameList(0);
+        nonGst = DatabaseHelper_Cutomer.getCustomerNameList(1);
 
         comboBoxCustomer.getItems().addAll(gst);
         TextFields.bindAutoCompletion(comboBoxCustomer.getEditor(), comboBoxCustomer.getItems());
@@ -177,7 +178,7 @@ public class BillingController {
     private void getBillId() {
         int num = 1;
         invoice = "K-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
-        while (DatabaseHelper.ifInvoiceExist(invoice)) {
+        while (DatabaseHelper_Bills.ifInvoiceExist(invoice)) {
             invoice = "K-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
             num++;
         }
@@ -194,9 +195,9 @@ public class BillingController {
             mainApp.addSpinner();
             boolean success = false;
             if (isNewBill)
-                success = DatabaseHelper.insertNewBill(bill, tableName);
-            else if (DatabaseHelper.deleteBill(oldBill.getBillId(), tableName))
-                success = DatabaseHelper.insertNewBill(bill, tableName);
+                success = DatabaseHelper_Bills.insertNewBill(bill, tableName);
+            else if (DatabaseHelper_Bills.deleteBill(oldBill.getBillId(), tableName))
+                success = DatabaseHelper_Bills.insertNewBill(bill, tableName);
 
 
             if (success) {
@@ -231,7 +232,7 @@ public class BillingController {
     void handleCustomerSubmit() {
         if (comboBoxCustomer.getValue() != null && !comboBoxCustomer.getValue().isEmpty() &&
                 comboBills.getValue() != null && !comboBills.getValue().isEmpty()) {
-            customer = DatabaseHelper.getCustomerInfo(comboBoxCustomer.getValue());
+            customer = DatabaseHelper_Cutomer.getCustomerInfo(comboBoxCustomer.getValue());
             if (customer == null) {
                 mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Choose a Valid Customer", "red");
                 return;

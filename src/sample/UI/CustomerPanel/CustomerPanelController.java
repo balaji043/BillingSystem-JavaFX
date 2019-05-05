@@ -14,7 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import sample.Alert.AlertMaker;
-import sample.Database.DatabaseHelper;
+import sample.Database.DatabaseHelper_Cutomer;
 import sample.Database.ExcelDatabaseHelper;
 import sample.Database.ExcelHelper;
 import sample.Main;
@@ -118,7 +118,7 @@ public class CustomerPanelController implements Initializable {
                             " the time of bill submission.\n" + customer.getName() + "'s data"
                     , mainApp);
             if (okay) {
-                if (DatabaseHelper.deleteCustomer(customer)) {
+                if (DatabaseHelper_Cutomer.deleteCustomer(customer)) {
                     mainApp.snackBar("Success"
                             , "Selected Customer's data is deleted"
                             , "green");
@@ -146,7 +146,7 @@ public class CustomerPanelController implements Initializable {
                 Customer customer = new Customer(cnName.getText(), phone.getText(), gstIn.getText()
                         , "" + address1.getText(), "" + address2.getText(), state.getText(), zip.getText()
                         , "CUS" + new SimpleDateFormat("yyyyMMddHHSSS").format(new Date()));
-                submitted = DatabaseHelper.insertNewCustomer(customer);
+                submitted = DatabaseHelper_Cutomer.insertNewCustomer(customer);
                 if (submitted) {
                     mainApp.snackBar("Success", "New Customer Added Successfully", "green");
                 } else {
@@ -161,7 +161,7 @@ public class CustomerPanelController implements Initializable {
                         , "" + address1.getText(), "" + address2.getText()
                         , "" + state.getText(), "" + zip.getText()
                         , customer.getId());
-                submitted = DatabaseHelper.updateCustomer(newCustomer);
+                submitted = DatabaseHelper_Cutomer.updateCustomer(newCustomer);
                 if (submitted) {
                     mainApp.snackBar("Success", "Customer Data Updated Successfully"
                             , "green");
@@ -317,7 +317,7 @@ public class CustomerPanelController implements Initializable {
     }
 
     private void getCustomers() {
-        all = DatabaseHelper.getCustomerList();
+        all = DatabaseHelper_Cutomer.getCustomerList();
         nonGST.clear();
         gst.clear();
         for (Customer c : all) {

@@ -121,6 +121,20 @@ public class RootController implements Initializable {
         mainApp.initNewBill(null, "");
     }
 
+    public void handlePurchaseBill() {
+        i = 1;
+        window.setText("New Bill");
+        toggle();
+        mainApp.initPurchaseBills();
+    }
+
+    public void handleNewPurchaseBill() {
+        window.setText("New Bill");
+        toggle();
+        mainApp.initNewPurchaseBills();
+    }
+
+
     public void handleViewBill() {
         i = 2;
         window.setText("View Bill");
@@ -217,4 +231,5 @@ public class RootController implements Initializable {
     public void disableAddNewUserButton(boolean s) {
         addNewUser.setDisable(s);
     }
+
 }

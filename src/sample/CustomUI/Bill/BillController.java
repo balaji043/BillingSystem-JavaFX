@@ -11,7 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import sample.Database.DatabaseHelper;
+import sample.Database.DatabaseHelper_Cutomer;
 import sample.Model.Bill;
 import sample.Model.Customer;
 import sample.Model.Product;
@@ -76,7 +76,7 @@ public class BillController {
 
         //billing address section
 
-        Customer customer = DatabaseHelper.getCustomerInfo(bill.getCustomerName());
+        Customer customer = DatabaseHelper_Cutomer.getCustomerInfo(bill.getCustomerName());
         if (customer != null) {
             lCusName.setText(": " + customer.getName());
             lCusStreet.setText(": " + customer.getStreetAddress()
