@@ -37,7 +37,7 @@ public class RootController implements Initializable {
     @FXML
     private JFXHamburger ham;
     @FXML
-    public JFXButton addNewUser,r,s;
+    public JFXButton addNewUser, r, s;
 
     private int i = 0;
     private Main mainApp;
@@ -63,10 +63,10 @@ public class RootController implements Initializable {
         int i = 25;
         r.setGraphic(new ImageView(new Image(Main.class.
                 getResourceAsStream("Resources/icons/refreshWhite.png")
-                ,i,i,false,true)));
+                , i, i, false, true)));
         s.setGraphic(new ImageView(new Image(Main.class.
                 getResourceAsStream("Resources/icons/gear.png")
-                ,i,i,false,true)));
+                , i, i, false, true)));
     }
 
     private void setAccelerators() {
@@ -86,6 +86,8 @@ public class RootController implements Initializable {
                 , KeyCombination.CONTROL_DOWN), this::handleLogout);
         keyCodeCombinationRunnableHashMap.put(new KeyCodeCombination(KeyCode.H
                 , KeyCombination.CONTROL_DOWN), this::handleHome);
+        keyCodeCombinationRunnableHashMap.put(new KeyCodeCombination(KeyCode.P
+                , KeyCombination.CONTROL_DOWN), this::handlePurchaseBill);
         mainApp.getPrimaryStage().getScene().getAccelerators().putAll(keyCodeCombinationRunnableHashMap);
     }
 
@@ -127,6 +129,13 @@ public class RootController implements Initializable {
         window.setText("View Bill");
         toggle();
         mainApp.initViewBills();
+    }
+
+    public void handlePurchaseBill() {
+        i = 6;
+        window.setText("Purchase Bills");
+        toggle();
+        mainApp.initPurchaseBills();
     }
 
     public void handleCustomerPanel() {
@@ -172,6 +181,12 @@ public class RootController implements Initializable {
         mainApp.initUserPanel();
     }
 
+    private void handlePurchaseBill1() {
+        i = 6;
+        window.setText("Purchase Bills");
+        mainApp.initPurchaseBills();
+    }
+
     @FXML
     public void handleRefresh() {
         switch (i) {
@@ -199,15 +214,19 @@ public class RootController implements Initializable {
                 handleLogout();
                 return;
             }
+            case 6: {
+                handlePurchaseBill1();
+                return;
+            }
             default: {
                 handleLogout();
             }
         }
-        mainApp.snackBar("Refreshed","page refreshed successfully","green");
+        mainApp.snackBar("Refreshed", "page refreshed successfully", "green");
     }
 
     @FXML
-    public void handleSettings()  {
+    public void handleSettings() {
         if (AlertMaker.showSettings(mainApp))
             mainApp.snackBar("Success", "Changes Saved Successfully", "green");
         else

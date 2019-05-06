@@ -11,7 +11,8 @@ import javafx.scene.text.Text;
 import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
 import sample.CustomUI.SingleProduct.SingleProduct;
-import sample.Database.DatabaseHelper;
+import sample.Database.DatabaseHelper_Bill;
+import sample.Database.DatabaseHelper_Customer;
 import sample.Main;
 import sample.Model.Bill;
 import sample.Model.Customer;
@@ -53,8 +54,8 @@ public class BillingController {
         borderPane.setDisable(true);
         checkBoxGST.setSelected(true);
         manualDate.setDisable(true);
-        gst = DatabaseHelper.getCustomerNameList(0);
-        nonGst = DatabaseHelper.getCustomerNameList(1);
+        gst = DatabaseHelper_Customer.getCustomerNameList(0);
+        nonGst = DatabaseHelper_Customer.getCustomerNameList(1);
 
         comboBoxCustomer.getItems().addAll(gst);
         TextFields.bindAutoCompletion(comboBoxCustomer.getEditor(), comboBoxCustomer.getItems());
@@ -174,7 +175,7 @@ public class BillingController {
     private void getBillId() {
         int num = 1;
         invoice = "J-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
-        while (DatabaseHelper.ifInvoiceExist(invoice)) {
+        while (DatabaseHelper_Bill.ifInvoiceExist(invoice)) {
             invoice = "J-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
             num++;
         }
@@ -189,9 +190,9 @@ public class BillingController {
 
         if (ready && AlertMaker.showBill(bill, mainApp, false)) {
             mainApp.addSpinner();
-            boolean success = isNewBill ? DatabaseHelper.insertNewBill(bill) :
-                    DatabaseHelper.deleteBill(oldBill.getBillId())
-                            && DatabaseHelper.insertNewBill(bill);
+            boolean success = isNewBill ? DatabaseHelper_Bill.insertNewBill(bill) :
+                    DatabaseHelper_Bill.deleteBill(oldBill.getBillId())
+                            && DatabaseHelper_Bill.insertNewBill(bill);
             if (success) {
                 mainApp.snackBar("Success", bill.getInvoice() +
                         " Bill is saved successfully!", "green");
@@ -223,7 +224,7 @@ public class BillingController {
     @FXML
     void handleCustomerSubmit() {
         if (comboBoxCustomer.getValue() != null && !comboBoxCustomer.getValue().isEmpty()) {
-            customer = DatabaseHelper.getCustomerInfo(comboBoxCustomer.getValue());
+            customer = DatabaseHelper_Customer.getCustomerInfo(comboBoxCustomer.getValue());
             if (customer == null) {
                 mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Choose a Valid Customer", "red");
                 return;

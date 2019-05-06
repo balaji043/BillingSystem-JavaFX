@@ -8,11 +8,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import sample.Alert.AlertMaker;
 import sample.Model.Bill;
 import sample.Model.Customer;
+import sample.Model.PurchaseBill;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+@SuppressWarnings("Duplicates")
 public class ExcelHelper {
 
     private static boolean okay = false;
@@ -24,14 +26,13 @@ public class ExcelHelper {
             String FILE_NAME = dest.getAbsolutePath();
             FileInputStream excel;
             XSSFWorkbook workbook;
-            XSSFSheet sheet;
-
             try {
                 excel = new FileInputStream(dest);
                 workbook = new XSSFWorkbook(excel);
             } catch (Exception e) {
                 workbook = new XSSFWorkbook();
             }
+            XSSFSheet sheet;
             try {
                 sheet = workbook.createSheet("History");
             } catch (Exception e) {
@@ -125,6 +126,65 @@ public class ExcelHelper {
                 row.createCell(6).setCellValue(customer.getZipCode());
                 row.createCell(7).setCellValue(customer.getId());
                 rowNum++;
+            }
+            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+            workbook.write(outputStream);
+            outputStream.close();
+            workbook.close();
+            okay = true;
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        return okay;
+    }
+
+    public static boolean writeExcelPurchaseBills(@NotNull File dest) {
+        okay = false;
+        try {
+            String FILE_NAME = dest.getAbsolutePath();
+            FileInputStream excel;
+            XSSFWorkbook workbook;
+            try {
+                excel = new FileInputStream(dest);
+                workbook = new XSSFWorkbook(excel);
+            } catch (Exception e) {
+                workbook = new XSSFWorkbook();
+            }
+            String[] typeArray = {"StdEnt", "StdEqm"};
+            for (String s : typeArray) {
+                ObservableList<PurchaseBill> purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList(s);
+                XSSFSheet sheet;
+                try {
+                    sheet = workbook.createSheet("PURCHASE BILLS FOR " + s);
+                } catch (Exception e) {
+                    sheet = workbook.getSheet("PURCHASE BILLS");
+                }
+                int rowNum = 0;
+                for (int columnIndex = 0; columnIndex <= 7; columnIndex++)
+                    sheet.autoSizeColumn(columnIndex);
+
+                Row row = sheet.createRow(rowNum);
+                row.createCell(0).setCellValue("DATE");
+                row.createCell(1).setCellValue("COMPANY NAME");
+                row.createCell(2).setCellValue("INVOICE");
+                row.createCell(3).setCellValue("AMOUNT BEFORE TAX");
+                row.createCell(4).setCellValue("12% TAX AMOUNT");
+                row.createCell(5).setCellValue("18% TAX AMOUNT");
+                row.createCell(6).setCellValue("28% TAX AMOUNT");
+                row.createCell(7).setCellValue("TOTAL NET AMOUNT");
+                rowNum++;
+                for (PurchaseBill bill : purchaseBills) {
+                    row = sheet.createRow(rowNum);
+                    row.createCell(0).setCellValue(bill.getDate());
+                    row.createCell(1).setCellValue(bill.getCompanyName());
+                    row.createCell(2).setCellValue(bill.getInvoiceNo());
+                    row.createCell(3).setCellValue(bill.getAmountBeforeTax());
+                    row.createCell(4).setCellValue(bill.getTwelve());
+                    row.createCell(5).setCellValue(bill.getEighteen());
+                    row.createCell(6).setCellValue(bill.getTwentyEight());
+                    row.createCell(7).setCellValue(bill.getTotalAmount());
+                    rowNum++;
+                }
             }
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
             workbook.write(outputStream);

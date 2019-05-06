@@ -1,5 +1,6 @@
 package sample.UI.CustomerPanel;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -11,10 +12,12 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
+import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
-import sample.Database.DatabaseHelper;
+import sample.Database.DatabaseHelper_Customer;
 import sample.Database.ExcelDatabaseHelper;
 import sample.Database.ExcelHelper;
 import sample.Main;
@@ -29,12 +32,14 @@ import java.util.ResourceBundle;
 public class CustomerPanelController implements Initializable {
     @FXML
     public JFXCheckBox checkGST, checkGST1, checkGST2;
+    public JFXTextField cnNameSearchTField;
     @FXML
     private BorderPane borderPane;
     @FXML
     private JFXTextField cnName, phone, gstIn, address1, address2, state, zip;
-
     private Main mainApp;
+    @FXML
+    private JFXButton searchBTN;
 
     @FXML
     private TableView<Customer> userTableView;
@@ -61,6 +66,7 @@ public class CustomerPanelController implements Initializable {
         zip.getValidators().add(validator);
         checkGST1.setSelected(true);
         checkGST2.setSelected(true);
+        TextFields.bindAutoCompletion(cnNameSearchTField, DatabaseHelper_Customer.getCustomerNameList(2));
     }
 
     public void setMainApp(Main mainApp) {
@@ -77,6 +83,19 @@ public class CustomerPanelController implements Initializable {
         checkGST.setOnAction(e -> toggle(checkGST.isSelected()));
         checkGST1.setOnAction(e -> setCustomer());
         checkGST2.setOnAction(e -> setCustomer());
+
+        ImageView view1 = null;
+        try {
+            int i = 20;
+            view1 = new ImageView(new Image(Main.class.
+                    getResourceAsStream("Resources/icons/search.png")
+                    , i, i, true, true));
+
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        if (view1 != null)
+            searchBTN.setGraphic(view1);
     }
 
     private void setAll(Customer customer) {
@@ -118,7 +137,7 @@ public class CustomerPanelController implements Initializable {
                             " the time of bill submission.\n" + customer.getName() + "'s data"
                     , mainApp);
             if (okay) {
-                if (DatabaseHelper.deleteCustomer(customer)) {
+                if (DatabaseHelper_Customer.deleteCustomer(customer)) {
                     mainApp.snackBar("Success"
                             , "Selected Customer's data is deleted"
                             , "green");
@@ -142,10 +161,11 @@ public class CustomerPanelController implements Initializable {
         boolean submitted = false;
         if (isNewCustomer) {
             if (check()) {
+
                 Customer customer = new Customer(cnName.getText(), phone.getText(), gstIn.getText()
                         , "" + address1.getText(), "" + address2.getText(), state.getText(), zip.getText()
                         , "CUS" + new SimpleDateFormat("yyyyMMddHHSSS").format(new Date()));
-                submitted = DatabaseHelper.insertNewCustomer(customer);
+                submitted = DatabaseHelper_Customer.insertNewCustomer(customer);
                 if (submitted) {
                     mainApp.snackBar("Success", "New Customer Added Successfully", "green");
                 } else {
@@ -160,7 +180,7 @@ public class CustomerPanelController implements Initializable {
                         , "" + address1.getText(), "" + address2.getText()
                         , "" + state.getText(), "" + zip.getText()
                         , customer.getId());
-                submitted = DatabaseHelper.updateCustomer(newCustomer);
+                submitted = DatabaseHelper_Customer.updateCustomer(newCustomer);
                 if (submitted) {
                     mainApp.snackBar("Success", "Customer Data Updated Successfully"
                             , "green");
@@ -176,9 +196,11 @@ public class CustomerPanelController implements Initializable {
         }
     }
 
+
     @FXML
     void handleImport() {
-        File dest = chooseFile();
+
+        File dest = mainApp.chooseFile();
         if (dest == null) {
             mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
@@ -195,21 +217,14 @@ public class CustomerPanelController implements Initializable {
         init();
     }
 
-    private File chooseFile() {
-        mainApp.snackBar("", "Choose File", "green");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll
-                (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
-        return fileChooser.showSaveDialog(mainApp.getPrimaryStage());
-    }
-
     @FXML
     void handleExport() {
         if (all.size() == 0) {
             mainApp.snackBar("", "Nothing to Import", "red");
             return;
         }
-        File dest = chooseFile();
+
+        File dest = mainApp.chooseFile();
         if (dest == null) {
             mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
@@ -251,12 +266,11 @@ public class CustomerPanelController implements Initializable {
             cnName.validate();
             return false;
         }
-        if (phone.getText() != null && !phone.getText().isEmpty() && (phone.getText().length() != 10 || checkNum(phone.getText()))) {
-            mainApp.snackBar("Info", "Enter Correct Phone", "red");
-            return false;
-        }
 
         if (checkGST.isSelected()) {
+            if (phone.getText() == null || phone.getText().isEmpty()) {
+                phone.validate();
+            }
             if (gstIn.getText().length() != 15) {
                 mainApp.snackBar("Info", "Enter Correct length of GSTIN NO Entered : "
                         + gstIn.getText().length(), "red");
@@ -264,6 +278,12 @@ public class CustomerPanelController implements Initializable {
             }
         } else {
             gstIn.setText("For Own Use");
+        }
+        if (phone.getText() != null && !phone.getText().isEmpty()) {
+            if (phone.getText().length() != 10 || !checkNum(phone.getText())) {
+                mainApp.snackBar("Info", "Enter Correct Phone", "red");
+                return false;
+            }
         }
         return true;
     }
@@ -283,18 +303,19 @@ public class CustomerPanelController implements Initializable {
             gstIn.setEditable(true);
             gstIn.getValidators().add(validator);
             gstIn.validate();
-            if (gstIn.getText().equalsIgnoreCase("For Own Use"))
+            if (gstIn.getText().equalsIgnoreCase("For Own Use")) {
                 gstIn.setText("");
-
+            }
         } else {
             gstIn.setDisable(true);
             gstIn.setEditable(false);
             gstIn.resetValidation();
-            if (!gstIn.getText().equalsIgnoreCase("For Own Use"))
+            if (!gstIn.getText().equalsIgnoreCase("For Own Use")) {
                 gstIn.setText("For Own Use");
-
+            }
         }
     }
+
     private void setCustomer() {
         getCustomers();
         userTableView.getItems().clear();
@@ -308,13 +329,20 @@ public class CustomerPanelController implements Initializable {
     }
 
     private void getCustomers() {
-        all = DatabaseHelper.getCustomerList();
+        all = DatabaseHelper_Customer.getCustomerList();
         nonGST.clear();
         gst.clear();
         for (Customer c : all) {
             if (c.getGstIn().equals("For Own Use"))
                 nonGST.add(c);
             else gst.add(c);
+        }
+    }
+
+    public void handleSearch() {
+        if (cnNameSearchTField.getText() != null && !cnNameSearchTField.getText().isEmpty()) {
+            userTableView.getItems().clear();
+            userTableView.getItems().addAll(DatabaseHelper_Customer.getCustomerList(cnNameSearchTField.getText()));
         }
     }
 }

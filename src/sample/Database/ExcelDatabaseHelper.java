@@ -67,7 +67,7 @@ public class ExcelDatabaseHelper {
                 if (currentRow.getCell(7) != null) {
                     id = "" + currentRow.getCell(7).getStringCellValue();
                 }
-                DatabaseHelper.insertNewCustomer(new Customer(n, p, g, a1, a2, a3, z, id));
+                DatabaseHelper_Customer.insertNewCustomer(new Customer(n, p, g, a1, a2, a3, z, id));
             }
 
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);

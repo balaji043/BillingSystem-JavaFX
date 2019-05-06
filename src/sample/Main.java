@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sample.Alert.AlertMaker;
 import sample.Database.DatabaseHelper;
@@ -20,11 +21,14 @@ import sample.Model.User;
 import sample.UI.Billing.BillingController;
 import sample.UI.CustomerPanel.CustomerPanelController;
 import sample.UI.Login.LoginController;
+import sample.UI.NewPurchaseBill.NewPurchaseBill;
+import sample.UI.PurchaseBills.PurchaseBills;
 import sample.UI.Root.RootController;
 import sample.UI.UserPanel.UserPanelController;
 import sample.UI.ViewBills.ViewBillsController;
 import sample.Utils.Preferences;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Main extends Application {
@@ -183,6 +187,36 @@ public class Main extends Application {
         }
     }
 
+    public void initPurchaseBills() {
+        if (isLoggedIn) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("UI/PurchaseBills/PurchaseBills.fxml"));
+            try {
+                StackPane root = loader.load();
+                rootController.setContent(root);
+                PurchaseBills rootController = loader.getController();
+                rootController.setMainApp(Main.this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void initNewPurchaseBills() {
+        if (isLoggedIn) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("UI/NewPurchaseBill/NewPurchaseBill.fxml"));
+            try {
+                StackPane root = loader.load();
+                rootController.setContent(root);
+                NewPurchaseBill rootController = loader.getController();
+                rootController.setMainApp(Main.this);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void handleLogout() {
         if (isLoggedIn && AlertMaker.showMCAlert("Confirm logout?"
                 , "Are you sure you want to Logout?"
@@ -249,5 +283,13 @@ public class Main extends Application {
 
     public void removeSpinner() {
         rootLayout.getChildren().remove(spinner);
+    }
+
+    public File chooseFile() {
+        this.snackBar("", "Choose File", "green");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll
+                (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
+        return fileChooser.showSaveDialog(this.getPrimaryStage());
     }
 }

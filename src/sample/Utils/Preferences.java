@@ -28,7 +28,7 @@ public class Preferences {
     private HashSet<String> descriptions;
     private HashSet<String> perData;
     private HashSet<String> hsn;
-
+    private HashSet<String> companyNames;
 
     // Constructor
     private Preferences() {
@@ -44,6 +44,7 @@ public class Preferences {
         descriptions = new HashSet<>();
         perData = new HashSet<>();
         hsn = new HashSet<>();
+        companyNames = new HashSet<>();
         perData.add("PCS");
         perData.add("DOZ");
         perData.add("PKT");
@@ -256,4 +257,11 @@ public class Preferences {
         this.logoName = logoName;
     }
 
+    public HashSet<String> getCompanyNames() {
+        return companyNames;
+    }
+
+    public void setCompanyNames(HashSet<String> companyNames) {
+        this.companyNames = companyNames;
+    }
 }
