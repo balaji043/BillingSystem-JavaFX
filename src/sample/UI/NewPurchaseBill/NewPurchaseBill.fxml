@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
@@ -10,10 +9,14 @@
     <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
                 minWidth="-Infinity">
         <top>
-            <HBox alignment="CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
-                <JFXButton fx:id="addBTN" onAction="#handleAddBill" styleClass="jfx-button1" text="0" textFill="WHITE"/>
-                <JFXButton fx:id="deleteBTN" onAction="#handleDeleteBill" styleClass="jfx-button1" text="0"
-                           textFill="WHITE"/>
+            <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+                <JFXButton fx:id="addBTN" onAction="#handleAddBill" styleClass="jfx-button1" textFill="WHITE"/>
+                <JFXButton fx:id="deleteBTN" onAction="#handleDeleteBill" styleClass="jfx-button1" textFill="WHITE"/>
+                <JFXButton layoutX="740.0" layoutY="30.0" minHeight="40.0" onAction="#handleBack" prefWidth="200.0"
+                           styleClass="jfx-button1" text="Back" textFill="WHITE"/>
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                </padding>
             </HBox>
         </top>
         <center>
@@ -38,6 +41,9 @@
             <StackPane>
                 <JFXButton fx:id="submitBTN" onAction="#handleSubmit" prefHeight="40.0" prefWidth="200.0"
                            styleClass="jfx-button1" text="Submit" textFill="WHITE"/>
+                <BorderPane.margin>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                </BorderPane.margin>
             </StackPane>
         </bottom>
     </BorderPane>

@@ -18,5 +18,14 @@
         </library>
       </libraries>
     </data-source>
+    <data-source source="LOCAL" name="new_file" uuid="4f445331-5307-4930-8fce-4f4ac99bab75">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/../BillingSystem\new_file</jdbc-url>
+      <driver-properties>
+        <property name="enable_load_extension" value="true" />
+      </driver-properties>
+    </data-source>
   </component>
 </project>

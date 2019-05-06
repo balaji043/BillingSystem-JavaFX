@@ -89,15 +89,7 @@
 
                 <JFXButton buttonType="RAISED" contentDisplay="CENTER" mnemonicParsing="false"
                            onAction="#handlePurchaseBill" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button1"
-                           text="Purchase Bill Panel" textFill="WHITE">
-                    <font>
-                        <Font name="System Bold" size="16.0"/>
-                    </font>
-                </JFXButton>
-                <JFXButton buttonType="RAISED" contentDisplay="CENTER" mnemonicParsing="false"
-                           onAction="#handleNewPurchaseBill" prefHeight="40.0" prefWidth="200.0"
-                           styleClass="jfx-button1"
-                           text="New Purchase Bill" textFill="WHITE">
+                           text="PURCHASE BILLS" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="16.0"/>
                     </font>

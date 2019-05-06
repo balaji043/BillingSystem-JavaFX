@@ -9,6 +9,9 @@ import sample.Alert.AlertMaker;
 import sample.CustomUI.SinglePurchaseBill.SinglePurchaseBill;
 import sample.Database.DatabaseHelper_PurchaseBill;
 import sample.Main;
+import sample.Utils.Preferences;
+
+import java.util.HashSet;
 
 public class NewPurchaseBill {
 
@@ -35,7 +38,6 @@ public class NewPurchaseBill {
             addBTN.setGraphic(view1);
         if (view2 != null)
             deleteBTN.setGraphic(view2);
-
     }
 
     public void handleAddBill() {
@@ -53,27 +55,30 @@ public class NewPurchaseBill {
     }
 
     public void handleSubmit() {
-        boolean ready = true, result;
+        boolean ready = true;
         int noOfPurchaseBills = listView.getItems().size();
         for (SinglePurchaseBill b : listView.getItems()) {
             ready = ready && b.isReady();
         }
+        HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
         if (ready) {
             ObservableList<SinglePurchaseBill> s = listView.getItems();
             for (SinglePurchaseBill bill : s) {
-                try {
-                    result = DatabaseHelper_PurchaseBill.insertNewPurchaseBill(bill.getPurchaseBill());
-                    ready = ready && result;
-                } catch (Exception e) {
-                    result = false;
-                }
-                if (result)
-                    listView.getItems().remove(bill);
+                ready = ready && DatabaseHelper_PurchaseBill.insertNewPurchaseBill(bill.getPurchaseBill());
+                companyNames.add(bill.getPurchaseBill().getCompanyName());
             }
-            mainApp.snackBar("SUCCESS", "Successfully Added " + noOfPurchaseBills + " Purchased Bills", "green");
-            if (ready)
+            if (ready) {
+                mainApp.snackBar("SUCCESS", "Successfully Added " + noOfPurchaseBills + " Purchased Bills", "green");
                 listView.getItems().clear();
+                Preferences preferences = Preferences.getPreferences();
+                preferences.setCompanyNames(companyNames);
+                Preferences.setPreference(preferences);
+            }
         } else
             mainApp.snackBar("INFO", "Check the Fields marked in Red", "red");
+    }
+
+    public void handleBack() {
+        mainApp.initPurchaseBills();
     }
 }

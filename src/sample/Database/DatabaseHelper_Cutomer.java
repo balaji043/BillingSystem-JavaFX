@@ -109,11 +109,51 @@ public class DatabaseHelper_Cutomer {
     public static ObservableList<Customer> getCustomerList() {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
 
         try {
             String query = "SELECT * FROM CUSTOMER WHERE TRUE";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
+            customers = getCustomerList(preparedStatement);
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        } finally {
+            assert preparedStatement != null;
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return customers;
+    }
+
+    public static ObservableList<Customer> getCustomerList(String searchText) {
+        ObservableList<Customer> customers = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+
+        try {
+            String query = "SELECT * FROM CUSTOMER WHERE NAME LIKE ?";
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
+            preparedStatement.setString(1, searchText);
+            customers = getCustomerList(preparedStatement);
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        } finally {
+            assert preparedStatement != null;
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return customers;
+    }
+
+    private static ObservableList<Customer> getCustomerList(PreparedStatement preparedStatement) {
+        ObservableList<Customer> customers = FXCollections.observableArrayList();
+        ResultSet resultSet = null;
+
+        try {
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 customers.add(new Customer("" + resultSet.getString(1)
@@ -135,7 +175,16 @@ public class DatabaseHelper_Cutomer {
         return customers;
     }
 
-    public static ObservableList<String> getCustomerNameList(@NotNull int gst) {
+    /**
+     * This functions returns the customer list
+     *
+     * @param no is either 0,1 or any to indicate whether to return gst customers or non-gst Customers or both;
+     *           if  no == 0 then non-gst customer list will be returned;
+     *           if  no == 0 then gst customer list will be returned;
+     *           if  no == 0 then both gst and non-gst customer list will be returned;
+     **/
+
+    public static ObservableList<String> getCustomerNameList(@NotNull int no) {
         ObservableList<String> customers = FXCollections.observableArrayList();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -144,12 +193,12 @@ public class DatabaseHelper_Cutomer {
             String query = "SELECT * FROM CUSTOMER WHERE TRUE";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
-            if (gst == 0) {
+            if (no == 0) {
                 while (resultSet.next()) {
                     if (!resultSet.getString(3).equals("For Own Use"))
                         customers.add(resultSet.getString("NAME"));
                 }
-            } else if (gst == 1) {
+            } else if (no == 1) {
                 while (resultSet.next()) {
                     if (resultSet.getString(3).equals("For Own Use"))
                         customers.add(resultSet.getString("NAME"));

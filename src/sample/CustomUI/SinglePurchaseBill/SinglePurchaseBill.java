@@ -8,19 +8,19 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import sample.Alert.AlertMaker;
 import sample.Main;
 import sample.Model.PurchaseBill;
+import sample.Utils.Preferences;
 
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 
 public class SinglePurchaseBill extends HBox {
 
@@ -36,10 +36,14 @@ public class SinglePurchaseBill extends HBox {
     private JFXTextField _12TField, _18TField, _28TField;
     @FXML
     private Text slNoText;
+    @FXML
+    private HBox twelve, eighteen, twentyEight;
 
     private RequiredFieldValidator requiredFieldValidator = new RequiredFieldValidator("*");
     private boolean ready = true;
     private PurchaseBill purchaseBill = null;
+    private HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
+
 
 
     public SinglePurchaseBill() {
@@ -50,30 +54,37 @@ public class SinglePurchaseBill extends HBox {
 
         try {
             fxmlLoader.load();
-
-            is_12Exists.setSelected(false);
-            is_18Exists.setSelected(false);
-            is_28Exists.setSelected(false);
-
-            _12TField.setDisable(true);
-            _18TField.setDisable(true);
-            _28TField.setDisable(true);
-
-            is_12Exists.setOnAction(e -> toggle(_12TField, is_12Exists));
-            is_18Exists.setOnAction(e -> toggle(_18TField, is_18Exists));
-            is_28Exists.setOnAction(e -> toggle(_28TField, is_28Exists));
-
-            invoiceTField.getValidators().add(requiredFieldValidator);
-            amountBeforeTaxTField.getValidators().add(requiredFieldValidator);
-            amountAfterTaxTField.getValidators().add(requiredFieldValidator);
-
-            invoiceTField.validate();
-            amountBeforeTaxTField.validate();
-            amountAfterTaxTField.validate();
-
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         }
+
+        is_12Exists.setSelected(false);
+        is_18Exists.setSelected(false);
+        is_28Exists.setSelected(false);
+
+        _12TField.setText("0");
+        _18TField.setText("0");
+        _28TField.setText("0");
+
+        _12TField.setDisable(true);
+        _18TField.setDisable(true);
+        _28TField.setDisable(true);
+
+        is_12Exists.setOnAction(e -> toggle(_12TField, is_12Exists));
+        is_18Exists.setOnAction(e -> toggle(_18TField, is_18Exists));
+        is_28Exists.setOnAction(e -> toggle(_28TField, is_28Exists));
+
+        invoiceTField.getValidators().add(requiredFieldValidator);
+        amountBeforeTaxTField.getValidators().add(requiredFieldValidator);
+        amountAfterTaxTField.getValidators().add(requiredFieldValidator);
+
+        invoiceTField.validate();
+        amountBeforeTaxTField.validate();
+        amountAfterTaxTField.validate();
+
+        companyNameCBOX.getItems().addAll(companyNames);
+
+
     }
 
     private void toggle(JFXTextField tField, JFXCheckBox tFieldExists) {
@@ -120,7 +131,9 @@ public class SinglePurchaseBill extends HBox {
                     , companyNameCBOX.getValue()
                     , invoiceTField.getText()
                     , amountBeforeTaxTField.getText()
-                    , getTaxAmounts()
+                    , _12TField.getText()
+                    , _18TField.getText()
+                    , _28TField.getText()
                     , amountAfterTaxTField.getText());
         }
         return ready;
@@ -128,14 +141,6 @@ public class SinglePurchaseBill extends HBox {
 
     public PurchaseBill getPurchaseBill() {
         return purchaseBill;
-    }
-
-    private String[] getTaxAmounts() {
-        String[] taxAmounts = {"", "", ""};
-        if (is_12Exists.isSelected()) taxAmounts[0] = _12TField.getText();
-        if (is_18Exists.isSelected()) taxAmounts[0] = _18TField.getText();
-        if (is_28Exists.isSelected()) taxAmounts[0] = _28TField.getText();
-        return taxAmounts;
     }
 
     private boolean isWrongFormat(String text) {
@@ -157,5 +162,48 @@ public class SinglePurchaseBill extends HBox {
 
     public void setSlNoText(String slNoText) {
         this.slNoText.setText(slNoText);
+    }
+
+    public void setPurchaseBill(PurchaseBill toEdit) {
+        long l = Long.parseLong(toEdit.getDateInLong());
+        Date d = new Date(l);
+        fromDate.setValue(d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        companyNameCBOX.getItems().addAll(companyNames);
+        companyNameCBOX.getSelectionModel().select(toEdit.getCompanyName());
+
+        invoiceTField.setText(toEdit.getInvoiceNo());
+        invoiceTField.setEditable(false);
+        invoiceTField.setDisable(true);
+
+        amountBeforeTaxTField.setText(toEdit.getAmountBeforeTax());
+
+        if (!toEdit.getTwelve().equals("0")) {
+            is_12Exists.setSelected(true);
+            _12TField.setText(toEdit.getTwelve());
+            _12TField.setDisable(false);
+        }
+        if (!toEdit.getEighteen().equals("0")) {
+            is_18Exists.setSelected(true);
+            _18TField.setText(toEdit.getEighteen());
+            _18TField.setDisable(false);
+        }
+        if (!toEdit.getTwentyEight().equals("0")) {
+            is_28Exists.setSelected(true);
+            _28TField.setText(toEdit.getTwentyEight());
+            _28TField.setDisable(false);
+        }
+        amountAfterTaxTField.setText(toEdit.getTotalAmount());
+        invoiceTField.setEditable(false);
+    }
+
+    public VBox getVBox() {
+        VBox vBox = new VBox();
+        vBox.setSpacing(50);
+        vBox.setAlignment(Pos.CENTER_LEFT);
+        twelve.setAlignment(Pos.CENTER_LEFT);
+        eighteen.setAlignment(Pos.CENTER_LEFT);
+        twentyEight.setAlignment(Pos.CENTER_LEFT);
+        vBox.getChildren().addAll(fromDate, companyNameCBOX, invoiceTField, amountBeforeTaxTField, twelve, eighteen, twentyEight, amountAfterTaxTField);
+        return vBox;
     }
 }

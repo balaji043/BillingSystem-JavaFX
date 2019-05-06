@@ -1,5 +1,6 @@
 package sample.UI.CustomerPanel;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -11,8 +12,10 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.FileChooser;
+import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
 import sample.Database.DatabaseHelper_Cutomer;
 import sample.Database.ExcelDatabaseHelper;
@@ -29,12 +32,15 @@ import java.util.ResourceBundle;
 public class CustomerPanelController implements Initializable {
     @FXML
     public JFXCheckBox checkGST, checkGST1, checkGST2;
+    public JFXTextField cnNameSearchTField;
     @FXML
     private BorderPane borderPane;
     @FXML
     private JFXTextField cnName, phone, gstIn, address1, address2, state, zip;
 
     private Main mainApp;
+    @FXML
+    private JFXButton searchBTN;
 
     @FXML
     private TableView<Customer> userTableView;
@@ -77,6 +83,19 @@ public class CustomerPanelController implements Initializable {
         checkGST.setOnAction(e -> toggle(checkGST.isSelected()));
         checkGST1.setOnAction(e -> setCustomer());
         checkGST2.setOnAction(e -> setCustomer());
+
+        ImageView view1 = null;
+        try {
+            int i = 20;
+            view1 = new ImageView(new Image(Main.class.
+                    getResourceAsStream("Resources/icons/search.png")
+                    , i, i, true, true));
+
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        if (view1 != null)
+            searchBTN.setGraphic(view1);
     }
 
     private void setAll(Customer customer) {
@@ -177,18 +196,11 @@ public class CustomerPanelController implements Initializable {
         }
     }
 
-    private File chooseFile() {
-        mainApp.snackBar("", "Choose File", "green");
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll
-                (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
-        return fileChooser.showSaveDialog(mainApp.getPrimaryStage());
-    }
 
     @FXML
     void handleImport() {
 
-        File dest = chooseFile();
+        File dest = mainApp.chooseFile();
         if (dest == null) {
             mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
@@ -212,7 +224,7 @@ public class CustomerPanelController implements Initializable {
             return;
         }
 
-        File dest = chooseFile();
+        File dest = mainApp.chooseFile();
         if (dest == null) {
             mainApp.snackBar("INFO", "Operation Cancelled", "green");
         } else {
@@ -308,12 +320,22 @@ public class CustomerPanelController implements Initializable {
         getCustomers();
         userTableView.getItems().clear();
         if ((checkGST1.isSelected() && checkGST2.isSelected())
-                || (!checkGST1.isSelected() && !checkGST2.isSelected()))
+                || (!checkGST1.isSelected() && !checkGST2.isSelected())) {
+
             userTableView.getItems().addAll(all);
-        else if (checkGST1.isSelected())
+            TextFields.bindAutoCompletion(cnNameSearchTField, DatabaseHelper_Cutomer.getCustomerNameList(2));
+
+        } else if (checkGST1.isSelected()) {
+
             userTableView.getItems().addAll(gst);
-        else
+            TextFields.bindAutoCompletion(cnNameSearchTField, DatabaseHelper_Cutomer.getCustomerNameList(1));
+
+        } else {
+
             userTableView.getItems().addAll(nonGST);
+            TextFields.bindAutoCompletion(cnNameSearchTField, DatabaseHelper_Cutomer.getCustomerNameList(0));
+
+        }
     }
 
     private void getCustomers() {
@@ -324,6 +346,13 @@ public class CustomerPanelController implements Initializable {
             if (c.getGstIn().equals("For Own Use"))
                 nonGST.add(c);
             else gst.add(c);
+        }
+    }
+
+    public void handleSearch() {
+        if (cnNameSearchTField.getText() != null && !cnNameSearchTField.getText().isEmpty()) {
+            userTableView.getItems().clear();
+            userTableView.getItems().addAll(DatabaseHelper_Cutomer.getCustomerList(cnNameSearchTField.getText()));
         }
     }
 }

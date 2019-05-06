@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sample.Alert.AlertMaker;
 import sample.Database.DatabaseHelper;
@@ -27,6 +28,7 @@ import sample.UI.UserPanel.UserPanelController;
 import sample.UI.ViewBills.ViewBillsController;
 import sample.Utils.Preferences;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Main extends Application {
@@ -285,5 +287,12 @@ public class Main extends Application {
         rootLayout.getChildren().remove(spinner);
     }
 
+    public File chooseFile() {
+        this.snackBar("", "Choose File", "green");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll
+                (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
+        return fileChooser.showSaveDialog(this.getPrimaryStage());
+    }
 
 }

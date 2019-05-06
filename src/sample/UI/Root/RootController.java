@@ -85,6 +85,8 @@ public class RootController implements Initializable {
                 , KeyCombination.CONTROL_DOWN), this::handleLogout);
         keyCodeCombinationRunnableHashMap.put(new KeyCodeCombination(KeyCode.H
                 , KeyCombination.CONTROL_DOWN), this::handleHome);
+        keyCodeCombinationRunnableHashMap.put(new KeyCodeCombination(KeyCode.P
+                , KeyCombination.CONTROL_DOWN), this::handlePurchaseBill);
         mainApp.getPrimaryStage().getScene().getAccelerators().putAll(keyCodeCombinationRunnableHashMap);
     }
 
@@ -122,19 +124,11 @@ public class RootController implements Initializable {
     }
 
     public void handlePurchaseBill() {
-        i = 1;
-        window.setText("New Bill");
+        i = 6;
+        window.setText("Purchase Bills");
         toggle();
         mainApp.initPurchaseBills();
     }
-
-    public void handleNewPurchaseBill() {
-        window.setText("New Bill");
-        toggle();
-        mainApp.initNewPurchaseBills();
-    }
-
-
     public void handleViewBill() {
         i = 2;
         window.setText("View Bill");
@@ -185,6 +179,13 @@ public class RootController implements Initializable {
         mainApp.initUserPanel();
     }
 
+    private void handlePurchaseBill1() {
+        i = 6;
+        window.setText("Purchase Bills");
+        mainApp.initPurchaseBills();
+    }
+
+
     @FXML
     public void handleRefresh() {
         switch (i) {
@@ -210,6 +211,10 @@ public class RootController implements Initializable {
             }
             case 5: {
                 handleLogout();
+                return;
+            }
+            case 6: {
+                handlePurchaseBill1();
                 return;
             }
             default: {
