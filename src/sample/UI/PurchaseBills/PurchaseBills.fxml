@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="main" prefHeight="720.0" prefWidth="1920.0"
+           xmlns="http://javafx.com/javafx/8.0.171" fx:controller="sample.UI.PurchaseBills.PurchaseBills">
+    <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
+        <center>
+            <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+        </center>
+
+        <top>
+            <GridPane alignment="CENTER" hgap="10.0" maxHeight="100.0" maxWidth="1080.0" vgap="20.0"
+                      BorderPane.alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="212.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="60.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <BorderPane.margin>
+                    <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+                </BorderPane.margin>
+                <StackPane GridPane.columnIndex="1">
+                    <JFXDatePicker fx:id="fromDate" prefHeight="40.0" prefWidth="210.0" promptText="FROM"/>
+                </StackPane>
+                <StackPane GridPane.columnIndex="2">
+                    <JFXDatePicker fx:id="toDate" prefHeight="40.0" prefWidth="210.0" promptText="TO"/>
+                </StackPane>
+                <StackPane GridPane.columnIndex="4">
+                    <JFXButton buttonType="RAISED" onAction="#handleAddNewPurchaseBill" prefHeight="40.0"
+                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="ADD NEW BILL"
+                               textFill="WHITE"/>
+                </StackPane>
+                <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <JFXComboBox fx:id="companyNameCBOX" editable="true" prefHeight="40.0" prefWidth="200.0"
+                                 promptText="COMPANY NAME"/>
+                </StackPane>
+                <StackPane GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0" promptText="Search Invoice"/>
+                </StackPane>
+                <StackPane GridPane.columnIndex="3" GridPane.rowIndex="1">
+                    <JFXButton buttonType="RAISED" onAction="#handleDownloadSubmit" prefHeight="40.0" prefWidth="200.0"
+                               ripplerFill="#3333cc" styleClass="jfx-button1" text="DOWNLOAD" textFill="WHITE"/>
+                </StackPane>
+                <StackPane GridPane.columnIndex="3">
+                    <JFXButton buttonType="RAISED" onAction="#handleSubmit" prefHeight="40.0" prefWidth="200.0"
+                               ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE"/>
+                </StackPane>
+                <StackPane layoutX="448.0" layoutY="10.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                    <JFXButton buttonType="RAISED" onAction="#handleDeletePurchaseBill" prefHeight="40.0"
+                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="DELETE"
+                               textFill="WHITE"/>
+                </StackPane>
+                <StackPane layoutX="718.0" layoutY="60.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                    <JFXCheckBox fx:id="editPanelCheckBox" minWidth="200.0" onAction="#handleEditPurchaseBill"
+                                 prefHeight="40.0" prefWidth="200.0" text="Edit Purchase Bill"/>
+                </StackPane>
+                <StackPane layoutX="192.0" layoutY="60.0">
+                    <JFXComboBox fx:id="billTypeCBOX" prefHeight="40.0" prefWidth="200.0"
+                                 promptText="CHOOSE STORE"/>
+                </StackPane>
+            </GridPane>
+        </top>
+        <right>
+            <VBox fx:id="editPanel">
+                <JFXButton buttonType="RAISED" onAction="#handleEditSubmit" prefHeight="40.0" prefWidth="200.0"
+                           ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE"/>
+            </VBox>
+        </right>
+    </BorderPane>
+</StackPane>
