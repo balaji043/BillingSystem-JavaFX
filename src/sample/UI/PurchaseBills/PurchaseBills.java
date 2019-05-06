@@ -47,6 +47,7 @@ public class PurchaseBills {
         TextFields.bindAutoCompletion(companyNameCBOX.getEditor(), companyNameCBOX.getItems());
         initTable();
         tableView.setOnMouseClicked(e -> onPurchaseBillSelected());
+        TextFields.bindAutoCompletion(searchBox, DatabaseHelper_PurchaseBill.getAllPurchaseBillList());
     }
 
     public void handleAddNewPurchaseBill() {
