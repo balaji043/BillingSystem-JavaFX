@@ -8,25 +8,28 @@
          prefWidth="1200.0"
          spacing="2.0" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.171">
     <Text fx:id="slNoText" strokeType="OUTSIDE" strokeWidth="0.0" text="00"/>
-    <JFXDatePicker fx:id="fromDate" prefHeight="40.0" prefWidth="210.0" promptText="FROM"/>
+    <JFXDatePicker fx:id="fromDate" prefHeight="40.0" prefWidth="210.0" promptText="Invoice Date"/>
     <JFXComboBox fx:id="companyNameCBOX" editable="true" prefWidth="200.0" promptText="Select Company"/>
     <JFXTextField fx:id="invoiceTField" maxWidth="250.0" prefWidth="250.0" promptText="Invoice"/>
     <JFXTextField fx:id="amountBeforeTaxTField" maxWidth="250.0" prefWidth="250.0" promptText="Amount Before Tax"/>
 
     <HBox alignment="CENTER" fx:id="twelve">
-        <JFXCheckBox fx:id="is_12Exists" maxWidth="0.0" prefHeight="0.0" prefWidth="0.0" text="- "/>
+        <JFXCheckBox fx:id="is_12Exists" maxWidth="0.0" prefHeight="0.0" prefWidth="0.0" text=" "/>
         <JFXTextField fx:id="_12TField" maxWidth="250.0" prefWidth="140.0" promptText="12% Tax Amount"/>
     </HBox>
+
     <HBox alignment="CENTER" fx:id="eighteen">
-        <JFXCheckBox fx:id="is_18Exists" prefHeight="0.0" prefWidth="0.0" text="- "/>
+        <JFXCheckBox fx:id="is_18Exists" prefHeight="0.0" prefWidth="0.0" text=" "/>
         <JFXTextField fx:id="_18TField" maxWidth="250.0" prefWidth="140.0" promptText="18% Tax Amount"/>
     </HBox>
+
     <HBox alignment="CENTER" fx:id="twentyEight">
-        <JFXCheckBox fx:id="is_28Exists" prefHeight="0.0" prefWidth="0.0" text="- "/>
+        <JFXCheckBox fx:id="is_28Exists" prefHeight="0.0" prefWidth="0.0" text=" "/>
         <JFXTextField fx:id="_28TField" maxWidth="250.0" prefWidth="140.0" promptText="28% Tax Amount"/>
     </HBox>
 
-    <JFXTextField fx:id="amountAfterTaxTField" maxWidth="250.0" prefWidth="250.0" promptText="Amount Before Tax"/>
+    <JFXTextField fx:id="amountAfterTaxTField" maxWidth="250.0" prefWidth="250.0" promptText="Total Net Amount"/>
+    <JFXCheckBox fx:id="hasGoneToAuditorCheckBox" minWidth="200.0" prefHeight="40.0" prefWidth="200.0" text=" "/>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>

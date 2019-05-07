@@ -3,6 +3,7 @@ package sample.Database;
 import com.sun.istack.internal.NotNull;
 import sample.Alert.AlertMaker;
 import sample.Model.User;
+import sample.Utils.Preferences;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,6 +22,12 @@ public class DatabaseHelper {
      */
 
     public static void create() {
+        Preferences preferences = Preferences.getPreferences();
+        if (preferences.isFirstTime()) {
+            preferences.setFirstTime(false);
+            deleteTable("PURCHASEBILLS");
+            Preferences.setPreference(preferences);
+        }
         if (createUserTable()) {
             DatabaseHelper_User.insertNewUser(new User("admin"
                     , "admin"
@@ -39,21 +46,20 @@ public class DatabaseHelper {
         }
     }
 
-    public static boolean createTable(String createQuery) {
+    static boolean createTable(String createQuery) {
         Connection connection = DatabaseHandler.getInstance().getConnection();
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         boolean okay = false;
         try {
             preparedStatement = connection.prepareStatement(createQuery);
             okay = !preparedStatement.execute();
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
-        } finally {
         }
         return okay;
     }
 
-    public static boolean deleteTable(@NotNull String tableName) {
+    static boolean deleteTable(@NotNull String tableName) {
         PreparedStatement preparedStatement = null;
 
         try {
@@ -82,7 +88,7 @@ public class DatabaseHelper {
         return false;
     }
 
-    public static void closePAndRMethod(PreparedStatement preparedStatement, ResultSet resultSet) {
+    static void closePAndRMethod(PreparedStatement preparedStatement, ResultSet resultSet) {
         try {
             assert preparedStatement != null;
             preparedStatement.close();
@@ -129,7 +135,7 @@ public class DatabaseHelper {
                 + " CompanyName TEXT NOT NULL, INVOICE TEXT NOT NULL UNIQUE,"
                 + " AmountBeforeTax TEXT NOT NULL, TwelvePerAmt TEXT NOT NULL, "
                 + " EighteenPerAmt TEXT NOT NULL, TwentyEightPerAmt TEXT NOT NULL, "
-                + " AmountAfterTax TEXT NOT NULL)";
+                + " AmountAfterTax TEXT NOT NULL, HasGoneToAuditor TEXT NOT NULL)";
         return createTable(createQuery);
     }
 }

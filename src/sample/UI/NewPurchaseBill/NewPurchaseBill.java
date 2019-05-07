@@ -47,10 +47,13 @@ public class NewPurchaseBill {
     }
 
     public void handleDeleteBill() {
-        if (listView.getSelectionModel().getSelectedItem() == null) {
+        if (listView.getSelectionModel().getSelectedItem() == null)
             mainApp.snackBar("INFO", "Select a row First", "green");
-        } else {
+        else {
             listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
+            int i = 1;
+            for (SinglePurchaseBill bill : listView.getItems())
+                bill.setSlNoText("" + (i++));
         }
     }
 

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="main" prefHeight="720.0" prefWidth="1920.0"
            xmlns="http://javafx.com/javafx/8.0.171" fx:controller="sample.UI.PurchaseBills.PurchaseBills">
-    <BorderPane prefHeight="200.0" prefWidth="200.0" fx:id="borderPane">
+    <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
         <center>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                 <columnResizePolicy>
@@ -30,7 +30,7 @@
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
                 <BorderPane.margin>
-                    <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+                    <Insets bottom="20.0" top="20.0"/>
                 </BorderPane.margin>
                 <StackPane>
                     <JFXDatePicker fx:id="fromDate" prefHeight="40.0" prefWidth="210.0" promptText="FROM"/>
@@ -64,17 +64,15 @@
                                textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="718.0" layoutY="60.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                    <JFXCheckBox fx:id="editPanelCheckBox" onAction="#handleEditPurchaseBill" minWidth="200.0"
-                                 prefHeight="40.0" prefWidth="200.0"
-                                 text="Edit Purchase Bill"/>
+                    <JFXCheckBox fx:id="editPanelCheckBox" minWidth="200.0" onAction="#handleEditPurchaseBill"
+                                 prefHeight="40.0" prefWidth="200.0" text="Edit Purchase Bill"/>
                 </StackPane>
             </GridPane>
         </top>
         <right>
             <VBox fx:id="editPanel">
-                <JFXButton buttonType="RAISED" onAction="#handleEditSubmit" prefHeight="40.0"
-                           prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT"
-                           textFill="WHITE"/>
+                <JFXButton buttonType="RAISED" onAction="#handleEditSubmit" prefHeight="40.0" prefWidth="200.0"
+                           ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE"/>
             </VBox>
         </right>
     </BorderPane>

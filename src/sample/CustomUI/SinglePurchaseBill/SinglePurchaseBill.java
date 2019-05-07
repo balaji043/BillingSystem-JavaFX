@@ -29,7 +29,7 @@ public class SinglePurchaseBill extends HBox {
     @FXML
     private JFXComboBox<String> companyNameCBOX;
     @FXML
-    private JFXCheckBox is_12Exists, is_18Exists, is_28Exists;
+    private JFXCheckBox is_12Exists, is_18Exists, is_28Exists, hasGoneToAuditorCheckBox;
     @FXML
     private JFXTextField invoiceTField, amountBeforeTaxTField, amountAfterTaxTField;
     @FXML
@@ -43,7 +43,6 @@ public class SinglePurchaseBill extends HBox {
     private boolean ready = true;
     private PurchaseBill purchaseBill = null;
     private HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
-
 
 
     public SinglePurchaseBill() {
@@ -134,7 +133,8 @@ public class SinglePurchaseBill extends HBox {
                     , _12TField.getText()
                     , _18TField.getText()
                     , _28TField.getText()
-                    , amountAfterTaxTField.getText());
+                    , amountAfterTaxTField.getText()
+                    , "" + hasGoneToAuditorCheckBox.isSelected());
         }
         return ready;
     }
@@ -175,6 +175,8 @@ public class SinglePurchaseBill extends HBox {
         invoiceTField.setEditable(false);
         invoiceTField.setDisable(true);
 
+        hasGoneToAuditorCheckBox.setSelected(toEdit.hasGoneToAuditor());
+
         amountBeforeTaxTField.setText(toEdit.getAmountBeforeTax());
 
         if (!toEdit.getTwelve().equals("0")) {
@@ -192,18 +194,28 @@ public class SinglePurchaseBill extends HBox {
             _28TField.setText(toEdit.getTwentyEight());
             _28TField.setDisable(false);
         }
+
         amountAfterTaxTField.setText(toEdit.getTotalAmount());
         invoiceTField.setEditable(false);
+
     }
 
     public VBox getVBox() {
         VBox vBox = new VBox();
-        vBox.setSpacing(50);
-        vBox.setAlignment(Pos.CENTER_LEFT);
+        vBox.setSpacing(25);
+        vBox.setAlignment(Pos.TOP_LEFT);
         twelve.setAlignment(Pos.CENTER_LEFT);
         eighteen.setAlignment(Pos.CENTER_LEFT);
         twentyEight.setAlignment(Pos.CENTER_LEFT);
-        vBox.getChildren().addAll(fromDate, companyNameCBOX, invoiceTField, amountBeforeTaxTField, twelve, eighteen, twentyEight, amountAfterTaxTField);
+        hasGoneToAuditorCheckBox.setText("Send To Auditor");
+        vBox.getChildren().addAll(fromDate
+                , companyNameCBOX
+                , invoiceTField
+                , amountBeforeTaxTField
+                , twelve, eighteen
+                , twentyEight
+                , amountAfterTaxTField
+                , hasGoneToAuditorCheckBox);
         return vBox;
     }
 }

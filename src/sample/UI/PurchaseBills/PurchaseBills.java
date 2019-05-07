@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -47,7 +48,15 @@ public class PurchaseBills {
         TextFields.bindAutoCompletion(companyNameCBOX.getEditor(), companyNameCBOX.getItems());
         initTable();
         tableView.setOnMouseClicked(e -> onPurchaseBillSelected());
-        TextFields.bindAutoCompletion(searchBox, DatabaseHelper_PurchaseBill.getAllPurchaseBillList());
+        TextFields.bindAutoCompletion(searchBox, getInvoiceList());
+    }
+
+    private ObservableList<String> getInvoiceList() {
+        ObservableList<String> invoices = FXCollections.observableArrayList();
+        for (PurchaseBill bill :
+                tableView.getItems())
+            invoices.add(bill.getInvoiceNo());
+        return invoices;
     }
 
     public void handleAddNewPurchaseBill() {
@@ -145,6 +154,7 @@ public class PurchaseBills {
         addTableColumn("18%", "eighteen");
         addTableColumn("28%", "twentyEight");
         addTableColumn("Total Net Amount", "totalAmount");
+        addTableColumn("Send To Auditor", "hasGoneToAuditorString");
 
         loadTable();
         tableView.sort();

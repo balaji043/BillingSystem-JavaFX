@@ -22,7 +22,7 @@ public class DatabaseHelper_PurchaseBill {
         try {
             String query = String.format("INSERT INTO %s (DATE , CompanyName ," +
                     " INVOICE , AmountBeforeTax , TwelvePerAmt , EighteenPerAmt ," +
-                    " TwentyEightPerAmt , AmountAfterTax) VALUES (?,?,?,?,?,?,?,?)", tableName);
+                    " TwentyEightPerAmt , AmountAfterTax,HasGoneToAuditor) VALUES (?,?,?,?,?,?,?,?,?)", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, purchaseBill.getDateInLong());
             preparedStatement.setString(2, purchaseBill.getCompanyName());
@@ -32,6 +32,7 @@ public class DatabaseHelper_PurchaseBill {
             preparedStatement.setString(6, purchaseBill.getEighteen());
             preparedStatement.setString(7, purchaseBill.getTwentyEight());
             preparedStatement.setString(8, purchaseBill.getTotalAmount());
+            preparedStatement.setString(9, purchaseBill.getHasSentToAuditor());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
@@ -164,7 +165,8 @@ public class DatabaseHelper_PurchaseBill {
                 , resultSet.getString(5)
                 , resultSet.getString(6)
                 , resultSet.getString(7)
-                , resultSet.getString(8));
+                , resultSet.getString(8)
+                , resultSet.getString(9));
     }
 
     private static ObservableList<PurchaseBill> getResultSetSearchByString(String getQuery, String text) {
