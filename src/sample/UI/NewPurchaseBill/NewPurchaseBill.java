@@ -45,30 +45,33 @@ public class NewPurchaseBill {
 
     public void handleAddBill() {
         if (typeComboBox.getValue() == null) {
-            mainApp.snackBar("INFO", "SELCT TYPE FIRST", "green");
+            mainApp.snackBar("INFO", "SELECT TYPE FIRST", "green");
             return;
         }
         SinglePurchaseBill purchaseBill = new SinglePurchaseBill();
-        purchaseBill.setSlNoTextAndType(String.format("%2d", listView.getItems().size() + 1), typeComboBox.getValue());
+        purchaseBill.setSlNoText(String.format("%2d", listView.getItems().size() + 1));
         listView.getItems().add(purchaseBill);
     }
 
     public void handleDeleteBill() {
         if (typeComboBox.getValue() == null) {
-            mainApp.snackBar("INFO", "SELCT TYPE FIRST", "green");
+            mainApp.snackBar("INFO", "SELECT TYPE FIRST", "green");
             return;
         }
         if (listView.getSelectionModel().getSelectedItem() == null) {
             mainApp.snackBar("INFO", "Select a row First", "green");
         } else {
             listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
+            int i = 1;
+            for (SinglePurchaseBill bill : listView.getItems())
+                bill.setSlNoText("" + (i++));
         }
     }
 
     public void handleSubmit() {
 
         if (typeComboBox.getValue() == null) {
-            mainApp.snackBar("INFO", "SELCT TYPE FIRST", "green");
+            mainApp.snackBar("INFO", "SELECT TYPE FIRST", "green");
             return;
         }
         boolean ready = true;

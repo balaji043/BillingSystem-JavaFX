@@ -12,8 +12,9 @@ public class PurchaseBill {
     private String eighteen;
     private String twentyEight;
     private String totalAmount;
-    private String type;
     private String date;
+    private String hasSentToAuditor;
+    private String hasGoneToAuditorString;
 
     public PurchaseBill(String dateInLong
             , String companyName
@@ -23,7 +24,7 @@ public class PurchaseBill {
             , String eighteen
             , String twentyEight
             , String totalAmount
-            , String type) {
+            , String hasSentToAuditor) {
         this.dateInLong = dateInLong;
         this.companyName = companyName;
         this.invoiceNo = invoiceNo;
@@ -32,7 +33,8 @@ public class PurchaseBill {
         this.eighteen = eighteen;
         this.twentyEight = twentyEight;
         this.totalAmount = totalAmount;
-        this.type = type;
+        this.hasSentToAuditor = hasSentToAuditor;
+        this.hasGoneToAuditorString = hasGoneToAuditor() ? "YES" : "NO";
     }
 
     public String getDateInLong() {
@@ -67,8 +69,8 @@ public class PurchaseBill {
         return totalAmount;
     }
 
-    public String getType() {
-        return type;
+    public String getHasSentToAuditor() {
+        return hasSentToAuditor;
     }
 
     @Override
@@ -89,4 +91,11 @@ public class PurchaseBill {
         return BillingSystemUtils.formatDateTimeString(Long.parseLong(dateInLong));
     }
 
+    public boolean hasGoneToAuditor() {
+        return hasSentToAuditor.equals("true");
+    }
+
+    public String getHasGoneToAuditorString() {
+        return hasGoneToAuditorString;
+    }
 }

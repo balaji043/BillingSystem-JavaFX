@@ -24,6 +24,7 @@ public class Preferences {
     private String limit;
     private String theme;
     private String logoName;
+    private boolean isFirstTime;
 
     private HashSet<String> descriptions;
     private HashSet<String> perData;
@@ -58,6 +59,7 @@ public class Preferences {
         limit = "22";
         theme = "red";
         logoName = "StdEnt";
+        isFirstTime = true;
     }
 
     private static void initConfig() {
@@ -263,5 +265,13 @@ public class Preferences {
 
     public void setCompanyNames(HashSet<String> companyNames) {
         this.companyNames = companyNames;
+    }
+
+    public boolean isFirstTime() {
+        return isFirstTime;
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        isFirstTime = firstTime;
     }
 }

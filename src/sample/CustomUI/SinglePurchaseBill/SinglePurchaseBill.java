@@ -29,7 +29,7 @@ public class SinglePurchaseBill extends HBox {
     @FXML
     private JFXComboBox<String> companyNameCBOX;
     @FXML
-    private JFXCheckBox is_12Exists, is_18Exists, is_28Exists;
+    private JFXCheckBox is_12Exists, is_18Exists, is_28Exists, hasGoneToAuditorCheckBox;
     @FXML
     private JFXTextField invoiceTField, amountBeforeTaxTField, amountAfterTaxTField;
     @FXML
@@ -43,7 +43,6 @@ public class SinglePurchaseBill extends HBox {
     private boolean ready = true;
     private PurchaseBill purchaseBill = null;
     private HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
-    private String type = null;
 
 
     public SinglePurchaseBill() {
@@ -128,14 +127,14 @@ public class SinglePurchaseBill extends HBox {
                     .atZone(ZoneId.systemDefault()).toInstant()).getTime();
 
             purchaseBill = new PurchaseBill(date
-                    , companyNameCBOX.getValue()
-                    , invoiceTField.getText()
-                    , amountBeforeTaxTField.getText()
-                    , _12TField.getText()
-                    , _18TField.getText()
-                    , _28TField.getText()
-                    , amountAfterTaxTField.getText()
-                    , type);
+                    , "" + companyNameCBOX.getValue()
+                    , "" + invoiceTField.getText()
+                    , "" + amountBeforeTaxTField.getText()
+                    , "" + _12TField.getText()
+                    , "" + _18TField.getText()
+                    , "" + _28TField.getText()
+                    , "" + amountAfterTaxTField.getText()
+                    , "" + hasGoneToAuditorCheckBox.isSelected());
         }
         return ready;
     }
@@ -172,6 +171,9 @@ public class SinglePurchaseBill extends HBox {
             _28TField.setText(toEdit.getTwentyEight());
             _28TField.setDisable(false);
         }
+
+        hasGoneToAuditorCheckBox.setSelected(toEdit.hasGoneToAuditor());
+
         amountAfterTaxTField.setText(toEdit.getTotalAmount());
         invoiceTField.setEditable(false);
     }
@@ -193,21 +195,27 @@ public class SinglePurchaseBill extends HBox {
         ready = false;
     }
 
-    public void setSlNoTextAndType(String slNoText, String type) {
+    public void setSlNoText(String slNoText) {
         this.slNoText.setText(slNoText);
-        this.type = type;
     }
 
     public VBox getVBox() {
         VBox vBox = new VBox();
-        vBox.setSpacing(50);
-        vBox.setAlignment(Pos.CENTER_LEFT);
+        vBox.setSpacing(25);
+        vBox.setAlignment(Pos.TOP_LEFT);
         twelve.setAlignment(Pos.CENTER_LEFT);
         eighteen.setAlignment(Pos.CENTER_LEFT);
         twentyEight.setAlignment(Pos.CENTER_LEFT);
-        vBox.getChildren().addAll(fromDate, companyNameCBOX, invoiceTField, amountBeforeTaxTField, twelve, eighteen, twentyEight, amountAfterTaxTField);
+        hasGoneToAuditorCheckBox.setText("Send To Auditor");
+        vBox.getChildren().addAll(fromDate
+                , companyNameCBOX
+                , invoiceTField
+                , amountBeforeTaxTField
+                , twelve, eighteen
+                , twentyEight
+                , amountAfterTaxTField
+                , hasGoneToAuditorCheckBox);
         return vBox;
     }
-
 
 }

@@ -105,7 +105,7 @@ public class PurchaseBills {
 
                 VBox vBox = new VBox();
                 vBox.getChildren().addAll(singlePurchaseBill.getVBox(), editPanel);
-                vBox.setAlignment(Pos.CENTER);
+                vBox.setAlignment(Pos.TOP_LEFT);
                 vBox.setSpacing(20);
                 vBox.setPadding(new Insets(20, 20, 20, 20));
 
@@ -148,6 +148,7 @@ public class PurchaseBills {
         addTableColumn("18%", "eighteen");
         addTableColumn("28%", "twentyEight");
         addTableColumn("Total Net Amount", "totalAmount");
+        addTableColumn("Send To Auditor", "hasGoneToAuditorString");
 
         loadTable();
         tableView.sort();
