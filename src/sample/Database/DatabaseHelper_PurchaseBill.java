@@ -98,8 +98,8 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
             preparedStatement.setString(5, purchaseBill.getEighteen());
             preparedStatement.setString(6, purchaseBill.getTwentyEight());
             preparedStatement.setString(7, purchaseBill.getTotalAmount());
-            preparedStatement.setString(8, purchaseBill.getInvoiceNo());
-            preparedStatement.setString(9, purchaseBill.getHasGoneToAuditorString());
+            preparedStatement.setString(8, purchaseBill.getHasSentToAuditor());
+            preparedStatement.setString(9, purchaseBill.getInvoiceNo());
 
             okay = preparedStatement.executeUpdate() > 0;
 

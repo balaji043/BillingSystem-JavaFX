@@ -156,21 +156,9 @@ public class SinglePurchaseBill extends HBox {
 
         amountBeforeTaxTField.setText(toEdit.getAmountBeforeTax());
 
-        if (!toEdit.getTwelve().equals("0")) {
-            is_12Exists.setSelected(true);
-            _12TField.setText(toEdit.getTwelve());
-            _12TField.setDisable(false);
-        }
-        if (!toEdit.getEighteen().equals("0")) {
-            is_18Exists.setSelected(true);
-            _18TField.setText(toEdit.getEighteen());
-            _18TField.setDisable(false);
-        }
-        if (!toEdit.getTwentyEight().equals("0")) {
-            is_28Exists.setSelected(true);
-            _28TField.setText(toEdit.getTwentyEight());
-            _28TField.setDisable(false);
-        }
+        setTaxValues(is_12Exists, _12TField, toEdit.getTwelve());
+        setTaxValues(is_18Exists, _18TField, toEdit.getEighteen());
+        setTaxValues(is_28Exists, _28TField, toEdit.getTwentyEight());
 
         hasGoneToAuditorCheckBox.setSelected(toEdit.hasGoneToAuditor());
 
@@ -218,4 +206,15 @@ public class SinglePurchaseBill extends HBox {
         return vBox;
     }
 
+    private void setTaxValues(JFXCheckBox isSelected, JFXTextField value, String text) {
+        if (!text.equals("0")) {
+            isSelected.setSelected(true);
+            value.setText(text);
+            value.setDisable(false);
+        } else {
+            isSelected.setSelected(false);
+            value.setText(text);
+            value.setDisable(true);
+        }
+    }
 }

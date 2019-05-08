@@ -28,7 +28,6 @@
 
     <JFXTextField fx:id="amountAfterTaxTField" maxWidth="250.0" prefWidth="250.0" promptText="Total Net Amount"/>
     <JFXCheckBox fx:id="hasGoneToAuditorCheckBox" minWidth="200.0" prefHeight="40.0" prefWidth="200.0" text=" "/>
-
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
