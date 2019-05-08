@@ -183,6 +183,7 @@ public class ExcelHelper {
             row.createCell(5).setCellValue("18% TAX AMOUNT");
             row.createCell(6).setCellValue("28% TAX AMOUNT");
             row.createCell(7).setCellValue("TOTAL NET AMOUNT");
+            row.createCell(8).setCellValue("SEND TO AUDITOR");
             rowNum++;
             for (PurchaseBill bill : purchaseBills) {
                 row = sheet.createRow(rowNum);
@@ -194,6 +195,7 @@ public class ExcelHelper {
                 row.createCell(5).setCellValue(bill.getEighteen());
                 row.createCell(6).setCellValue(bill.getTwentyEight());
                 row.createCell(7).setCellValue(bill.getTotalAmount());
+                row.createCell(8).setCellValue(bill.getHasGoneToAuditorString());
                 rowNum++;
             }
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);

@@ -76,7 +76,7 @@ public class DatabaseHelper_PurchaseBill {
 
         String updateQuery = " UPDATE " + tableName + " SET DATE = ?, CompanyName = ?, " +
                 " AmountBeforeTax = ?, TwelvePerAmt = ? , EighteenPerAmt = ?," +
-                " TwentyEightPerAmt = ?, AmountAfterTax = ? WHERE INVOICE = ?";
+                " TwentyEightPerAmt = ?, AmountAfterTax = ? , HasGoneToAuditor = ? WHERE INVOICE = ?";
         try {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
             preparedStatement.setString(1, purchaseBill.getDateInLong());
@@ -86,7 +86,8 @@ public class DatabaseHelper_PurchaseBill {
             preparedStatement.setString(5, purchaseBill.getEighteen());
             preparedStatement.setString(6, purchaseBill.getTwentyEight());
             preparedStatement.setString(7, purchaseBill.getTotalAmount());
-            preparedStatement.setString(8, purchaseBill.getInvoiceNo());
+            preparedStatement.setString(8, purchaseBill.getHasSentToAuditor());
+            preparedStatement.setString(9, purchaseBill.getInvoiceNo());
 
             okay = preparedStatement.executeUpdate() > 0;
 

@@ -129,9 +129,7 @@ public class PurchaseBills {
                 if (AlertMaker.showMCAlert("Confirm?", "Are you sure you want to update these changes?", mainApp))
                     if (DatabaseHelper_PurchaseBill.updatePurchaseBill(singlePurchaseBill.getPurchaseBill())) {
                         mainApp.snackBar("Success", "Purchase Bill Updated Successfully", "green");
-                        singlePurchaseBill = null;
                         loadTable();
-                        borderPane.setRight(null);
                     } else mainApp.snackBar("ERROR", "Operation Failed", "red");
                 else mainApp.snackBar("INFO", "Operation cancelled", "green");
             else
