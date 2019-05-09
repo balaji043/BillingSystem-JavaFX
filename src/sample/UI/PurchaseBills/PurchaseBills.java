@@ -29,7 +29,7 @@ import java.io.File;
 import java.time.LocalDate;
 
 public class PurchaseBills {
-    public JFXComboBox<String> companyNameCBOX;
+    public JFXComboBox<String> companyNameCBOX, sendToAuditorComboBox;
     public JFXTextField searchBox;
     public StackPane main;
     public TableView<PurchaseBill> tableView;
@@ -48,6 +48,10 @@ public class PurchaseBills {
         borderPane.setRight(null);
         companyNameCBOX.getItems().addAll(Preferences.getPreferences().getCompanyNames());
         TextFields.bindAutoCompletion(companyNameCBOX.getEditor(), companyNameCBOX.getItems());
+
+        sendToAuditorComboBox.getItems().addAll("All", "Sent To Auditor", "Not Send to Auditor");
+        sendToAuditorComboBox.getSelectionModel().selectFirst();
+
         initTable();
         tableView.setOnMouseClicked(e -> onPurchaseBillSelected());
         TextFields.bindAutoCompletion(searchBox, getInvoiceList());
@@ -182,9 +186,27 @@ public class PurchaseBills {
             purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(fromDate.getValue(), toDate.getValue());
         else
             purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList();
-        tableView.getItems().addAll(purchaseBills);
+
+        tableView.getItems().addAll(getFilterListBySendToAuditor(purchaseBills));
         tableView.sort();
 
+    }
+
+    private ObservableList<PurchaseBill> getFilterListBySendToAuditor(ObservableList<PurchaseBill> purchaseBills) {
+        ObservableList<PurchaseBill> newBills = FXCollections.observableArrayList();
+
+        if (sendToAuditorComboBox.getValue().equals("All"))
+            return purchaseBills;
+        else if (sendToAuditorComboBox.getValue().equals("Sent To Auditor")) {
+            for (PurchaseBill p : purchaseBills)
+                if (p.hasGoneToAuditor())
+                    newBills.add(p);
+        } else {
+            for (PurchaseBill p : purchaseBills)
+                if (!p.hasGoneToAuditor())
+                    newBills.add(p);
+        }
+        return newBills;
     }
 
     private void onPurchaseBillSelected() {
