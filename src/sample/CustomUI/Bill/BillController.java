@@ -94,12 +94,18 @@ public class BillController {
         //TAX section
         //TAX OVERALL TOTAL
         double t = Float.parseFloat(bill.getTotalAmount()), r = 0.00f;
+        String sign = "+";
         if ((t - (int) t) != 0.00) {
             r = (t - (int) t);
-            t = Math.ceil(t);
-            r = 1 - r;
+            if (r >= 0.50) {
+                r = 1 - r;
+                t = Math.ceil(t);
+            } else {
+                t = Math.floor(t);
+                sign = "-";
+            }
         }
-        roundedOff.setText(String.format("%.2f", r));
+        roundedOff.setText(String.format("%s%.2f", sign, r));
         lTotalPlusTaxNum.setText("RS. " + t);
         lgrossAmount.setText(bill.getGross());
         lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int) t) + " Rupees Only )");//Bank Details
