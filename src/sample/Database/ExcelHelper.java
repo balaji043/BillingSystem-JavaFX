@@ -3,6 +3,7 @@ package sample.Database;
 import com.sun.istack.internal.NotNull;
 import javafx.collections.ObservableList;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import sample.Alert.AlertMaker;
@@ -50,6 +51,7 @@ public class ExcelHelper {
             row.createCell(7).setCellValue("Prepared By");
 
             rowNum++;
+            autoResizeColumn(sheet, 7);
             for (int columnIndex = 0; columnIndex <= 10; columnIndex++) {
                 sheet.autoSizeColumn(columnIndex);
             }
@@ -117,6 +119,7 @@ public class ExcelHelper {
             row.createCell(6).setCellValue("ZIP");
             row.createCell(7).setCellValue("CUSTOMER ID (DO NOT DELETE) ");
             rowNum++;
+            autoResizeColumn(sheet, 7);
             for (Customer customer : customers) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(customer.getName());
@@ -176,9 +179,10 @@ public class ExcelHelper {
                 row.createCell(7).setCellValue("TOTAL NET AMOUNT");
                 row.createCell(8).setCellValue("Send To Auditor");
                 rowNum++;
+                autoResizeColumn(sheet, 8);
                 for (PurchaseBill bill : purchaseBills) {
                     row = sheet.createRow(rowNum);
-                    row.createCell(0).setCellValue(bill.getDateAsStrng());
+                    row.createCell(0).setCellValue(bill.getDateAsString());
                     row.createCell(1).setCellValue(bill.getCompanyName());
                     row.createCell(2).setCellValue(bill.getInvoiceNo());
                     row.createCell(3).setCellValue(bill.getAmountBeforeTax());
@@ -200,4 +204,11 @@ public class ExcelHelper {
         }
         return okay;
     }
+
+    private static void autoResizeColumn(Sheet sheet, int n) {
+        for (int i = 0; i <= n; i++)
+            sheet.autoSizeColumn(i);
+
+    }
+
 }

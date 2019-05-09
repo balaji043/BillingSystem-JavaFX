@@ -79,11 +79,11 @@ public class PurchaseBills {
         } else {
             if (ExcelHelper.writeExcelPurchaseBills(dest))
                 mainApp.snackBar("Success"
-                        , "Customer Data Written to Excel"
+                        , "Purchase Bill Data Written to Excel"
                         , "green");
             else
                 mainApp.snackBar("Failed"
-                        , "Customer Data is NOT written to Excel"
+                        , "Purchase Bill Data is NOT written to Excel"
                         , "red");
         }
     }

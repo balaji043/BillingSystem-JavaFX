@@ -97,7 +97,7 @@ public class PurchaseBill {
         return date;
     }
 
-    public String getDateAsStrng() {
+    public String getDateAsString() {
         return BillingSystemUtils.formatDateTimeString(Long.parseLong(dateInLong));
     }
 
