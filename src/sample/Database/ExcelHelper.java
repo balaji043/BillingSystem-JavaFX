@@ -44,9 +44,10 @@ public class ExcelHelper {
             row.createCell(1).setCellValue("Customer Name");
             row.createCell(2).setCellValue("Date");
             row.createCell(3).setCellValue("Total Amount");
-            row.createCell(4).setCellValue("Phone NO");
-            row.createCell(5).setCellValue("Place");
-            row.createCell(6).setCellValue("Prepared By");
+            row.createCell(4).setCellValue("Rounded Off");
+            row.createCell(5).setCellValue("Phone NO");
+            row.createCell(6).setCellValue("Place");
+            row.createCell(7).setCellValue("Prepared By");
 
             rowNum++;
             for (int columnIndex = 0; columnIndex <= 10; columnIndex++) {
@@ -59,14 +60,15 @@ public class ExcelHelper {
                 row.createCell(1).setCellValue(bill.getCustomerName());
                 row.createCell(2).setCellValue(bill.getDate());
                 row.createCell(3).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
-                row.createCell(4).setCellValue(bill.getMobile());
+                row.createCell(4).setCellValue(bill.getRoundOff());
+                row.createCell(5).setCellValue(bill.getMobile());
                 try {
                     place = bill.getAddress().split("\n")[2];
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                row.createCell(5).setCellValue(place);
-                row.createCell(6).setCellValue(bill.getUserName());
+                row.createCell(6).setCellValue(place);
+                row.createCell(7).setCellValue(bill.getUserName());
                 place = "";
                 rowNum++;
             }
@@ -176,7 +178,7 @@ public class ExcelHelper {
                 rowNum++;
                 for (PurchaseBill bill : purchaseBills) {
                     row = sheet.createRow(rowNum);
-                    row.createCell(0).setCellValue(bill.getDate());
+                    row.createCell(0).setCellValue(bill.getDateAsStrng());
                     row.createCell(1).setCellValue(bill.getCompanyName());
                     row.createCell(2).setCellValue(bill.getInvoiceNo());
                     row.createCell(3).setCellValue(bill.getAmountBeforeTax());

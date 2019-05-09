@@ -16,11 +16,13 @@ public class Bill {
     private String GSTNo;
     private ObservableList<Product> products;
     private String totalAmount;
-    private String total;
-
+    private String totalAmountBeforeRoundOff;
     private String userName;
     private String time;
     private LocalDate localDate;
+    private double total;
+
+    private String roundOff;
 
     public Bill(String billId, String invoice, String date
             , String customerName, String customerId
@@ -37,13 +39,30 @@ public class Bill {
         this.products = products;
         this.userName = userName;
 
-        float total = 0;
+        double total = 0, r = 0.00f;
 
         for (Product product : products) {
             total = total + Float.parseFloat(product.getTotalAmount());
         }
-        totalAmount = "" + String.format("%.2f", total);
-        this.total = String.format("%.2f", Math.ceil(Double.parseDouble(getTotalAmount())));
+
+        totalAmountBeforeRoundOff = String.format("%.2f", total);
+
+        String sign = "";
+        if ((total - (int) total) != 0.00) {
+            r = (total - (int) total);
+            if (r >= 0.50) {
+                r = 1 - r;
+                total = Math.ceil(total);
+                sign = "+";
+            } else {
+                total = Math.floor(total);
+                sign = "-";
+            }
+        }
+        roundOff = String.format("%s%.2f", sign, r);
+
+        totalAmount = String.format("%.2f", total);
+        this.total = total;
     }
 
     public String getBillId() {
@@ -99,12 +118,22 @@ public class Bill {
         this.time = time;
     }
 
-    public LocalDate getLocalDate() {
-        return localDate;
+
+    public String getRoundOff() {
+        return roundOff;
     }
 
-    public String getTotal() {
+    public String getTotalAmountBeforeRoundOff() {
+        return totalAmountBeforeRoundOff;
+    }
+
+    //DO NOT DELETE. THIS IS FOR TABLE VIEW TOTAL AMOUNT SORT AND DATE SORT
+    public double getTotal() {
         return total;
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
     }
 
     @Override

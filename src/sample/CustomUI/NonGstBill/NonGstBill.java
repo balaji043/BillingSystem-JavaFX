@@ -84,14 +84,10 @@ public class NonGstBill {
         initGridPane(bill);
         //TAX section
         //TAX OVERALL TOTAL
-        double t = Float.parseFloat(bill.getTotalAmount());
+        billAmount.setText(bill.getTotalAmountBeforeRoundOff());
+        roundedOff.setText(bill.getRoundOff());
 
-        billAmount.setText(bill.getTotalAmount());
-        if (t - (int) t != 0)
-            roundedOff.setText(String.format("%.2f", 1 - (t - (int) t)));
-        else
-            roundedOff.setText("0.00");
-        t = Math.ceil(t);
+        double t = Double.parseDouble(bill.getTotalAmount());
         lTotalPlusTaxNum.setText(String.format("RS. %.2f", t));
         lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int) t) + " Rupees Only )");//Bank Details
         lBankName.setText(preferences.getBank());

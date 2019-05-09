@@ -88,6 +88,4 @@ public class DatabaseHelper {
         }
         return false;
     }
-
-
 }

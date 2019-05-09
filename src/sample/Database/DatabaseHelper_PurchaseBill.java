@@ -109,6 +109,21 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         return okay;
     }
 
+    public static boolean updatePurchaseBillAsGoneToAuditor(PurchaseBill purchaseBill, String tableName) {
+        boolean okay = true;
+        PreparedStatement preparedStatement;
+        String updateQuery = " UPDATE " + tableName + " SET HasGoneToAuditor = ? WHERE INVOICE = ?";
+        try {
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
+            preparedStatement.setString(1, "true");
+            preparedStatement.setString(2, purchaseBill.getInvoiceNo());
+            okay = preparedStatement.executeUpdate() > 0;
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        return okay;
+    }
+
     public static ObservableList<PurchaseBill> getAllPurchaseBillList(String tableName) {
         ObservableList<PurchaseBill> bills = FXCollections.observableArrayList();
         try {

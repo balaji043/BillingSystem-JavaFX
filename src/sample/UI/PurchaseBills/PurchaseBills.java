@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -25,9 +26,10 @@ import sample.Model.PurchaseBill;
 import sample.Utils.Preferences;
 
 import java.io.File;
+import java.time.LocalDate;
 
 public class PurchaseBills {
-    public JFXComboBox<String> companyNameCBOX, billTypeCBOX;
+    public JFXComboBox<String> companyNameCBOX, billTypeCBOX, sendToAuditorComboBox;
     public JFXTextField searchBox;
     public StackPane main;
     public TableView<PurchaseBill> tableView;
@@ -46,6 +48,10 @@ public class PurchaseBills {
         borderPane.setRight(null);
         billTypeCBOX.getItems().addAll("Standard Enterprises", "Standard Equipments");
         billTypeCBOX.getSelectionModel().selectFirst();
+
+        sendToAuditorComboBox.getItems().addAll("All", "Sent To Auditor", "Not Send to Auditor");
+        sendToAuditorComboBox.getSelectionModel().selectFirst();
+
         companyNameCBOX.getItems().addAll(Preferences.getPreferences().getCompanyNames());
         TextFields.bindAutoCompletion(companyNameCBOX.getEditor(), companyNameCBOX.getItems());
         initTable();
@@ -131,11 +137,22 @@ public class PurchaseBills {
 
     }
 
+    public void handleSendToAuditorSubmit() {
+        ObservableList<PurchaseBill> selectedBills = tableView.getSelectionModel().getSelectedItems();
+        if (!mainApp.getUser().getAccess().equals("admin") || selectedBills.size() == 0 || !AlertMaker.showMCAlert("Confirm?", "Are you sure you want to mark these items as send to auditor?", mainApp))
+            return;
+        boolean result = true;
+        for (PurchaseBill purchaseBill : selectedBills)
+            result = result && DatabaseHelper_PurchaseBill.updatePurchaseBillAsGoneToAuditor(purchaseBill, DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
+        loadTable();
+    }
+
     private void initTable() {
 
         tableView.getColumns().clear();
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        TableColumn<PurchaseBill, String> column = new TableColumn<>("Date");
+        TableColumn<PurchaseBill, LocalDate> column = new TableColumn<>("Date");
         column.setCellValueFactory(new PropertyValueFactory<>("date"));
         tableView.getColumns().add(column);
 
@@ -148,8 +165,10 @@ public class PurchaseBills {
         addTableColumn("Total Net Amount", "totalAmount");
         addTableColumn("Send To Auditor", "hasGoneToAuditorString");
 
+        tableView.getSortOrder().clear();
+        tableView.getSortOrder().add(column);
+
         loadTable();
-        tableView.sort();
     }
 
     private void addTableColumn(String name, String msg) {
@@ -173,17 +192,38 @@ public class PurchaseBills {
             purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(fromDate.getValue(), toDate.getValue(), DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
         else
             purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList(DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
-        tableView.getItems().addAll(purchaseBills);
+        tableView.getItems().addAll(getFilterListBySendToAuditor(purchaseBills));
+        tableView.sort();
+
     }
 
     private void onPurchaseBillSelected() {
+        if (tableView.getSelectionModel().getSelectedItems().size() != 1) {
+            singlePurchaseBill.setPurchaseBill(null);
+            return;
+        }
         if (editPanelCheckBox.isSelected()) {
             PurchaseBill toEdit = tableView.getSelectionModel().getSelectedItem();
-            if (toEdit != null)
-                singlePurchaseBill.setPurchaseBill(toEdit);
+            singlePurchaseBill.setPurchaseBill(toEdit);
         }
     }
 
+    private ObservableList<PurchaseBill> getFilterListBySendToAuditor(ObservableList<PurchaseBill> purchaseBills) {
+        ObservableList<PurchaseBill> newBills = FXCollections.observableArrayList();
+
+        if (sendToAuditorComboBox.getValue().equals("All"))
+            return purchaseBills;
+        else if (sendToAuditorComboBox.getValue().equals("Sent To Auditor")) {
+            for (PurchaseBill p : purchaseBills)
+                if (p.hasGoneToAuditor())
+                    newBills.add(p);
+        } else {
+            for (PurchaseBill p : purchaseBills)
+                if (!p.hasGoneToAuditor())
+                    newBills.add(p);
+        }
+        return newBills;
+    }
     private void getInvoiceList() {
         ObservableList<String> s = FXCollections.observableArrayList();
         String[] strings = {"StdEnt", "StdEqm"};
