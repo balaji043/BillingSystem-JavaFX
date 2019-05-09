@@ -385,4 +385,30 @@ public class DatabaseHelper_Bills {
         return okay;
     }
 
+    public static Bill getBillInfo(String invoice, String tableName) {
+
+        Bill bill = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            String insert = " SELECT * FROM  " + tableName + " WHERE INVOICE = ?";
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
+            preparedStatement.setString(1, invoice);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next())
+                bill = getBill(resultSet);
+
+        } catch (SQLException e) {
+            AlertMaker.showErrorMessage(e);
+        } finally {
+            try {
+                assert preparedStatement != null;
+                preparedStatement.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return bill;
+    }
 }

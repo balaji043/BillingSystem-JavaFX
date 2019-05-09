@@ -3,6 +3,7 @@ package sample.Database;
 import com.sun.istack.internal.NotNull;
 import javafx.collections.ObservableList;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import sample.Alert.AlertMaker;
@@ -49,14 +50,16 @@ public class ExcelHelper {
             row.createCell(4).setCellValue("12%");
             row.createCell(5).setCellValue("18%");
             row.createCell(6).setCellValue("28%");
-            row.createCell(7).setCellValue("Total Amount");
-            row.createCell(8).setCellValue("GST NO");
-            row.createCell(9).setCellValue("Phone NO");
-            row.createCell(10).setCellValue("Place");
-            row.createCell(11).setCellValue("Prepared By");
+            row.createCell(7).setCellValue("Rounded Off");
+            row.createCell(8).setCellValue("Total Amount");
+            row.createCell(9).setCellValue("GST NO");
+            row.createCell(10).setCellValue("Phone NO");
+            row.createCell(11).setCellValue("Place");
+            row.createCell(12).setCellValue("Prepared By");
 
             rowNum++;
 
+            autoResizeColumn(sheet, 12);
             for (int columnIndex = 0; columnIndex <= 10; columnIndex++)
                 sheet.autoSizeColumn(columnIndex);
             String place = "";
@@ -69,16 +72,17 @@ public class ExcelHelper {
                 row.createCell(4).setCellValue(bill.getGst12Total());
                 row.createCell(5).setCellValue(bill.getGst18Total());
                 row.createCell(6).setCellValue(bill.getGst28Total());
-                row.createCell(7).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
-                row.createCell(8).setCellValue(bill.getGSTNo());
-                row.createCell(9).setCellValue(bill.getMobile());
+                row.createCell(7).setCellValue(bill.getRoundedOff());
+                row.createCell(8).setCellValue(bill.getTotalAmount());
+                row.createCell(9).setCellValue(bill.getGSTNo());
+                row.createCell(10).setCellValue(bill.getMobile());
                 try {
                     place = bill.getAddress().split("\n")[2];
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                row.createCell(10).setCellValue(place);
-                row.createCell(11).setCellValue(bill.getUserName());
+                row.createCell(11).setCellValue(place);
+                row.createCell(12).setCellValue(bill.getUserName());
                 place = "";
                 rowNum++;
             }
@@ -127,6 +131,7 @@ public class ExcelHelper {
             row.createCell(6).setCellValue("ZIP");
             row.createCell(7).setCellValue("CUSTOMER ID (DO NOT DELETE) ");
             rowNum++;
+            autoResizeColumn(sheet, 7);
             for (Customer customer : customers) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(customer.getName());
@@ -185,6 +190,7 @@ public class ExcelHelper {
             row.createCell(7).setCellValue("TOTAL NET AMOUNT");
             row.createCell(8).setCellValue("SEND TO AUDITOR");
             rowNum++;
+            autoResizeColumn(sheet, 8);
             for (PurchaseBill bill : purchaseBills) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(bill.getDateAsString());
@@ -207,5 +213,11 @@ public class ExcelHelper {
             AlertMaker.showErrorMessage(e);
         }
         return okay;
+    }
+
+    private static void autoResizeColumn(Sheet sheet, int n) {
+        for (int i = 0; i <= n; i++)
+            sheet.autoSizeColumn(i);
+
     }
 }

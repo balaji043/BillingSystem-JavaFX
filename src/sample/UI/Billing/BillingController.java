@@ -264,23 +264,27 @@ public class BillingController {
     }
 
     public void setBill(Bill bill, String isIGstBill) {
+
         isNewBill = false;
-        oldBill = bill;
+
         checkBoxGST.setSelected(!bill.getGSTNo().equalsIgnoreCase("for own use"));
         toggleCustomer();
         comboBoxCustomer.getSelectionModel().select(bill.getCustomerName());
         comboBills.getSelectionModel().select(isIGstBill);
         handleCustomerSubmit();
+        bill = DatabaseHelper_Bills.getBillInfo(bill.getInvoice(), tableName);
+        oldBill = bill;
         billId = bill.getBillId();
         invoice = bill.getInvoice();
         date = new Date(Long.parseLong(bill.getTime()));
         //hBox.getChildren().remove(manualD);
         totalAmount.setText(bill.getTotalAmount());
         int i = 1;
+        listView.getItems().clear();
         for (Product product : bill.getProducts()) {
             SingleProduct product1 = new SingleProduct();
             product1.setProduct(product);
-            product1.setSlNO(i);
+            product1.setSlNO(i++);
             listView.getItems().addAll(product1);
         }
     }

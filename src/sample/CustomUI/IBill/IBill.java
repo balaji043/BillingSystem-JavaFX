@@ -93,7 +93,7 @@ public class IBill {
 
         initGridPane(bill);
 
-        lTotalAmountNum.setText("RS. " + bill.getTotalAmount());
+        lTotalAmountNum.setText("RS. " + bill.getTotalAmountBeforeRoundOff());
 
         lTaxAmount12.setText(bill.getGst12Total());
         lTaxAmount18.setText(bill.getGst18Total());
@@ -102,26 +102,13 @@ public class IBill {
         //TAX section
 
         //TAX OVERALL TOTAL
-        double t = Float.parseFloat(bill.getTotalAmount()), r = 0.00f;
-        String sign = "";
-        if ((t - (int) t) != 0.00) {
-            r = (t - (int) t);
-            if (r >= 0.50) {
-                r = 1 - r;
-                t = Math.ceil(t);
-                sign = "+";
-            } else {
-                t = Math.floor(t);
-                sign = "-";
-            }
-        }
-        roundedOff.setText(String.format("%s%.2f", sign, r));
-        lTotalPlusTaxNum.setText("RS. " + t);
+        roundedOff.setText(bill.getRoundedOff());
+        lTotalPlusTaxNum.setText("RS. " + bill.getTotalAmount());
         lgrossAmount.setText(bill.getGross());
         laCGST.setText(bill.getTotalTaxAmount());
 
         lTotalAmountWords.setText("( " + BillingSystemUtils.convert((int)
-                t) + " Rupees Only )");
+                Double.parseDouble(bill.getTotalAmount())) + " Rupees Only )");
         //Bank Details
 
         lBankName.setText(preferences.getBank());

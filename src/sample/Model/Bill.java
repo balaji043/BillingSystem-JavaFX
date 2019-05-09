@@ -28,7 +28,9 @@ public class Bill {
     private String userName;
     private String time;
     private LocalDate localDate;
-    private String total;
+    private String totalAmountBeforeRoundOff;
+    private double total;
+    private String roundedOff;
 
     public Bill(String billId, String invoice, String date
             , String customerName, String customerId
@@ -52,7 +54,7 @@ public class Bill {
         float gst28Hal = 0;
         float gst28Tota;
         float gstTotal;
-        float total = 0;
+        double total = 0, r = 0.00f;
 
         for (Product product : products) {
             switch (product.getTax()) {
@@ -79,7 +81,7 @@ public class Bill {
         gstTotal = gst12Tota + gst18Tota + gst28Tota;
         gross = "" + String.format("%.2f", total - gstTotal);
         halfTax = "" + String.format("%.2f", gst12Hal + gst18Hal + gst28Hal);
-        totalAmount = "" + String.format("%.2f", total);
+
         totalTaxAmount = "" + String.format("%.2f", gstTotal);
         gst12Half = "" + String.format("%.2f", gst12Hal);
         gst12Total = "" + String.format("%.2f", gst12Tota);
@@ -87,7 +89,22 @@ public class Bill {
         gst18Total = "" + String.format("%.2f", gst18Tota);
         gst28Half = "" + String.format("%.2f", gst28Hal);
         gst28Total = "" + String.format("%.2f", gst28Tota);
-        this.total = String.format("%.2f", Math.ceil(Double.parseDouble(totalAmount)));
+        totalAmountBeforeRoundOff = String.format("%.2f", total);
+        String sign = "";
+        if ((total - (int) total) != 0.00) {
+            r = (total - (int) total);
+            if (r >= 0.50) {
+                r = 1 - r;
+                total = Math.ceil(total);
+                sign = "+";
+            } else {
+                total = Math.floor(total);
+                sign = "-";
+            }
+        }
+        roundedOff = String.format("%s%.2f", sign, r);
+        this.totalAmount = String.format("%.2f", total);
+        this.total = total;
     }
 
     public String getBillId() {
@@ -183,8 +200,16 @@ public class Bill {
         return localDate;
     }
 
-    public String getTotal() {
+    public double getTotal() {
         return total;
+    }
+
+    public String getTotalAmountBeforeRoundOff() {
+        return totalAmountBeforeRoundOff;
+    }
+
+    public String getRoundedOff() {
+        return roundedOff;
     }
 
     @Override
