@@ -197,4 +197,19 @@ public class DatabaseHelper_PurchaseBill {
         preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(getQuery);
         return preparedStatement.executeQuery();
     }
+
+    public static boolean markBillAsGoneToAuditor(PurchaseBill purchaseBill) {
+        boolean okay = true;
+        PreparedStatement preparedStatement;
+        String updateQuery = " UPDATE " + tableName + " SET HasGoneToAuditor = ? WHERE INVOICE = ?";
+        try {
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
+            preparedStatement.setString(1, "true");
+            preparedStatement.setString(2, purchaseBill.getInvoiceNo());
+            okay = preparedStatement.executeUpdate() > 0;
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        return okay;
+    }
 }

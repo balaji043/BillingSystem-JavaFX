@@ -187,7 +187,7 @@ public class ExcelHelper {
             rowNum++;
             for (PurchaseBill bill : purchaseBills) {
                 row = sheet.createRow(rowNum);
-                row.createCell(0).setCellValue(bill.getDate());
+                row.createCell(0).setCellValue(bill.getDateAsString());
                 row.createCell(1).setCellValue(bill.getCompanyName());
                 row.createCell(2).setCellValue(bill.getInvoiceNo());
                 row.createCell(3).setCellValue(bill.getAmountBeforeTax());

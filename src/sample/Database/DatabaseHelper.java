@@ -3,7 +3,6 @@ package sample.Database;
 import com.sun.istack.internal.NotNull;
 import sample.Alert.AlertMaker;
 import sample.Model.User;
-import sample.Utils.Preferences;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,12 +21,6 @@ public class DatabaseHelper {
      */
 
     public static void create() {
-        Preferences preferences = Preferences.getPreferences();
-        if (preferences.isFirstTime()) {
-            preferences.setFirstTime(false);
-            deleteTable("PURCHASEBILLS");
-            Preferences.setPreference(preferences);
-        }
         if (createUserTable()) {
             DatabaseHelper_User.insertNewUser(new User("admin"
                     , "admin"

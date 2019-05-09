@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -25,6 +26,7 @@ import sample.Model.PurchaseBill;
 import sample.Utils.Preferences;
 
 import java.io.File;
+import java.time.LocalDate;
 
 public class PurchaseBills {
     public JFXComboBox<String> companyNameCBOX;
@@ -140,11 +142,11 @@ public class PurchaseBills {
     private void initTable() {
 
         tableView.getColumns().clear();
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        TableColumn<PurchaseBill, String> column = new TableColumn<>("Date");
+        TableColumn<PurchaseBill, LocalDate> column = new TableColumn<>("Date");
         column.setCellValueFactory(new PropertyValueFactory<>("date"));
         tableView.getColumns().add(column);
-
         addTableColumn("Company Name", "companyName");
         addTableColumn("Invoice No", "invoiceNo");
         addTableColumn("Amount Before Tax", "amountBeforeTax");
@@ -154,8 +156,9 @@ public class PurchaseBills {
         addTableColumn("Total Net Amount", "totalAmount");
         addTableColumn("Send To Auditor", "hasGoneToAuditorString");
 
+        tableView.getSortOrder().clear();
+        tableView.getSortOrder().add(column);
         loadTable();
-        tableView.sort();
     }
 
     private void addTableColumn(String name, String msg) {
@@ -180,13 +183,28 @@ public class PurchaseBills {
         else
             purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList();
         tableView.getItems().addAll(purchaseBills);
+        tableView.sort();
+
     }
 
     private void onPurchaseBillSelected() {
+        if (tableView.getSelectionModel().getSelectedItems().size() != 1) {
+            singlePurchaseBill.setPurchaseBill(null);
+            return;
+        }
         if (editPanelCheckBox.isSelected()) {
             PurchaseBill toEdit = tableView.getSelectionModel().getSelectedItem();
-            if (toEdit != null)
-                singlePurchaseBill.setPurchaseBill(toEdit);
+            singlePurchaseBill.setPurchaseBill(toEdit);
         }
+    }
+
+    public void handleSendToAuditorSubmit() {
+        ObservableList<PurchaseBill> selectedBills = tableView.getSelectionModel().getSelectedItems();
+        if (!mainApp.getUser().getAccess().equals("admin") || selectedBills.size() == 0 || !AlertMaker.showMCAlert("Confirm?", "Are you sure you want to mark these items as send to auditor?", mainApp))
+            return;
+        boolean result = true;
+        for (PurchaseBill purchaseBill : selectedBills)
+            result = result && DatabaseHelper_PurchaseBill.markBillAsGoneToAuditor(purchaseBill);
+        loadTable();
     }
 }

@@ -165,6 +165,19 @@ public class SinglePurchaseBill extends HBox {
     }
 
     public void setPurchaseBill(PurchaseBill toEdit) {
+        if (toEdit == null) {
+            fromDate.getEditor().clear();
+            companyNameCBOX.getItems().clear();
+            invoiceTField.clear();
+            hasGoneToAuditorCheckBox.setSelected(false);
+            amountBeforeTaxTField.clear();
+            setTaxValues(is_12Exists, _12TField, "0");
+            setTaxValues(is_18Exists, _18TField, "0");
+            setTaxValues(is_28Exists, _28TField, "0");
+            amountAfterTaxTField.clear();
+            invoiceTField.clear();
+            return;
+        }
         long l = Long.parseLong(toEdit.getDateInLong());
         Date d = new Date(l);
         fromDate.setValue(d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());

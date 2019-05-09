@@ -3,6 +3,10 @@ package sample.Model;
 
 import sample.Utils.BillingSystemUtils;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 public class PurchaseBill {
     private String dateInLong;
     private String companyName;
@@ -10,7 +14,7 @@ public class PurchaseBill {
     private String amountBeforeTax;
     private String twelve, eighteen, twentyEight;
     private String totalAmount;
-    private String date;
+    private LocalDate date;
     private String hasSentToAuditor;
     private String hasGoneToAuditorString;
 
@@ -33,6 +37,8 @@ public class PurchaseBill {
         this.totalAmount = totalAmount;
         this.hasSentToAuditor = hasSentToAuditor;
         this.hasGoneToAuditorString = hasGoneToAuditor() ? "YES" : "NO";
+        Date d = new Date(Long.parseLong(dateInLong));
+        date = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public String getDateInLong() {
@@ -85,8 +91,8 @@ public class PurchaseBill {
                 '}';
     }
 
-    public String getDate() {
-        return BillingSystemUtils.formatDateTimeString(Long.parseLong(dateInLong));
+    public LocalDate getDate() {
+        return date;
     }
 
     public boolean hasGoneToAuditor() {
@@ -95,5 +101,9 @@ public class PurchaseBill {
 
     public String getHasGoneToAuditorString() {
         return hasGoneToAuditorString;
+    }
+
+    public String getDateAsString() {
+        return BillingSystemUtils.formatDateTimeString(Long.parseLong(dateInLong));
     }
 }

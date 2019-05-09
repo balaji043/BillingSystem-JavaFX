@@ -67,6 +67,11 @@
                     <JFXCheckBox fx:id="editPanelCheckBox" minWidth="200.0" onAction="#handleEditPurchaseBill"
                                  prefHeight="40.0" prefWidth="200.0" text="Edit Purchase Bill"/>
                 </StackPane>
+                <StackPane layoutX="496.0" layoutY="60.0" GridPane.columnIndex="4">
+                    <JFXButton buttonType="RAISED" onAction="#handleSendToAuditorSubmit" prefHeight="40.0"
+                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="MARK AS SENT"
+                               textFill="WHITE"/>
+                </StackPane>
             </GridPane>
         </top>
         <right>
