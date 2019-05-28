@@ -59,9 +59,7 @@ public class ExcelHelper {
 
             rowNum++;
 
-            autoResizeColumn(sheet, 12);
-            for (int columnIndex = 0; columnIndex <= 10; columnIndex++)
-                sheet.autoSizeColumn(columnIndex);
+
             String place = "";
             for (Bill bill : bills) {
                 row = sheet.createRow(rowNum);
@@ -86,6 +84,7 @@ public class ExcelHelper {
                 place = "";
                 rowNum++;
             }
+            autoResizeColumn(sheet, 12);
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
             workbook.write(outputStream);
             outputStream.close();
@@ -118,8 +117,6 @@ public class ExcelHelper {
                 sheet = workbook.getSheet("Customer");
             }
             int rowNum = 0;
-            for (int columnIndex = 0; columnIndex <= 7; columnIndex++)
-                sheet.autoSizeColumn(columnIndex);
 
             Row row = sheet.createRow(rowNum);
             row.createCell(0).setCellValue("Name");
@@ -131,7 +128,6 @@ public class ExcelHelper {
             row.createCell(6).setCellValue("ZIP");
             row.createCell(7).setCellValue("CUSTOMER ID (DO NOT DELETE) ");
             rowNum++;
-            autoResizeColumn(sheet, 7);
             for (Customer customer : customers) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(customer.getName());
@@ -144,6 +140,8 @@ public class ExcelHelper {
                 row.createCell(7).setCellValue(customer.getId());
                 rowNum++;
             }
+            autoResizeColumn(sheet, 7);
+
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
             workbook.write(outputStream);
             outputStream.close();
@@ -176,8 +174,6 @@ public class ExcelHelper {
                 sheet = workbook.getSheet("PURCHASE BILLS");
             }
             int rowNum = 0;
-            for (int columnIndex = 0; columnIndex <= 7; columnIndex++)
-                sheet.autoSizeColumn(columnIndex);
 
             Row row = sheet.createRow(rowNum);
             row.createCell(0).setCellValue("DATE");
@@ -190,7 +186,7 @@ public class ExcelHelper {
             row.createCell(7).setCellValue("TOTAL NET AMOUNT");
             row.createCell(8).setCellValue("SEND TO AUDITOR");
             rowNum++;
-            autoResizeColumn(sheet, 8);
+
             for (PurchaseBill bill : purchaseBills) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(bill.getDateAsString());
@@ -204,6 +200,7 @@ public class ExcelHelper {
                 row.createCell(8).setCellValue(bill.getHasGoneToAuditorString());
                 rowNum++;
             }
+            autoResizeColumn(sheet, 8);
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
             workbook.write(outputStream);
             outputStream.close();

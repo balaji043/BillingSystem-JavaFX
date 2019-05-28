@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
 import sample.Main;
 import sample.Model.PurchaseBill;
@@ -83,6 +84,7 @@ public class SinglePurchaseBill extends HBox {
 
         companyNameCBOX.getItems().addAll(companyNames);
 
+        TextFields.bindAutoCompletion(companyNameCBOX.getEditor(), companyNames);
 
     }
 
