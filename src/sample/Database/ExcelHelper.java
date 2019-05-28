@@ -44,25 +44,22 @@ public class ExcelHelper {
             row.createCell(0).setCellValue("Invoice");
             row.createCell(1).setCellValue("Customer Name");
             row.createCell(2).setCellValue("Date");
-            row.createCell(3).setCellValue("Total Amount");
-            row.createCell(4).setCellValue("Rounded Off");
+            row.createCell(3).setCellValue("Rounded Off");
+            row.createCell(4).setCellValue("Total Amount");
             row.createCell(5).setCellValue("Phone NO");
             row.createCell(6).setCellValue("Place");
             row.createCell(7).setCellValue("Prepared By");
 
             rowNum++;
-            autoResizeColumn(sheet, 7);
-            for (int columnIndex = 0; columnIndex <= 10; columnIndex++) {
-                sheet.autoSizeColumn(columnIndex);
-            }
+
             String place = "";
             for (Bill bill : bills) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(bill.getInvoice());
                 row.createCell(1).setCellValue(bill.getCustomerName());
                 row.createCell(2).setCellValue(bill.getDate());
-                row.createCell(3).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
-                row.createCell(4).setCellValue(bill.getRoundOff());
+                row.createCell(3).setCellValue(bill.getRoundOff());
+                row.createCell(4).setCellValue("" + Math.ceil((Float.parseFloat(bill.getTotalAmount()))));
                 row.createCell(5).setCellValue(bill.getMobile());
                 try {
                     place = bill.getAddress().split("\n")[2];
@@ -74,6 +71,8 @@ public class ExcelHelper {
                 place = "";
                 rowNum++;
             }
+            autoResizeColumn(sheet, 7);
+
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
             workbook.write(outputStream);
             outputStream.close();
@@ -106,8 +105,6 @@ public class ExcelHelper {
                 sheet = workbook.getSheet("Customer");
             }
             int rowNum = 0;
-            for (int columnIndex = 0; columnIndex <= 7; columnIndex++)
-                sheet.autoSizeColumn(columnIndex);
 
             Row row = sheet.createRow(rowNum);
             row.createCell(0).setCellValue("Name");
@@ -119,7 +116,6 @@ public class ExcelHelper {
             row.createCell(6).setCellValue("ZIP");
             row.createCell(7).setCellValue("CUSTOMER ID (DO NOT DELETE) ");
             rowNum++;
-            autoResizeColumn(sheet, 7);
             for (Customer customer : customers) {
                 row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue(customer.getName());
@@ -132,6 +128,7 @@ public class ExcelHelper {
                 row.createCell(7).setCellValue(customer.getId());
                 rowNum++;
             }
+            autoResizeColumn(sheet, 7);
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
             workbook.write(outputStream);
             outputStream.close();
@@ -165,8 +162,6 @@ public class ExcelHelper {
                     sheet = workbook.getSheet("PURCHASE BILLS");
                 }
                 int rowNum = 0;
-                for (int columnIndex = 0; columnIndex <= 7; columnIndex++)
-                    sheet.autoSizeColumn(columnIndex);
 
                 Row row = sheet.createRow(rowNum);
                 row.createCell(0).setCellValue("DATE");
@@ -179,7 +174,6 @@ public class ExcelHelper {
                 row.createCell(7).setCellValue("TOTAL NET AMOUNT");
                 row.createCell(8).setCellValue("Send To Auditor");
                 rowNum++;
-                autoResizeColumn(sheet, 8);
                 for (PurchaseBill bill : purchaseBills) {
                     row = sheet.createRow(rowNum);
                     row.createCell(0).setCellValue(bill.getDateAsString());
@@ -193,6 +187,7 @@ public class ExcelHelper {
                     row.createCell(8).setCellValue(bill.getHasGoneToAuditorString());
                     rowNum++;
                 }
+                autoResizeColumn(sheet, 8);
             }
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
             workbook.write(outputStream);

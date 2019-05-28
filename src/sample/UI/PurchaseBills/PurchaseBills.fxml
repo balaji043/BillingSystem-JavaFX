@@ -71,7 +71,7 @@
                 <StackPane layoutX="192.0" layoutY="60.0">
                     <JFXComboBox fx:id="billTypeCBOX" prefHeight="40.0" prefWidth="200.0" promptText="CHOOSE STORE"/>
                 </StackPane>
-                <StackPane layoutX="496.0" layoutY="60.0" GridPane.columnIndex="4">
+                <StackPane layoutX="496.0" layoutY="60.0" GridPane.columnIndex="5">
                     <JFXButton buttonType="RAISED" onAction="#handleSendToAuditorSubmit" prefHeight="40.0"
                                prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="MARK AS SENT"
                                textFill="WHITE"/>
