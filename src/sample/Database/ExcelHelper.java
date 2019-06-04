@@ -159,7 +159,7 @@ public class ExcelHelper {
                 try {
                     sheet = workbook.createSheet("PURCHASE BILLS FOR " + s);
                 } catch (Exception e) {
-                    sheet = workbook.getSheet("PURCHASE BILLS");
+                    sheet = workbook.getSheet("PURCHASE BILLS FOR " + s);
                 }
                 int rowNum = 0;
 
@@ -200,6 +200,61 @@ public class ExcelHelper {
         return okay;
     }
 
+    public static boolean writeExcelPurchaseBills(@NotNull File dest, String companyName, ObservableList<PurchaseBill> purchaseBills) {
+        okay = false;
+        try {
+            String FILE_NAME = dest.getAbsolutePath();
+            FileInputStream excel;
+            XSSFWorkbook workbook;
+            try {
+                excel = new FileInputStream(dest);
+                workbook = new XSSFWorkbook(excel);
+            } catch (Exception e) {
+                workbook = new XSSFWorkbook();
+            }
+            XSSFSheet sheet;
+            try {
+                sheet = workbook.createSheet("PURCHASE BILLS FOR " + companyName);
+            } catch (Exception e) {
+                sheet = workbook.getSheet("PURCHASE BILLS FOR " + companyName);
+            }
+            int rowNum = 0;
+
+            Row row = sheet.createRow(rowNum);
+            row.createCell(0).setCellValue("DATE");
+            row.createCell(1).setCellValue("COMPANY NAME");
+            row.createCell(2).setCellValue("INVOICE");
+            row.createCell(3).setCellValue("AMOUNT BEFORE TAX");
+            row.createCell(4).setCellValue("12% TAX AMOUNT");
+            row.createCell(5).setCellValue("18% TAX AMOUNT");
+            row.createCell(6).setCellValue("28% TAX AMOUNT");
+            row.createCell(7).setCellValue("TOTAL NET AMOUNT");
+            row.createCell(8).setCellValue("Send To Auditor");
+            rowNum++;
+            for (PurchaseBill bill : purchaseBills) {
+                row = sheet.createRow(rowNum);
+                row.createCell(0).setCellValue(bill.getDateAsString());
+                row.createCell(1).setCellValue(bill.getCompanyName());
+                row.createCell(2).setCellValue(bill.getInvoiceNo());
+                row.createCell(3).setCellValue(bill.getAmountBeforeTax());
+                row.createCell(4).setCellValue(bill.getTwelve());
+                row.createCell(5).setCellValue(bill.getEighteen());
+                row.createCell(6).setCellValue(bill.getTwentyEight());
+                row.createCell(7).setCellValue(bill.getTotalAmount());
+                row.createCell(8).setCellValue(bill.getHasGoneToAuditorString());
+                rowNum++;
+            }
+            autoResizeColumn(sheet, 8);
+            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+            workbook.write(outputStream);
+            outputStream.close();
+            workbook.close();
+            okay = true;
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        return okay;
+    }
     private static void autoResizeColumn(Sheet sheet, int n) {
         for (int i = 0; i <= n; i++)
             sheet.autoSizeColumn(i);

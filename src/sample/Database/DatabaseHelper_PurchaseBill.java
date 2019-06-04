@@ -21,10 +21,10 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
 
     private static boolean createPurchaseBillTable(String purchaseBillTableName) {
         String createQuery = "CREATE TABLE IF NOT EXISTS " + purchaseBillTableName + " ( DATE TEXT NOT NULL, "
-                + " CompanyName TEXT NOT NULL, INVOICE TEXT NOT NULL UNIQUE,"
+                + " CompanyName TEXT NOT NULL, INVOICE TEXT NOT NULL,"
                 + " AmountBeforeTax TEXT NOT NULL, TwelvePerAmt TEXT NOT NULL, "
                 + " EighteenPerAmt TEXT NOT NULL, TwentyEightPerAmt TEXT NOT NULL, "
-                + " AmountAfterTax TEXT NOT NULL, hasGoneToAuditor TEXT NOT NULL)";
+                + " AmountAfterTax TEXT NOT NULL, hasGoneToAuditor TEXT NOT NULL,UNIQUE(CompanyName,INVOICE))";
         return createTable(createQuery);
     }
 
@@ -47,7 +47,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
             preparedStatement.setString(9, purchaseBill.getHasSentToAuditor());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            AlertMaker.showErrorMessage(e);
+            e.printStackTrace();
         } finally {
             try {
                 assert preparedStatement != null;

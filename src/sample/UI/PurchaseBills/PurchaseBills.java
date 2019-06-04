@@ -167,7 +167,7 @@ public class PurchaseBills {
 
         tableView.getSortOrder().clear();
         tableView.getSortOrder().add(column);
-
+        tableView.sort();
         loadTable();
     }
 
@@ -224,6 +224,7 @@ public class PurchaseBills {
         }
         return newBills;
     }
+
     private void getInvoiceList() {
         ObservableList<String> s = FXCollections.observableArrayList();
         String[] strings = {"StdEnt", "StdEqm"};
@@ -231,5 +232,26 @@ public class PurchaseBills {
             for (PurchaseBill v : DatabaseHelper_PurchaseBill.getAllPurchaseBillList(string))
                 s.add(v.getInvoiceNo());
         TextFields.bindAutoCompletion(searchBox, s);
+    }
+
+    public void handleDownloadAll() {
+        if (tableView.getItems().size() == 0) {
+            mainApp.snackBar("", "Nothing to Export", "red");
+            return;
+        }
+
+        File dest = mainApp.chooseFile();
+        if (dest == null) {
+            mainApp.snackBar("INFO", "Operation Cancelled", "green");
+        } else {
+            if (ExcelHelper.writeExcelPurchaseBills(dest, companyNameCBOX.getValue(), tableView.getItems()))
+                mainApp.snackBar("Success"
+                        , "Purchase Bill Data Written to Excel"
+                        , "green");
+            else
+                mainApp.snackBar("Failed"
+                        , "Purchase Bill Data is NOT written to Excel"
+                        , "red");
+        }
     }
 }
