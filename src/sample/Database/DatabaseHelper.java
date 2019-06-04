@@ -1,11 +1,8 @@
 package sample.Database;
 
 import com.sun.istack.internal.NotNull;
-import javafx.collections.ObservableList;
 import sample.Alert.AlertMaker;
-import sample.Model.PurchaseBill;
 import sample.Model.User;
-import sample.Utils.Preferences;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,20 +36,6 @@ public class DatabaseHelper {
         }
         if (createPurchaseBillTable()) {
             System.out.println("PurchaseBills Table Created or Already Exists");
-        }
-        makeChanges();
-    }
-
-    private static void makeChanges() {
-        Preferences preferences = Preferences.getPreferences();
-        if (preferences.isFirst()) {
-            ObservableList<PurchaseBill> purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList();
-            deleteTable("PURCHASEBILLS");
-            createPurchaseBillTable();
-            for (PurchaseBill purchaseBill : purchaseBills)
-                DatabaseHelper_PurchaseBill.insertNewPurchaseBill(purchaseBill);
-            preferences.setFirst(false);
-            Preferences.setPreference(preferences);
         }
     }
 
