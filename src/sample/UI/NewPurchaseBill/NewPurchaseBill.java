@@ -2,6 +2,7 @@ package sample.UI.NewPurchaseBill;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -42,19 +43,16 @@ public class NewPurchaseBill {
 
     public void handleAddBill() {
         SinglePurchaseBill purchaseBill = new SinglePurchaseBill();
-        purchaseBill.setSlNoText(String.format("%2d", listView.getItems().size() + 1));
         listView.getItems().add(purchaseBill);
+        setSlNo();
     }
 
     public void handleDeleteBill() {
         if (listView.getSelectionModel().getSelectedItem() == null)
             mainApp.snackBar("INFO", "Select a row First", "green");
-        else {
+        else
             listView.getItems().remove(listView.getSelectionModel().getSelectedItem());
-            int i = 1;
-            for (SinglePurchaseBill bill : listView.getItems())
-                bill.setSlNoText("" + (i++));
-        }
+        setSlNo();
     }
 
     public void handleSubmit() {
@@ -66,10 +64,24 @@ public class NewPurchaseBill {
         HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
         if (ready) {
             ObservableList<SinglePurchaseBill> s = listView.getItems();
+            ObservableList<SinglePurchaseBill> toRemove = FXCollections.observableArrayList();
+            boolean singleResult;
             for (SinglePurchaseBill bill : s) {
-                ready = ready && DatabaseHelper_PurchaseBill.insertNewPurchaseBill(bill.getPurchaseBill());
+                singleResult = DatabaseHelper_PurchaseBill.insertNewPurchaseBill(bill.getPurchaseBill());
+                ready = ready && singleResult;
+                if (singleResult) {
+                    toRemove.add(bill);
+                } else {
+                    mainApp.snackBar("Error"
+                            , "Another PurchaseBill exist with same invoice and Customer Name"
+                            , "red");
+                    bill.markRed();
+                }
                 companyNames.add(bill.getPurchaseBill().getCompanyName());
             }
+            for (SinglePurchaseBill r : toRemove)
+                listView.getItems().remove(r);
+
             if (ready) {
                 mainApp.snackBar("SUCCESS", "Successfully Added " + noOfPurchaseBills + " Purchased Bills", "green");
                 listView.getItems().clear();
@@ -79,9 +91,19 @@ public class NewPurchaseBill {
             }
         } else
             mainApp.snackBar("INFO", "Check the Fields marked in Red", "red");
+
+        if (listView.getItems().size() != 0) setSlNo();
     }
 
     public void handleBack() {
         mainApp.initPurchaseBills();
+    }
+
+    private void setSlNo() {
+        int i = 1;
+        for (SinglePurchaseBill b :
+                listView.getItems())
+            b.setSlNoText(String.format("%2d", i++));
+
     }
 }

@@ -162,6 +162,7 @@ public class PurchaseBills {
 
         tableView.getSortOrder().clear();
         tableView.getSortOrder().add(column);
+        tableView.sort();
         loadTable();
     }
 

@@ -233,4 +233,8 @@ public class SinglePurchaseBill extends HBox {
             value.setDisable(true);
         }
     }
+
+    public void markRed() {
+        addRedBackgroundToTField(invoiceTField);
+    }
 }

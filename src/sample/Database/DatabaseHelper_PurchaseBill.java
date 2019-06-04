@@ -35,7 +35,7 @@ public class DatabaseHelper_PurchaseBill {
             preparedStatement.setString(9, purchaseBill.getHasSentToAuditor());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            AlertMaker.showErrorMessage(e);
+            e.printStackTrace();
         } finally {
             try {
                 assert preparedStatement != null;

@@ -28,6 +28,7 @@ public class Preferences {
     private HashSet<String> perData;
     private HashSet<String> hsn;
     private HashSet<String> companyNames;
+    private boolean isFirst;
 
 
     // Constructor
@@ -57,6 +58,7 @@ public class Preferences {
         date = "" + d.getTime();
         limit = "22";
         theme = "green";
+        isFirst = true;
     }
 
     private static void initConfig() {
@@ -254,5 +256,14 @@ public class Preferences {
 
     public void setCompanyNames(HashSet<String> companyNames) {
         this.companyNames = companyNames;
+    }
+
+
+    public boolean isFirst() {
+        return isFirst;
+    }
+
+    public void setFirst(boolean first) {
+        isFirst = first;
     }
 }
