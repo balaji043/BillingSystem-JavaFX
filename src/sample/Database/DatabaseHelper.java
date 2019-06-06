@@ -29,7 +29,6 @@ public class DatabaseHelper {
             System.out.println("PurchaseBills Table Created or Already Exists");
         }
     }
-
     static boolean createTable(String createQuery) {
         Connection connection = DatabaseHandler.getInstance().getConnection();
         PreparedStatement preparedStatement = null;

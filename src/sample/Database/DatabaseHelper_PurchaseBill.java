@@ -47,7 +47,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
             preparedStatement.setString(9, purchaseBill.getHasSentToAuditor());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } finally {
             try {
                 assert preparedStatement != null;

@@ -65,7 +65,7 @@
                                prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="DELETE"
                                textFill="WHITE"/>
                 </StackPane>
-                <StackPane layoutX="718.0" layoutY="60.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                <StackPane layoutX="718.0" layoutY="60.0" GridPane.columnIndex="6" GridPane.rowIndex="1">
                     <JFXCheckBox fx:id="editPanelCheckBox" minWidth="200.0" onAction="#handleEditPurchaseBill"
                                  prefHeight="40.0" prefWidth="200.0" text="Edit Purchase Bill"/>
                 </StackPane>
@@ -84,6 +84,11 @@
                 <StackPane GridPane.columnIndex="6">
                     <JFXButton buttonType="RAISED" onAction="#handleDownloadAll" prefHeight="40.0" prefWidth="200.0"
                                ripplerFill="#3333cc" styleClass="jfx-button1" text="DOWNLOAD ALL" textFill="WHITE"/>
+                </StackPane>
+                <StackPane layoutX="623.0" layoutY="60.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                    <JFXButton buttonType="RAISED" onAction="#handleImportPurchaseBill" prefHeight="40.0"
+                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="IMPORT"
+                               textFill="WHITE"/>
                 </StackPane>
             </GridPane>
         </top>
