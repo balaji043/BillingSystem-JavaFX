@@ -20,6 +20,7 @@ import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
 import sample.CustomUI.SinglePurchaseBill.SinglePurchaseBill;
 import sample.Database.DatabaseHelper_PurchaseBill;
+import sample.Database.ExcelDatabaseHelper;
 import sample.Database.ExcelHelper;
 import sample.Main;
 import sample.Model.PurchaseBill;
@@ -96,18 +97,31 @@ public class PurchaseBills {
 
     public void handleDeletePurchaseBill() {
         if (mainApp.getUser().getAccess().equals("admin")) {
-            PurchaseBill toDeletePurchaseBill = tableView.getSelectionModel().getSelectedItem();
-            if (toDeletePurchaseBill != null &&
-                    AlertMaker.showMCAlert("Confirm ? "
-                            , "Are you sure you want to delete this Purchase Bill from "
-                                    + toDeletePurchaseBill.getCompanyName() + "?"
-                            , mainApp)) {
-                if (DatabaseHelper_PurchaseBill.deletePurchaseBill(toDeletePurchaseBill)) {
-                    mainApp.snackBar("Success", "Purchase Bill Deleted Successfully", "green");
+            if (tableView.getSelectionModel().getSelectedItems().size() == 1) {
+                PurchaseBill toDeletePurchaseBill = tableView.getSelectionModel().getSelectedItem();
+                if (toDeletePurchaseBill != null &&
+                        AlertMaker.showMCAlert("Confirm ? "
+                                , "Are you sure you want to delete this Purchase Bill from "
+                                        + toDeletePurchaseBill.getCompanyName() + "?"
+                                , mainApp)) {
+                    if (DatabaseHelper_PurchaseBill.deletePurchaseBill(toDeletePurchaseBill)) {
+                        mainApp.snackBar("Success", "Purchase Bill Deleted Successfully", "green");
+                        loadTable();
+                    }
+                } else
+                    mainApp.snackBar("Info", "No Bill Selected", "green");
+            } else {
+                ObservableList<PurchaseBill> toDelete = FXCollections.observableArrayList();
+                toDelete.addAll(tableView.getSelectionModel().getSelectedItems());
+
+                if (AlertMaker.showMCAlert("Confirm ? "
+                        , "Are you sure you want to delete " + toDelete.size() + " Purchase Bills from ?"
+                        , mainApp)) {
+                    for (PurchaseBill toDeleteBill : toDelete)
+                        DatabaseHelper_PurchaseBill.deletePurchaseBill(toDeleteBill);
                     loadTable();
                 }
-            } else
-                mainApp.snackBar("Info", "No Bill Selected", "green");
+            }
         }
     }
 
@@ -141,6 +155,23 @@ public class PurchaseBills {
             else
                 mainApp.snackBar("INFO", "Check the details once again", "green");
 
+    }
+
+    public void handleImportPurchaseBill() {
+        File dest = mainApp.chooseFile();
+        if (dest == null) {
+            mainApp.snackBar("INFO", "Operation Cancelled", "green");
+        } else {
+            if (ExcelDatabaseHelper.writeDBPurchaseBill(dest))
+                mainApp.snackBar("Success"
+                        , "Purchase Bill Data Written to DB"
+                        , "green");
+            else
+                mainApp.snackBar("Failed"
+                        , "Purchase Bill Data is NOT written to DB"
+                        , "red");
+        }
+        loadTable();
     }
 
     private void initTable() {

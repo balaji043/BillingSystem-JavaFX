@@ -99,16 +99,11 @@ public class ExcelHelper {
     public static boolean writeExcelCustomer(@NotNull File dest
             , @NotNull ObservableList<Customer> customers) {
         okay = false;
+        XSSFWorkbook workbook = ExcelDatabaseHelper.getWorkBook(dest);
+
         try {
             String FILE_NAME = dest.getAbsolutePath();
-            FileInputStream excel;
-            XSSFWorkbook workbook;
-            try {
-                excel = new FileInputStream(dest);
-                workbook = new XSSFWorkbook(excel);
-            } catch (Exception e) {
-                workbook = new XSSFWorkbook();
-            }
+            ExcelDatabaseHelper.getWorkBook(dest);
 
             XSSFSheet sheet;
             try {
@@ -158,14 +153,7 @@ public class ExcelHelper {
         okay = false;
         try {
             String FILE_NAME = dest.getAbsolutePath();
-            FileInputStream excel;
-            XSSFWorkbook workbook;
-            try {
-                excel = new FileInputStream(dest);
-                workbook = new XSSFWorkbook(excel);
-            } catch (Exception e) {
-                workbook = new XSSFWorkbook();
-            }
+            XSSFWorkbook workbook = ExcelDatabaseHelper.getWorkBook(dest);
 
             XSSFSheet sheet;
             try {

@@ -25,6 +25,7 @@
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="212.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="60.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
@@ -64,7 +65,7 @@
                                prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="DELETE"
                                textFill="WHITE"/>
                 </StackPane>
-                <StackPane layoutX="718.0" layoutY="60.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                <StackPane layoutX="718.0" layoutY="60.0" GridPane.columnIndex="6" GridPane.rowIndex="1">
                     <JFXCheckBox fx:id="editPanelCheckBox" minWidth="200.0" onAction="#handleEditPurchaseBill"
                                  prefHeight="40.0" prefWidth="200.0" text="Edit Purchase Bill"/>
                 </StackPane>
@@ -76,6 +77,11 @@
                 <StackPane layoutX="192.0" layoutY="60.0">
                     <JFXComboBox fx:id="sendToAuditorComboBox" editable="true" prefHeight="40.0" prefWidth="200.0"
                                  promptText="Send To Auditor"/>
+                </StackPane>
+                <StackPane layoutX="623.0" layoutY="60.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                    <JFXButton buttonType="RAISED" onAction="#handleImportPurchaseBill" prefHeight="40.0"
+                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="IMPORT"
+                               textFill="WHITE"/>
                 </StackPane>
             </GridPane>
         </top>
