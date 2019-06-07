@@ -63,9 +63,10 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         boolean okay = false;
         PreparedStatement preparedStatement = null;
         try {
-            String delete = String.format("DELETE FROM %s WHERE INVOICE = ? ", tableName);
+            String delete = String.format("DELETE FROM %s WHERE INVOICE = ? AND CompanyName = ?", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(delete);
             preparedStatement.setString(1, purchaseBill.getInvoiceNo());
+            preparedStatement.setString(2, purchaseBill.getCompanyName());
             okay = preparedStatement.executeUpdate() > 0;
             preparedStatement.close();
         } catch (SQLException e) {
@@ -86,20 +87,20 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         boolean okay = true;
         PreparedStatement preparedStatement;
 
-        String updateQuery = " UPDATE " + tableName + " SET DATE = ?, CompanyName = ?, " +
+        String updateQuery = " UPDATE " + tableName + " SET DATE = ?, " +
                 " AmountBeforeTax = ?, TwelvePerAmt = ? , EighteenPerAmt = ?," +
-                " TwentyEightPerAmt = ?, AmountAfterTax = ?, hasGoneToAuditor = ? WHERE INVOICE = ? ";
+                " TwentyEightPerAmt = ?, AmountAfterTax = ?, hasGoneToAuditor = ? WHERE INVOICE = ? AND CompanyName = ?";
         try {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
             preparedStatement.setString(1, purchaseBill.getDateInLong());
-            preparedStatement.setString(2, purchaseBill.getCompanyName());
-            preparedStatement.setString(3, purchaseBill.getAmountBeforeTax());
-            preparedStatement.setString(4, purchaseBill.getTwelve());
-            preparedStatement.setString(5, purchaseBill.getEighteen());
-            preparedStatement.setString(6, purchaseBill.getTwentyEight());
-            preparedStatement.setString(7, purchaseBill.getTotalAmount());
-            preparedStatement.setString(8, purchaseBill.getHasSentToAuditor());
-            preparedStatement.setString(9, purchaseBill.getInvoiceNo());
+            preparedStatement.setString(2, purchaseBill.getAmountBeforeTax());
+            preparedStatement.setString(3, purchaseBill.getTwelve());
+            preparedStatement.setString(4, purchaseBill.getEighteen());
+            preparedStatement.setString(5, purchaseBill.getTwentyEight());
+            preparedStatement.setString(6, purchaseBill.getTotalAmount());
+            preparedStatement.setString(7, purchaseBill.getHasSentToAuditor());
+            preparedStatement.setString(8, purchaseBill.getInvoiceNo());
+            preparedStatement.setString(9, purchaseBill.getCompanyName());
 
             okay = preparedStatement.executeUpdate() > 0;
 
@@ -112,11 +113,12 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
     public static boolean updatePurchaseBillAsGoneToAuditor(PurchaseBill purchaseBill, String tableName) {
         boolean okay = true;
         PreparedStatement preparedStatement;
-        String updateQuery = " UPDATE " + tableName + " SET HasGoneToAuditor = ? WHERE INVOICE = ?";
+        String updateQuery = " UPDATE " + tableName + " SET HasGoneToAuditor = ? WHERE INVOICE = ? AND CompanyName = ?";
         try {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
             preparedStatement.setString(1, "true");
             preparedStatement.setString(2, purchaseBill.getInvoiceNo());
+            preparedStatement.setString(3, purchaseBill.getCompanyName());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
