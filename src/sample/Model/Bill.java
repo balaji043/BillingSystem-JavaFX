@@ -31,6 +31,8 @@ public class Bill {
     private String totalAmountBeforeRoundOff;
     private double total;
     private String roundedOff;
+    private String place;
+
 
     public Bill(String billId, String invoice, String date
             , String customerName, String customerId
@@ -105,6 +107,11 @@ public class Bill {
         roundedOff = String.format("%s%.2f", sign, r);
         this.totalAmount = String.format("%.2f", total);
         this.total = total;
+        try {
+            this.place = address.split("\n")[2];
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getBillId() {
@@ -210,6 +217,10 @@ public class Bill {
 
     public String getRoundedOff() {
         return roundedOff;
+    }
+
+    public String getPlace() {
+        return place;
     }
 
     @Override

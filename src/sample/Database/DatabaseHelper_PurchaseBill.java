@@ -51,9 +51,10 @@ public class DatabaseHelper_PurchaseBill {
         boolean okay = false;
         PreparedStatement preparedStatement = null;
         try {
-            String delete = String.format("DELETE FROM %s WHERE INVOICE = ? ", tableName);
+            String delete = String.format("DELETE FROM %s WHERE INVOICE = ? AND CompanyName =? ", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(delete);
             preparedStatement.setString(1, purchaseBill.getInvoiceNo());
+            preparedStatement.setString(2, purchaseBill.getCompanyName());
             okay = preparedStatement.executeUpdate() > 0;
             preparedStatement.close();
         } catch (SQLException e) {
@@ -201,11 +202,12 @@ public class DatabaseHelper_PurchaseBill {
     public static boolean markBillAsGoneToAuditor(PurchaseBill purchaseBill) {
         boolean okay = true;
         PreparedStatement preparedStatement;
-        String updateQuery = " UPDATE " + tableName + " SET HasGoneToAuditor = ? WHERE INVOICE = ?";
+        String updateQuery = " UPDATE " + tableName + " SET HasGoneToAuditor = ? WHERE INVOICE = ? AND CompanyName = ? ";
         try {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
             preparedStatement.setString(1, "true");
             preparedStatement.setString(2, purchaseBill.getInvoiceNo());
+            preparedStatement.setString(3, purchaseBill.getCompanyName());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
