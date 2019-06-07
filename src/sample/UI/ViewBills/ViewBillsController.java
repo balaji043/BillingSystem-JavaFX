@@ -175,7 +175,9 @@ public class ViewBillsController implements Initializable {
 
         tableView.getColumns().clear();
         tableView.getItems().clear();
+
         addTableColumn("Customer", "customerName");
+        addTableColumn("Place", "place");
         addTableColumn("Invoice", "invoice");
 
         TableColumn<Bill, LocalDate> column = new TableColumn<>("Date");

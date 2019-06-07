@@ -23,6 +23,7 @@ public class Bill {
     private double total;
 
     private String roundOff;
+    private String place;
 
     public Bill(String billId, String invoice, String date
             , String customerName, String customerId
@@ -63,6 +64,12 @@ public class Bill {
 
         totalAmount = String.format("%.2f", total);
         this.total = total;
+
+        try {
+            this.place = address.split("\n")[2];
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public String getBillId() {
@@ -146,5 +153,13 @@ public class Bill {
                 ", totalAmount='" + totalAmount + '\'' +
                 ", userName='" + userName + '\'' +
                 '}';
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 }
