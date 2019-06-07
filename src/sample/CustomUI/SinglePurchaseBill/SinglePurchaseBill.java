@@ -162,6 +162,7 @@ public class SinglePurchaseBill extends HBox {
         long l = Long.parseLong(toEdit.getDateInLong());
         Date d = new Date(l);
         fromDate.setValue(d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        companyNameCBOX.setDisable(true);
         companyNameCBOX.getItems().addAll(companyNames);
         companyNameCBOX.getSelectionModel().select(toEdit.getCompanyName());
 
