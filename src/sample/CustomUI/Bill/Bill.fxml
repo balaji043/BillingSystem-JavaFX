@@ -363,14 +363,14 @@
                     <GridPane.margin>
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                     </GridPane.margin>
-                    <Text text="Tax Percentage">
+                    <Text text="Taxable Value">
                         <font>
                             <Font name="System Bold Italic" size="8.0" />
                         </font>
                     </Text>
                 </StackPane>
                 <StackPane layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
-                    <Text text="12%">
+                    <Text fx:id="l12BeforeTax" text="12%">
                         <font>
                             <Font name="System Bold" size="8.0" />
                         </font>
@@ -378,14 +378,14 @@
                 </StackPane>
                 <StackPane layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="2">
 
-                    <Text text="18%">
+                    <Text fx:id="l18BeforeTax" text="18%">
                         <font>
                             <Font name="System Bold" size="8.0" />
                         </font>
                     </Text>
                 </StackPane>
                 <StackPane layoutX="10.0" layoutY="10.0" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="3">
-                    <Text text="28%">
+                    <Text fx:id="l28BeforeTax" text="28%">
                         <font>
                             <Font name="System Bold" size="8.0" />
                         </font>

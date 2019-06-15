@@ -32,6 +32,9 @@ public class Bill {
     private double total;
     private String roundedOff;
     private String place;
+    private String _12BeforeTaxTotal;
+    private String _18BeforeTaxTotal;
+    private String _28BeforeTaxTotal;
 
 
     public Bill(String billId, String invoice, String date
@@ -56,20 +59,26 @@ public class Bill {
         float gst28Hal = 0;
         float gst28Tota;
         float gstTotal;
+        float _12BTotal = 0;
+        float _18BTotal = 0;
+        float _28BTotal = 0;
         double total = 0, r = 0.00f;
 
         for (Product product : products) {
             switch (product.getTax()) {
                 case "12": {
                     gst12Hal = gst12Hal + Float.parseFloat(product.getHalfTaxAmt());
+                    _12BTotal = product.getOriginalAmount();
                     break;
                 }
                 case "18": {
                     gst18Hal = gst18Hal + Float.parseFloat(product.getHalfTaxAmt());
+                    _18BTotal = product.getOriginalAmount();
                     break;
                 }
                 case "28": {
                     gst28Hal = gst28Hal + Float.parseFloat(product.getHalfTaxAmt());
+                    _28BTotal = product.getOriginalAmount();
                     break;
                 }
                 default:
@@ -77,6 +86,10 @@ public class Bill {
             }
             total = total + Float.parseFloat(product.getTotalAmount());
         }
+        _12BeforeTaxTotal = String.format("%.2f", _12BTotal);
+        _18BeforeTaxTotal = String.format("%.2f", _18BTotal);
+        _28BeforeTaxTotal = String.format("%.2f", _28BTotal);
+
         gst12Tota = gst12Hal * 2;
         gst18Tota = gst18Hal * 2;
         gst28Tota = gst28Hal * 2;
@@ -221,6 +234,18 @@ public class Bill {
 
     public String getPlace() {
         return place;
+    }
+
+    public String get_12BeforeTaxTotal() {
+        return _12BeforeTaxTotal;
+    }
+
+    public String get_18BeforeTaxTotal() {
+        return _18BeforeTaxTotal;
+    }
+
+    public String get_28BeforeTaxTotal() {
+        return _28BeforeTaxTotal;
     }
 
     @Override

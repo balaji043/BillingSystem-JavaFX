@@ -42,6 +42,8 @@ public class IBill {
     private Text lBankName, lBankAccNo, lBranchName, lBankIFSC, forStoreName;
     @FXML
     private Text lgrossAmount, laCGST, roundedOff;
+    @FXML
+    private Text l12BeforeTax, l18BeforeTax, l28BeforeTax;
 
     private Preferences preferences = Preferences.getPreferences();
 
@@ -117,6 +119,10 @@ public class IBill {
         lBankIFSC.setText(preferences.getIfsc());
 
         forStoreName.setText("For " + preferences.getName());
+
+        l12BeforeTax.setText(bill.get_12BeforeTaxTotal());
+        l18BeforeTax.setText(bill.get_18BeforeTaxTotal());
+        l28BeforeTax.setText(bill.get_28BeforeTaxTotal());
     }
 
     private void initGridPane(Bill bill) {
