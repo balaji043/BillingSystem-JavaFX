@@ -188,15 +188,32 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
     }
 
     private static PurchaseBill getPurchaseBill(ResultSet resultSet) throws SQLException {
+        String invoice = resultSet.getString(3);
+
+        try {
+            invoice = "" + Math.round(Double.parseDouble(invoice));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         return new PurchaseBill(resultSet.getString(1)
                 , resultSet.getString(2)
-                , resultSet.getString(3)
-                , resultSet.getString(4)
-                , resultSet.getString(5)
-                , resultSet.getString(6)
-                , resultSet.getString(7)
-                , resultSet.getString(8)
+                , invoice
+                , getValue(resultSet.getString(4))
+                , getValue(resultSet.getString(5))
+                , getValue(resultSet.getString(6))
+                , getValue(resultSet.getString(7))
+                , getValue(resultSet.getString(8))
                 , resultSet.getString(9));
+    }
+
+    private static String getValue(String value) {
+        try {
+            value = "" + String.format("%.2f", Double.parseDouble(value));
+        } catch (NumberFormatException e) {
+            System.out.println(e.getMessage() + e.getLocalizedMessage());
+        }
+        return value;
     }
 
     private static ObservableList<PurchaseBill> getResultSetSearchByString(String getQuery, String text) {

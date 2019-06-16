@@ -159,7 +159,7 @@ public class ExcelDatabaseHelper {
                             break;
                         }
                         case NUMERIC: {
-                            invoice = "" + currentRow.getCell(2).getNumericCellValue();
+                            invoice = "" + Math.round(currentRow.getCell(2).getNumericCellValue());
                             break;
                         }
                     }
@@ -247,22 +247,9 @@ public class ExcelDatabaseHelper {
                     System.out.println(e.getMessage());
                 }
             }
-            if (currentRow.getCell(8) != null) {
-                try {
-                    switch (currentRow.getCell(8).getCellType()) {
-                        case STRING: {
-                            sendToAuditor = currentRow.getCell(8).getStringCellValue();
-                            break;
-                        }
-                        case NUMERIC: {
-                            sendToAuditor = "" + currentRow.getCell(8).getNumericCellValue();
-                            break;
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
+            if (currentRow.getCell(8) != null)
+                sendToAuditor = currentRow.getCell(8).getStringCellValue();
+
             purchaseBill = new PurchaseBill("" + date1.getTime(), cmpName, invoice, amount, _12, _18, _28, totalNet, sendToAuditor);
             try {
                 DatabaseHelper_PurchaseBill.insertNewPurchaseBill(purchaseBill, tableName);
