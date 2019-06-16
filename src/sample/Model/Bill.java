@@ -68,17 +68,17 @@ public class Bill {
             switch (product.getTax()) {
                 case "12": {
                     gst12Hal = gst12Hal + Float.parseFloat(product.getHalfTaxAmt());
-                    _12BTotal = product.getOriginalAmount();
+                    _12BTotal += product.getTotalOriginalAmount();
                     break;
                 }
                 case "18": {
                     gst18Hal = gst18Hal + Float.parseFloat(product.getHalfTaxAmt());
-                    _18BTotal = product.getOriginalAmount();
+                    _18BTotal += product.getTotalOriginalAmount();
                     break;
                 }
                 case "28": {
                     gst28Hal = gst28Hal + Float.parseFloat(product.getHalfTaxAmt());
-                    _28BTotal = product.getOriginalAmount();
+                    _28BTotal += product.getTotalOriginalAmount();
                     break;
                 }
                 default:
