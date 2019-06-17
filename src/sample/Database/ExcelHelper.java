@@ -51,11 +51,14 @@ public class ExcelHelper {
             row.createCell(5).setCellValue("18%");
             row.createCell(6).setCellValue("28%");
             row.createCell(7).setCellValue("Rounded Off");
-            row.createCell(8).setCellValue("Total Amount");
-            row.createCell(9).setCellValue("GST NO");
-            row.createCell(10).setCellValue("Phone NO");
-            row.createCell(11).setCellValue("Place");
-            row.createCell(12).setCellValue("Prepared By");
+            row.createCell(8).setCellValue("Taxable 12%");
+            row.createCell(9).setCellValue("Taxable 18%");
+            row.createCell(10).setCellValue("Taxable 28%");
+            row.createCell(11).setCellValue("Total Amount");
+            row.createCell(12).setCellValue("GST NO");
+            row.createCell(13).setCellValue("Phone NO");
+            row.createCell(14).setCellValue("Place");
+            row.createCell(15).setCellValue("Prepared By");
 
             rowNum++;
 
@@ -71,20 +74,23 @@ public class ExcelHelper {
                 row.createCell(5).setCellValue(bill.getGst18Total());
                 row.createCell(6).setCellValue(bill.getGst28Total());
                 row.createCell(7).setCellValue(bill.getRoundedOff());
-                row.createCell(8).setCellValue(bill.getTotalAmount());
-                row.createCell(9).setCellValue(bill.getGSTNo());
-                row.createCell(10).setCellValue(bill.getMobile());
+                row.createCell(8).setCellValue(bill.get_12BeforeTaxTotal());
+                row.createCell(9).setCellValue(bill.get_18BeforeTaxTotal());
+                row.createCell(10).setCellValue(bill.get_28BeforeTaxTotal());
+                row.createCell(11).setCellValue(bill.getTotalAmount());
+                row.createCell(12).setCellValue(bill.getGSTNo());
+                row.createCell(13).setCellValue(bill.getMobile());
                 try {
                     place = bill.getAddress().split("\n")[2];
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                row.createCell(11).setCellValue(place);
-                row.createCell(12).setCellValue(bill.getUserName());
+                row.createCell(14).setCellValue(place);
+                row.createCell(15).setCellValue(bill.getUserName());
                 place = "";
                 rowNum++;
             }
-            autoResizeColumn(sheet, 12);
+            autoResizeColumn(sheet, 15);
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
             workbook.write(outputStream);
             outputStream.close();

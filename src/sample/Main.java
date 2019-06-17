@@ -52,6 +52,7 @@ public class Main extends Application {
 
     private String theme;
 
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -98,6 +99,7 @@ public class Main extends Application {
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         }
+
     }
 
     public void initLoginLayout() {
@@ -294,5 +296,4 @@ public class Main extends Application {
                 (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
         return fileChooser.showSaveDialog(this.getPrimaryStage());
     }
-
 }

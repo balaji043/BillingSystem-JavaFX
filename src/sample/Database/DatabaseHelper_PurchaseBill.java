@@ -16,6 +16,24 @@ public class DatabaseHelper_PurchaseBill {
 
     private static String tableName = "PURCHASEBILLS";
 
+    private static boolean change(String i, String cmpName) {
+        boolean okay = true;
+        PreparedStatement preparedStatement;
+
+        String updateQuery = " UPDATE " + tableName + " SET INVOICE = ? WHERE INVOICE = ? AND CompanyName = ?;";
+        try {
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
+            preparedStatement.setString(1, "" + Math.round(Double.parseDouble(i)));
+            preparedStatement.setString(2, i);
+            preparedStatement.setString(3, cmpName);
+            okay = preparedStatement.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        return okay;
+    }
+
     public static boolean insertNewPurchaseBill(PurchaseBill purchaseBill) {
         PreparedStatement preparedStatement = null;
         boolean okay = false;
@@ -35,7 +53,7 @@ public class DatabaseHelper_PurchaseBill {
             preparedStatement.setString(9, purchaseBill.getHasSentToAuditor());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } finally {
             try {
                 assert preparedStatement != null;
@@ -159,15 +177,31 @@ public class DatabaseHelper_PurchaseBill {
     }
 
     private static PurchaseBill getPurchaseBill(ResultSet resultSet) throws SQLException {
+        String invoice = resultSet.getString(3);
+
+        try {
+            Double.parseDouble(invoice);
+            change(invoice, resultSet.getString(2));
+        } catch (Exception e) {
+        }
+
         return new PurchaseBill(resultSet.getString(1)
                 , resultSet.getString(2)
-                , resultSet.getString(3)
-                , resultSet.getString(4)
-                , resultSet.getString(5)
-                , resultSet.getString(6)
-                , resultSet.getString(7)
-                , resultSet.getString(8)
+                , invoice
+                , getValue(resultSet.getString(4))
+                , getValue(resultSet.getString(5))
+                , getValue(resultSet.getString(6))
+                , getValue(resultSet.getString(7))
+                , getValue(resultSet.getString(8))
                 , resultSet.getString(9));
+    }
+
+    private static String getValue(String value) {
+        try {
+            value = "" + String.format("%.2f", Double.parseDouble(value));
+        } catch (NumberFormatException e) {
+        }
+        return value;
     }
 
     private static ObservableList<PurchaseBill> getResultSetSearchByString(String getQuery, String text) {

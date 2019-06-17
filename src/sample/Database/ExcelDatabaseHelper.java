@@ -13,7 +13,6 @@ import sample.Model.PurchaseBill;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -111,12 +110,22 @@ public class ExcelDatabaseHelper {
                     continue;
                 }
                 if (currentRow.getCell(0) != null) {
+
+                    switch (currentRow.getCell(0).getCellType()) {
+                        case STRING: {
+                            date = currentRow.getCell(0).getStringCellValue();
+                            date1 = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+                            break;
+                        }
+                        case NUMERIC: {
+                            date1 = currentRow.getCell(0).getDateCellValue();
+                            break;
+                        }
+                    }
                     try {
-                        date = currentRow.getCell(0).getStringCellValue();
-                        System.out.println(date);
-                        date1 = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-                    } catch (NumberFormatException | ParseException e) {
-                        System.out.println(e.getMessage());
+                        System.out.println(date1.getTime());
+                    } catch (Exception e1) {
+                        System.out.println(e1.getMessage());
                     }
                 }
                 if (currentRow.getCell(1) != null) {
@@ -144,10 +153,12 @@ public class ExcelDatabaseHelper {
                                 break;
                             }
                             case NUMERIC: {
-                                invoice = "" + currentRow.getCell(2).getNumericCellValue();
+                                currentRow.getCell(2).setCellType(CellType.STRING);
                                 break;
                             }
                         }
+                        invoice = currentRow.getCell(2).getStringCellValue();
+
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
