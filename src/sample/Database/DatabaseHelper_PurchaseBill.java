@@ -28,6 +28,24 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         return createTable(createQuery);
     }
 
+    private static boolean change(String i, String cmpName, String tableName) {
+        boolean okay = true;
+        PreparedStatement preparedStatement;
+
+        String updateQuery = " UPDATE " + tableName + " SET INVOICE = ? WHERE INVOICE = ? AND CompanyName = ?;";
+        try {
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
+            preparedStatement.setString(1, "" + Math.round(Double.parseDouble(i)));
+            preparedStatement.setString(2, i);
+            preparedStatement.setString(3, cmpName);
+            okay = preparedStatement.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        }
+        return okay;
+    }
+
     public static boolean insertNewPurchaseBill(PurchaseBill purchaseBill, String tableName) {
         PreparedStatement preparedStatement = null;
         boolean okay = false;
@@ -130,7 +148,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         ObservableList<PurchaseBill> bills = FXCollections.observableArrayList();
         try {
             ResultSet resultSet = getResultSet(tableName);
-            while (resultSet.next()) bills.add(getPurchaseBill(resultSet));
+            while (resultSet.next()) bills.add(getPurchaseBill(resultSet, tableName));
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
         }
@@ -139,13 +157,13 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
 
     public static ObservableList<PurchaseBill> getPurchaseBillList(String text, String tableName) {
         String getQuery = " SELECT * FROM " + tableName + " WHERE INVOICE LIKE ?";
-        return getResultSetSearchByString(getQuery, text);
+        return getResultSetSearchByString(getQuery, text, tableName);
     }
 
     public static ObservableList<PurchaseBill> getPurchaseBillList(String companyName, LocalDate a, LocalDate b, String tableName) {
         String getQuery = " SELECT * FROM " + tableName + " WHERE CompanyName LIKE ?";
         ObservableList<PurchaseBill> bills = FXCollections.observableArrayList();
-        for (PurchaseBill bill : getResultSetSearchByString(getQuery, companyName)) {
+        for (PurchaseBill bill : getResultSetSearchByString(getQuery, companyName, tableName)) {
             try {
                 long l = Long.parseLong(bill.getDateInLong());
                 Date date = new Date(l);
@@ -161,7 +179,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
 
     public static ObservableList<PurchaseBill> getPurchaseBillListByCompanyName(String text, String tableName) {
         String getQuery = " SELECT * FROM " + tableName + " WHERE CompanyName LIKE ?";
-        return getResultSetSearchByString(getQuery, text);
+        return getResultSetSearchByString(getQuery, text, tableName);
     }
 
     public static ObservableList<PurchaseBill> getPurchaseBillList(LocalDate a, LocalDate b, String tableName) {
@@ -176,7 +194,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
                     LocalDate d = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
                     if ((d.isEqual(a) || d.isEqual(b)) || (d.isAfter(a) && d.isBefore(b)))
-                        bills.add(getPurchaseBill(resultSet));
+                        bills.add(getPurchaseBill(resultSet, tableName));
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -187,13 +205,13 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         return bills;
     }
 
-    private static PurchaseBill getPurchaseBill(ResultSet resultSet) throws SQLException {
+    private static PurchaseBill getPurchaseBill(ResultSet resultSet, String tableName) throws SQLException {
         String invoice = resultSet.getString(3);
 
         try {
-            invoice = "" + Math.round(Double.parseDouble(invoice));
+            Double.parseDouble(invoice);
+            change(invoice, resultSet.getString(2), tableName);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
 
         return new PurchaseBill(resultSet.getString(1)
@@ -216,14 +234,14 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         return value;
     }
 
-    private static ObservableList<PurchaseBill> getResultSetSearchByString(String getQuery, String text) {
+    private static ObservableList<PurchaseBill> getResultSetSearchByString(String getQuery, String text, String tableName) {
         ObservableList<PurchaseBill> bills = FXCollections.observableArrayList();
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(getQuery);
             preparedStatement.setString(1, text);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) bills.add(getPurchaseBill(resultSet));
+            while (resultSet.next()) bills.add(getPurchaseBill(resultSet, tableName));
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
         } finally {
