@@ -88,14 +88,13 @@ public class DatabaseHelper_PurchaseBill {
         }
         return okay;
     }
-
     public static boolean updatePurchaseBill(PurchaseBill purchaseBill) {
         boolean okay = true;
         PreparedStatement preparedStatement;
 
-        String updateQuery = " UPDATE " + tableName + " SET DATE = ?, CompanyName = ?, " +
+        String updateQuery = " UPDATE " + tableName + " SET DATE = ?, " +
                 " AmountBeforeTax = ?, TwelvePerAmt = ? , EighteenPerAmt = ?," +
-                " TwentyEightPerAmt = ?, AmountAfterTax = ? , HasGoneToAuditor = ? WHERE INVOICE = ? AND CompanyName = ?;";
+                " TwentyEightPerAmt = ?, AmountAfterTax = ?, hasGoneToAuditor = ? WHERE INVOICE = ? AND CompanyName = ?";
         try {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
             preparedStatement.setString(1, purchaseBill.getDateInLong());
@@ -107,6 +106,7 @@ public class DatabaseHelper_PurchaseBill {
             preparedStatement.setString(7, purchaseBill.getHasSentToAuditor());
             preparedStatement.setString(8, purchaseBill.getInvoiceNo());
             preparedStatement.setString(9, purchaseBill.getCompanyName());
+
             okay = preparedStatement.executeUpdate() > 0;
 
         } catch (Exception e) {
@@ -128,6 +128,11 @@ public class DatabaseHelper_PurchaseBill {
 
     public static ObservableList<PurchaseBill> getPurchaseBillList(String text) {
         String getQuery = " SELECT * FROM " + tableName + " WHERE INVOICE LIKE ?";
+        return getResultSetSearchByString(getQuery, text);
+    }
+
+    public static ObservableList<PurchaseBill> getPurchaseBillListByTotalNetAmount(String text) {
+        String getQuery = " SELECT * FROM " + tableName + " WHERE AmountAfterTax LIKE ?";
         return getResultSetSearchByString(getQuery, text);
     }
 
@@ -183,6 +188,7 @@ public class DatabaseHelper_PurchaseBill {
             Double.parseDouble(invoice);
             change(invoice, resultSet.getString(2));
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
         return new PurchaseBill(resultSet.getString(1)
@@ -200,6 +206,7 @@ public class DatabaseHelper_PurchaseBill {
         try {
             value = "" + String.format("%.2f", Double.parseDouble(value));
         } catch (NumberFormatException e) {
+            System.out.println(e.getMessage());
         }
         return value;
     }

@@ -22,8 +22,8 @@
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="212.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="60.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="138.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="10.0" prefWidth="175.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                 </columnConstraints>
@@ -45,19 +45,19 @@
                                prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="ADD NEW BILL"
                                textFill="WHITE"/>
                 </StackPane>
-                <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <StackPane GridPane.rowIndex="1">
                     <JFXComboBox fx:id="companyNameCBOX" editable="true" prefHeight="40.0" prefWidth="200.0"
                                  promptText="COMPANY NAME"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="2" GridPane.rowIndex="1">
                     <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0" promptText="Search Invoice"/>
                 </StackPane>
-                <StackPane GridPane.columnIndex="3" GridPane.rowIndex="1">
+                <StackPane GridPane.columnIndex="6">
                     <JFXButton buttonType="RAISED" onAction="#handleDownloadSubmit" prefHeight="40.0" prefWidth="200.0"
                                ripplerFill="#3333cc" styleClass="jfx-button1" text="DOWNLOAD" textFill="WHITE"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="3">
-                    <JFXButton buttonType="RAISED" onAction="#handleSubmit" prefHeight="40.0" prefWidth="200.0"
+                    <JFXButton buttonType="RAISED" onAction="#handleSubmit" prefHeight="31.0" prefWidth="149.0"
                                ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="448.0" layoutY="10.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
@@ -82,6 +82,10 @@
                     <JFXButton buttonType="RAISED" onAction="#handleImportPurchaseBill" prefHeight="40.0"
                                prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="IMPORT"
                                textFill="WHITE"/>
+                </StackPane>
+                <StackPane layoutX="314.0" layoutY="60.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <JFXTextField fx:id="searchBox2" maxWidth="250.0" prefWidth="250.0"
+                                  promptText="Search TotalAmount"/>
                 </StackPane>
             </GridPane>
         </top>

@@ -31,7 +31,7 @@ import java.time.LocalDate;
 
 public class PurchaseBills {
     public JFXComboBox<String> companyNameCBOX, sendToAuditorComboBox;
-    public JFXTextField searchBox;
+    public JFXTextField searchBox, searchBox2;
     public StackPane main;
     public TableView<PurchaseBill> tableView;
     public JFXDatePicker fromDate, toDate;
@@ -56,6 +56,14 @@ public class PurchaseBills {
         initTable();
         tableView.setOnMouseClicked(e -> onPurchaseBillSelected());
         TextFields.bindAutoCompletion(searchBox, getInvoiceList());
+        TextFields.bindAutoCompletion(searchBox2, getTotalNetAmountList());
+    }
+
+    private ObservableList<String> getTotalNetAmountList() {
+        ObservableList<String> invoices = FXCollections.observableArrayList();
+        for (PurchaseBill bill : tableView.getItems())
+            invoices.add(bill.getTotalAmount());
+        return invoices;
     }
 
     private ObservableList<String> getInvoiceList() {
@@ -207,9 +215,12 @@ public class PurchaseBills {
         tableView.getItems().clear();
 
         ObservableList<PurchaseBill> purchaseBills;
-        if (searchBox.getText() != null && !searchBox.getText().isEmpty())
-            purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(searchBox.getText());
-        else if (companyNameCBOX.getValue() != null)
+        if ((searchBox.getText() != null && !searchBox.getText().isEmpty()) || (searchBox2.getText() != null && !searchBox2.getText().isEmpty())) {
+            if (searchBox.getText() != null && !searchBox.getText().isEmpty())
+                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(searchBox.getText());
+            else purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillListByTotalNetAmount(searchBox2.getText());
+
+        } else if (companyNameCBOX.getValue() != null)
             if (fromDate.getValue() != null && toDate.getValue() != null)
                 purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(companyNameCBOX.getValue(), fromDate.getValue(), toDate.getValue());
             else

@@ -98,7 +98,6 @@ public class ExcelDatabaseHelper {
                 System.out.println(e.getMessage());
             }
             PurchaseBill purchaseBill;
-
             Date date1 = new Date();
             boolean b = true;
             assert sheet != null;
@@ -114,7 +113,16 @@ public class ExcelDatabaseHelper {
                     switch (currentRow.getCell(0).getCellType()) {
                         case STRING: {
                             date = currentRow.getCell(0).getStringCellValue();
-                            date1 = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+                            try {
+                                date1 = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+                            } catch (Exception e) {
+                                try {
+                                    date1 = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+                                } catch (Exception e1) {
+                                    System.out.println(e1.getMessage());
+                                }
+                            }
+
                             break;
                         }
                         case NUMERIC: {
