@@ -49,7 +49,7 @@ public class DatabaseHelper_PurchaseBill {
             preparedStatement.setString(5, purchaseBill.getTwelve());
             preparedStatement.setString(6, purchaseBill.getEighteen());
             preparedStatement.setString(7, purchaseBill.getTwentyEight());
-            preparedStatement.setString(8, purchaseBill.getTotalAmount());
+            preparedStatement.setString(8, String.format("%.2f", Double.parseDouble(purchaseBill.getTotalAmount())));
             preparedStatement.setString(9, purchaseBill.getHasSentToAuditor());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -88,6 +88,7 @@ public class DatabaseHelper_PurchaseBill {
         }
         return okay;
     }
+
     public static boolean updatePurchaseBill(PurchaseBill purchaseBill) {
         boolean okay = true;
         PreparedStatement preparedStatement;
@@ -132,7 +133,7 @@ public class DatabaseHelper_PurchaseBill {
     }
 
     public static ObservableList<PurchaseBill> getPurchaseBillListByTotalNetAmount(String text) {
-        String getQuery = " SELECT * FROM " + tableName + " WHERE AmountAfterTax LIKE ?";
+        String getQuery = " SELECT * FROM " + tableName + " WHERE AmountAfterTax LIKE ? ";
         return getResultSetSearchByString(getQuery, text);
     }
 
@@ -198,7 +199,7 @@ public class DatabaseHelper_PurchaseBill {
                 , getValue(resultSet.getString(5))
                 , getValue(resultSet.getString(6))
                 , getValue(resultSet.getString(7))
-                , getValue(resultSet.getString(8))
+                , resultSet.getString(8)
                 , resultSet.getString(9));
     }
 
