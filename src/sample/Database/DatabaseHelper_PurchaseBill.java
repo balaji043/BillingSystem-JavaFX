@@ -28,8 +28,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         return createTable(createQuery);
     }
 
-    private static boolean change(String i, String cmpName, String tableName) {
-        boolean okay = true;
+    private static void change(String i, String cmpName, String tableName) {
         PreparedStatement preparedStatement;
 
         String updateQuery = " UPDATE " + tableName + " SET INVOICE = ? WHERE INVOICE = ? AND CompanyName = ?;";
@@ -38,12 +37,11 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
             preparedStatement.setString(1, "" + Math.round(Double.parseDouble(i)));
             preparedStatement.setString(2, i);
             preparedStatement.setString(3, cmpName);
-            okay = preparedStatement.executeUpdate() > 0;
+            preparedStatement.executeUpdate();
 
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         }
-        return okay;
     }
 
     public static boolean insertNewPurchaseBill(PurchaseBill purchaseBill, String tableName) {
@@ -61,7 +59,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
             preparedStatement.setString(5, purchaseBill.getTwelve());
             preparedStatement.setString(6, purchaseBill.getEighteen());
             preparedStatement.setString(7, purchaseBill.getTwentyEight());
-            preparedStatement.setString(8, purchaseBill.getTotalAmount());
+            preparedStatement.setString(8, String.format("%.2f", Double.parseDouble(purchaseBill.getTotalAmount())));
             preparedStatement.setString(9, purchaseBill.getHasSentToAuditor());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -209,6 +207,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         String getQuery = " SELECT * FROM " + tableName + " WHERE AmountAfterTax LIKE ?";
         return getResultSetSearchByString(getQuery, text, tableName);
     }
+
     private static PurchaseBill getPurchaseBill(ResultSet resultSet, String tableName) throws SQLException {
         String invoice = resultSet.getString(3);
 
@@ -225,7 +224,7 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
                 , getValue(resultSet.getString(5))
                 , getValue(resultSet.getString(6))
                 , getValue(resultSet.getString(7))
-                , getValue(resultSet.getString(8))
+                , resultSet.getString(8)
                 , resultSet.getString(9));
     }
 
