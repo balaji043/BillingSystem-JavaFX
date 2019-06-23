@@ -205,6 +205,10 @@ public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
         return bills;
     }
 
+    public static ObservableList<PurchaseBill> getPurchaseBillListByTotalNetAmount(String text, String tableName) {
+        String getQuery = " SELECT * FROM " + tableName + " WHERE AmountAfterTax LIKE ?";
+        return getResultSetSearchByString(getQuery, text, tableName);
+    }
     private static PurchaseBill getPurchaseBill(ResultSet resultSet, String tableName) throws SQLException {
         String invoice = resultSet.getString(3);
 

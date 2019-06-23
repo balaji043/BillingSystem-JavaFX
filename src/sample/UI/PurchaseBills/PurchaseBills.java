@@ -31,7 +31,7 @@ import java.time.LocalDate;
 
 public class PurchaseBills {
     public JFXComboBox<String> companyNameCBOX, billTypeCBOX, sendToAuditorComboBox;
-    public JFXTextField searchBox;
+    public JFXTextField searchBox, searchBox2;
     public StackPane main;
     public TableView<PurchaseBill> tableView;
     public JFXDatePicker fromDate, toDate;
@@ -55,8 +55,11 @@ public class PurchaseBills {
 
         companyNameCBOX.getItems().addAll(Preferences.getPreferences().getCompanyNames());
         TextFields.bindAutoCompletion(companyNameCBOX.getEditor(), companyNameCBOX.getItems());
+
+
         initTable();
         tableView.setOnMouseClicked(e -> onPurchaseBillSelected());
+        TextFields.bindAutoCompletion(searchBox2, getTotalNetAmountList());
         getInvoiceList();
     }
 
@@ -193,19 +196,24 @@ public class PurchaseBills {
 
     private void loadTable() {
         tableView.getItems().clear();
+        String tableName = DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue());
 
         ObservableList<PurchaseBill> purchaseBills;
-        if (searchBox.getText() != null && !searchBox.getText().isEmpty())
-            purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(searchBox.getText(), DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
-        else if (companyNameCBOX.getValue() != null)
-            if (fromDate.getValue() != null && toDate.getValue() != null)
-                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(companyNameCBOX.getValue(), fromDate.getValue(), toDate.getValue(), DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
+        if ((searchBox.getText() != null && !searchBox.getText().isEmpty()) || (searchBox2.getText() != null && !searchBox2.getText().isEmpty())) {
+            if (searchBox.getText() != null && !searchBox.getText().isEmpty())
+                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(searchBox.getText(), tableName);
             else
-                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillListByCompanyName(companyNameCBOX.getValue(), DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
+                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillListByTotalNetAmount(searchBox2.getText(), tableName);
+        } else if (companyNameCBOX.getValue() != null)
+            if (fromDate.getValue() != null && toDate.getValue() != null)
+                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(companyNameCBOX.getValue(), fromDate.getValue(), toDate.getValue(), tableName);
+            else
+                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillListByCompanyName(companyNameCBOX.getValue(), tableName);
         else if (fromDate.getValue() != null && toDate.getValue() != null)
-            purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(fromDate.getValue(), toDate.getValue(), DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
+            purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(fromDate.getValue(), toDate.getValue(), tableName);
         else
-            purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList(DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
+            purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList(tableName);
+
         tableView.getItems().addAll(getFilterListBySendToAuditor(purchaseBills));
         tableView.sort();
 
@@ -247,6 +255,16 @@ public class PurchaseBills {
                 s.add(v.getInvoiceNo());
         TextFields.bindAutoCompletion(searchBox, s);
     }
+
+    private ObservableList<String> getTotalNetAmountList() {
+        ObservableList<String> invoices = FXCollections.observableArrayList();
+        String[] strings = {"StdEnt", "StdEqm"};
+        for (String string : strings)
+            for (PurchaseBill v : DatabaseHelper_PurchaseBill.getAllPurchaseBillList(string))
+                invoices.add(v.getTotalAmount());
+        return invoices;
+    }
+
 
     public void handleDownloadAll() {
         if (tableView.getItems().size() == 0) {

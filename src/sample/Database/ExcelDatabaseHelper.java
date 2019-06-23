@@ -13,7 +13,6 @@ import sample.Model.PurchaseBill;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -131,10 +130,15 @@ public class ExcelDatabaseHelper {
                     case STRING: {
                         date = currentRow.getCell(0).getStringCellValue();
                         try {
-                            date1 = new SimpleDateFormat("dd-MM-yyyy").parse(date);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                            date1 = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+                        } catch (Exception e) {
+                            try {
+                                date1 = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+                            } catch (Exception e1) {
+                                System.out.println(e1.getMessage());
+                            }
                         }
+
                         break;
                     }
                     case NUMERIC: {
