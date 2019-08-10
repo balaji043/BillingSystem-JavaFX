@@ -16,20 +16,30 @@ public class DatabaseHelper_PurchaseBill {
 
     private static String tableName = "PURCHASEBILLS";
 
-    private static boolean change(String i, String cmpName) {
-        boolean okay = true;
-        PreparedStatement preparedStatement;
+    public static void change() {
+        updateTable("others TEXT");
+        updateTable("dateCleared TEXT");
+        updateTable("status TEXT NOT NULL DEFAULT NO;");
+    }
 
-        String updateQuery = " UPDATE " + tableName + " SET INVOICE = ? WHERE INVOICE = ? AND CompanyName = ?;";
+    private static boolean updateTable(String columnName) {
+        String updateQuery = "ALTER TABLE " + tableName + " ADD " + columnName;
+        boolean okay = true;
+        PreparedStatement preparedStatement = null;
+
         try {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
-            preparedStatement.setString(1, "" + Math.round(Double.parseDouble(i)));
-            preparedStatement.setString(2, i);
-            preparedStatement.setString(3, cmpName);
-            okay = preparedStatement.executeUpdate() > 0;
+            okay = preparedStatement.execute();
 
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return okay;
     }
@@ -40,7 +50,7 @@ public class DatabaseHelper_PurchaseBill {
         try {
             String query = String.format("INSERT INTO %s (DATE , CompanyName ," +
                     " INVOICE , AmountBeforeTax , TwelvePerAmt , EighteenPerAmt ," +
-                    " TwentyEightPerAmt , AmountAfterTax,HasGoneToAuditor) VALUES (?,?,?,?,?,?,?,?,?)", tableName);
+                    " TwentyEightPerAmt , AmountAfterTax, HasGoneToAuditor, others, dateCleared, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", tableName);
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, purchaseBill.getDateInLong());
             preparedStatement.setString(2, purchaseBill.getCompanyName());
@@ -51,6 +61,9 @@ public class DatabaseHelper_PurchaseBill {
             preparedStatement.setString(7, purchaseBill.getTwentyEight());
             preparedStatement.setString(8, String.format("%.2f", Double.parseDouble(purchaseBill.getTotalAmount())));
             preparedStatement.setString(9, purchaseBill.getHasSentToAuditor());
+            preparedStatement.setString(10, purchaseBill.getOthers());
+            preparedStatement.setString(11, purchaseBill.getDateClearedAsLong());
+            preparedStatement.setString(12, purchaseBill.getStatus());
             okay = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -95,7 +108,7 @@ public class DatabaseHelper_PurchaseBill {
 
         String updateQuery = " UPDATE " + tableName + " SET DATE = ?, " +
                 " AmountBeforeTax = ?, TwelvePerAmt = ? , EighteenPerAmt = ?," +
-                " TwentyEightPerAmt = ?, AmountAfterTax = ?, hasGoneToAuditor = ? WHERE INVOICE = ? AND CompanyName = ?";
+                " TwentyEightPerAmt = ?, AmountAfterTax = ?, hasGoneToAuditor = ?,dateCleared = ?,status = ?,others = ? WHERE INVOICE = ? AND CompanyName = ?";
         try {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
             preparedStatement.setString(1, purchaseBill.getDateInLong());
@@ -105,8 +118,11 @@ public class DatabaseHelper_PurchaseBill {
             preparedStatement.setString(5, purchaseBill.getTwentyEight());
             preparedStatement.setString(6, purchaseBill.getTotalAmount());
             preparedStatement.setString(7, purchaseBill.getHasSentToAuditor());
-            preparedStatement.setString(8, purchaseBill.getInvoiceNo());
-            preparedStatement.setString(9, purchaseBill.getCompanyName());
+            preparedStatement.setString(8, purchaseBill.getDateClearedAsLong());
+            preparedStatement.setString(9, purchaseBill.getStatus());
+            preparedStatement.setString(10, purchaseBill.getOthers());
+            preparedStatement.setString(11, purchaseBill.getInvoiceNo());
+            preparedStatement.setString(12, purchaseBill.getCompanyName());
 
             okay = preparedStatement.executeUpdate() > 0;
 
@@ -185,13 +201,6 @@ public class DatabaseHelper_PurchaseBill {
     private static PurchaseBill getPurchaseBill(ResultSet resultSet) throws SQLException {
         String invoice = resultSet.getString(3);
 
-        try {
-            Double.parseDouble(invoice);
-            change(invoice, resultSet.getString(2));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
         return new PurchaseBill(resultSet.getString(1)
                 , resultSet.getString(2)
                 , invoice
@@ -200,7 +209,10 @@ public class DatabaseHelper_PurchaseBill {
                 , getValue(resultSet.getString(6))
                 , getValue(resultSet.getString(7))
                 , resultSet.getString(8)
-                , resultSet.getString(9));
+                , resultSet.getString(9)
+                , resultSet.getString(10)
+                , resultSet.getString(11)
+                , resultSet.getString(12));
     }
 
     private static String getValue(String value) {

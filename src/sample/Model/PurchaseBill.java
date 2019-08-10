@@ -5,6 +5,7 @@ import sample.Utils.BillingSystemUtils;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class PurchaseBill {
@@ -12,11 +13,17 @@ public class PurchaseBill {
     private String companyName;
     private String invoiceNo;
     private String amountBeforeTax;
-    private String twelve, eighteen, twentyEight;
+    private String twelve;
+    private String eighteen;
+    private String twentyEight;
     private String totalAmount;
     private LocalDate date;
     private String hasSentToAuditor;
     private String hasGoneToAuditorString;
+    private String status;
+    private String dateCleared;
+    private String others;
+
 
     public PurchaseBill(String dateInLong
             , String companyName
@@ -26,7 +33,11 @@ public class PurchaseBill {
             , String eighteen
             , String twentyEight
             , String totalAmount
-            , String hasSentToAuditor) {
+            , String hasSentToAuditor
+            , String others
+            , String dateCleared
+            , String status) {
+
         this.dateInLong = dateInLong;
         this.companyName = companyName;
         this.invoiceNo = invoiceNo;
@@ -37,8 +48,13 @@ public class PurchaseBill {
         this.totalAmount = totalAmount;
         this.hasSentToAuditor = hasSentToAuditor;
         this.hasGoneToAuditorString = hasGoneToAuditor() ? "YES" : "NO";
+        this.status = status;
+        this.dateCleared = dateCleared;
+        this.others = others;
+
         Date d = new Date(Long.parseLong(dateInLong));
         date = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     public String getDateInLong() {
@@ -77,6 +93,38 @@ public class PurchaseBill {
         return hasSentToAuditor;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDateClearedAsLong() {
+        return dateCleared;
+    }
+
+    public String getOthers() {
+        return others;
+    }
+
+    public void setOthers(String others) {
+        this.others = others;
+    }
+
+    public String getDateCleared() {
+        String dateString = "";
+        try {
+            dateString = BillingSystemUtils.formatDateTimeString(Long.parseLong(dateCleared));
+        } catch (Exception e) {
+            System.out.println(dateString);
+        }
+        return dateString;
+
+
+    }
+
     @Override
     public String toString() {
         return "PurchaseBill{" +
@@ -105,5 +153,9 @@ public class PurchaseBill {
 
     public String getDateAsString() {
         return BillingSystemUtils.formatDateTimeString(Long.parseLong(dateInLong));
+    }
+
+    public void setDateCleared(String dateCleared) {
+        this.dateCleared = dateCleared;
     }
 }

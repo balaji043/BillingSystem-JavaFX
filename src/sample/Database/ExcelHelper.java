@@ -179,6 +179,9 @@ public class ExcelHelper {
             row.createCell(6).setCellValue("28% TAX AMOUNT");
             row.createCell(7).setCellValue("TOTAL NET AMOUNT");
             row.createCell(8).setCellValue("SEND TO AUDITOR");
+            row.createCell(9).setCellValue("Others");
+            row.createCell(10).setCellValue("Status");
+            row.createCell(11).setCellValue("Date Cleared");
             rowNum++;
 
             for (PurchaseBill bill : purchaseBills) {
@@ -192,6 +195,9 @@ public class ExcelHelper {
                 row.createCell(6).setCellValue(bill.getTwentyEight());
                 row.createCell(7).setCellValue(bill.getTotalAmount());
                 row.createCell(8).setCellValue(bill.getHasGoneToAuditorString());
+                row.createCell(9).setCellValue(bill.getOthers());
+                row.createCell(10).setCellValue(bill.getStatus());
+                row.createCell(11).setCellValue(bill.getDateCleared());
                 rowNum++;
             }
             autoResizeColumn(sheet, 8);

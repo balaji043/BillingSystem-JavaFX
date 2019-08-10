@@ -3,6 +3,7 @@ package sample.Database;
 import com.sun.istack.internal.NotNull;
 import sample.Alert.AlertMaker;
 import sample.Model.User;
+import sample.Utils.Preferences;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -124,11 +125,18 @@ public class DatabaseHelper {
     }
 
     private static boolean createPurchaseBillTable() {
+        Preferences preferences = Preferences.getPreferences();
+        if (preferences.isFirstTime()) {
+            DatabaseHelper_PurchaseBill.change();
+            preferences.setFirstTime(false);
+            Preferences.setPreference(preferences);
+        }
         String createQuery = "CREATE TABLE IF NOT EXISTS PURCHASEBILLS ( DATE TEXT NOT NULL, "
                 + " CompanyName TEXT NOT NULL, INVOICE TEXT NOT NULL,"
                 + " AmountBeforeTax TEXT NOT NULL, TwelvePerAmt TEXT NOT NULL, "
                 + " EighteenPerAmt TEXT NOT NULL, TwentyEightPerAmt TEXT NOT NULL, "
-                + " AmountAfterTax TEXT NOT NULL, HasGoneToAuditor TEXT NOT NULL,UNIQUE(CompanyName,INVOICE))";
+                + " AmountAfterTax TEXT NOT NULL, HasGoneToAuditor TEXT NOT NULL,"
+                + "OTHERS TEXT ,DateCleared TEXT,Status NOT NULL, UNIQUE(CompanyName,INVOICE))";
         return createTable(createQuery);
     }
 }

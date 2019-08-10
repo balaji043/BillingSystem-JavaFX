@@ -59,7 +59,7 @@ public class NewPurchaseBill {
         boolean ready = true;
         int noOfPurchaseBills = listView.getItems().size();
         for (SinglePurchaseBill b : listView.getItems()) {
-            ready = ready && b.isReady();
+            ready = b.isReady() && ready;
         }
         HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
         if (ready) {

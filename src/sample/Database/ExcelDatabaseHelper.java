@@ -99,17 +99,27 @@ public class ExcelDatabaseHelper {
             }
             PurchaseBill purchaseBill;
             Date date1 = new Date();
+            Date dateCleared = new Date();
             boolean b = true;
             assert sheet != null;
             for (Row currentRow : sheet) {
-                String cmpName = "", invoice = "", amount = "", _12 = "", _18 = "", _28 = "", totalNet = "", sendToAuditor = "";
+                String cmpName = "";
+                String invoice = "";
+                String amount = "";
+                String tax12 = "";
+                String tax18 = "";
+                String tax28 = "";
+                String totalNet = "";
+                String sendToAuditor = "";
+                String others = "";
+                String status = "";
+
                 String date;
                 if (b) {
                     b = false;
                     continue;
                 }
                 if (currentRow.getCell(0) != null) {
-
                     switch (currentRow.getCell(0).getCellType()) {
                         case STRING: {
                             date = currentRow.getCell(0).getStringCellValue();
@@ -129,11 +139,6 @@ public class ExcelDatabaseHelper {
                             date1 = currentRow.getCell(0).getDateCellValue();
                             break;
                         }
-                    }
-                    try {
-                        System.out.println(date1.getTime());
-                    } catch (Exception e1) {
-                        System.out.println(e1.getMessage());
                     }
                 }
                 if (currentRow.getCell(1) != null) {
@@ -191,11 +196,11 @@ public class ExcelDatabaseHelper {
                     try {
                         switch (currentRow.getCell(4).getCellType()) {
                             case STRING: {
-                                _12 = currentRow.getCell(4).getStringCellValue();
+                                tax12 = currentRow.getCell(4).getStringCellValue();
                                 break;
                             }
                             case NUMERIC: {
-                                _12 = "" + currentRow.getCell(4).getNumericCellValue();
+                                tax12 = "" + currentRow.getCell(4).getNumericCellValue();
                                 break;
                             }
                         }
@@ -207,11 +212,11 @@ public class ExcelDatabaseHelper {
                     try {
                         switch (currentRow.getCell(5).getCellType()) {
                             case STRING: {
-                                _18 = currentRow.getCell(5).getStringCellValue();
+                                tax18 = currentRow.getCell(5).getStringCellValue();
                                 break;
                             }
                             case NUMERIC: {
-                                _18 = "" + currentRow.getCell(5).getNumericCellValue();
+                                tax18 = "" + currentRow.getCell(5).getNumericCellValue();
                                 break;
                             }
                         }
@@ -223,11 +228,11 @@ public class ExcelDatabaseHelper {
                     try {
                         switch (currentRow.getCell(6).getCellType()) {
                             case STRING: {
-                                _28 = currentRow.getCell(6).getStringCellValue();
+                                tax28 = currentRow.getCell(6).getStringCellValue();
                                 break;
                             }
                             case NUMERIC: {
-                                _28 = "" + currentRow.getCell(6).getNumericCellValue();
+                                tax28 = "" + currentRow.getCell(6).getNumericCellValue();
                                 break;
                             }
                         }
@@ -267,7 +272,72 @@ public class ExcelDatabaseHelper {
                         System.out.println(e.getMessage());
                     }
                 }
-                purchaseBill = new PurchaseBill("" + date1.getTime(), cmpName, invoice, amount, _12, _18, _28, totalNet, sendToAuditor);
+                if (currentRow.getCell(9) != null) {
+                    try {
+                        switch (currentRow.getCell(9).getCellType()) {
+                            case STRING: {
+                                others = currentRow.getCell(9).getStringCellValue();
+                                break;
+                            }
+                            case NUMERIC: {
+                                others = "" + currentRow.getCell(9).getNumericCellValue();
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                if (currentRow.getCell(10) != null) {
+                    try {
+                        switch (currentRow.getCell(10).getCellType()) {
+                            case STRING: {
+                                status = currentRow.getCell(10).getStringCellValue();
+                                break;
+                            }
+                            case NUMERIC: {
+                                status = "" + currentRow.getCell(10).getNumericCellValue();
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                if (currentRow.getCell(11) != null) {
+
+                    switch (currentRow.getCell(11).getCellType()) {
+                        case STRING: {
+                            date = currentRow.getCell(11).getStringCellValue();
+                            try {
+                                dateCleared = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+                            } catch (Exception e) {
+                                try {
+                                    date1 = new SimpleDateFormat("dd-MM-yyyy").parse(date);
+                                } catch (Exception e1) {
+                                    System.out.println(e1.getMessage());
+                                }
+                            }
+                            break;
+                        }
+                        case NUMERIC: {
+                            date1 = currentRow.getCell(11).getDateCellValue();
+                            break;
+                        }
+                    }
+                }
+                purchaseBill = new PurchaseBill("" + date1.getTime()
+                        , cmpName
+                        , invoice
+                        , amount
+                        , tax12
+                        , tax18
+                        , tax28
+                        , totalNet
+                        , sendToAuditor
+                        , others
+                        , "" + dateCleared.getTime()
+                        , status);
                 try {
                     DatabaseHelper_PurchaseBill.insertNewPurchaseBill(purchaseBill);
                 } catch (Exception e) {

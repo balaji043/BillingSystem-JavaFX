@@ -198,6 +198,9 @@ public class PurchaseBills {
         addTableColumn("28%", "twentyEight");
         addTableColumn("Total Net Amount", "totalAmount");
         addTableColumn("Send To Auditor", "hasGoneToAuditorString");
+        addTableColumn("Others", "others");
+        addTableColumn("Date Cleared", "dateCleared");
+        addTableColumn("status", "status");
 
         tableView.getSortOrder().clear();
         tableView.getSortOrder().add(column);
