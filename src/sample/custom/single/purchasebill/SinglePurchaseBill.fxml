@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" focusTraversable="true" prefHeight="90.0"
+         prefWidth="1200.0"
+         spacing="2.0" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.171">
+
+    <VBox alignment="CENTER" spacing="20">
+        <HBox alignment="CENTER" spacing="2.0">
+            <Text fx:id="slNoText" strokeType="OUTSIDE" strokeWidth="0.0" text="00"/>
+            <JFXDatePicker fx:id="invoiceDate" prefHeight="40.0" prefWidth="210.0" promptText="Invoice Date"/>
+            <JFXComboBox fx:id="companyNameCBOX" editable="true" prefWidth="200.0" promptText="Select Company"/>
+            <JFXTextField fx:id="invoiceTField" maxWidth="250.0" prefWidth="250.0" promptText="Invoice No"/>
+            <JFXTextField fx:id="amountBeforeTaxTField" maxWidth="250.0" prefWidth="250.0"
+                          promptText="Amount Before Tax"/>
+
+            <HBox fx:id="twelve" alignment="CENTER">
+                <JFXCheckBox fx:id="is12Exists" maxWidth="0.0" prefHeight="0.0" prefWidth="0.0" text=" "/>
+                <JFXTextField fx:id="tax12TField" maxWidth="250.0" prefWidth="140.0" promptText="12% Tax Amount"/>
+            </HBox>
+
+            <HBox fx:id="eighteen" alignment="CENTER">
+                <JFXCheckBox fx:id="is18Exists" prefHeight="0.0" prefWidth="0.0" text=" "/>
+                <JFXTextField fx:id="tax18TField" maxWidth="250.0" prefWidth="140.0" promptText="18% Tax Amount"/>
+            </HBox>
+
+            <HBox fx:id="twentyEight" alignment="CENTER">
+                <JFXCheckBox fx:id="is28Exists" prefHeight="0.0" prefWidth="0.0" text=" "/>
+                <JFXTextField fx:id="tax28TField" maxWidth="250.0" prefWidth="140.0" promptText="28% Tax Amount"/>
+            </HBox>
+            <JFXTextField fx:id="extraAmountTextField" layoutX="1003.0" layoutY="10.0" maxWidth="250.0"
+                          prefWidth="250.0" promptText="Postage"/>
+
+            <JFXTextField fx:id="amountAfterTaxTField" disable="true" maxWidth="250.0" prefWidth="250.0"
+                          promptText="Total Net Amount"/>
+        </HBox>
+        <HBox alignment="CENTER" spacing="50.0">
+            <JFXDatePicker fx:id="billDateCleared" prefHeight="40.0" prefWidth="200.0" promptText="Date"/>
+            <JFXComboBox fx:id="billStatus" prefHeight="40.0" prefWidth="200.0" promptText="Bill Status"/>
+            <JFXTextField fx:id="othersDetails" prefHeight="40.0" prefWidth="200.0" promptText="Remarks"/>
+            <JFXCheckBox fx:id="hasGoneToAuditorCheckBox" minWidth="200.0" prefHeight="40.0" prefWidth="200.0"
+                         text="Gone to Auditor"/>
+        </HBox>
+    </VBox>
+
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+</fx:root>

@@ -10,47 +10,48 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.textfield.TextFields;
-import sample.Alert.AlertMaker;
-import sample.Database.DatabaseHelper_Bills;
-import sample.Database.DatabaseHelper_Cutomer;
-import sample.Database.ExcelHelper;
 import sample.Main;
-import sample.Model.Bill;
 import sample.Utils.BillingSystemUtils;
+import sample.Utils.GenericController;
+import sample.Utils.StringUtil;
+import sample.alert.AlertMaker;
+import sample.database.DatabaseHelperBills;
+import sample.database.DatabaseHelperCustomer;
+import sample.database.ExcelHelper;
+import sample.model.Bill;
 
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import static sample.Alert.AlertMaker.showBill;
+import static sample.alert.AlertMaker.showBill;
 
 @SuppressWarnings("Duplicates")
-public class ViewBillsController implements Initializable {
+public class ViewBillsController implements Initializable, GenericController {
+
+    @FXML
+    private JFXCheckBox taxTotalCheckBox;
+    @FXML
+    private Text totalAmount;
     @FXML
     private JFXButton edit;
     @FXML
     private JFXCheckBox checkGST, checkNonGst;
-
     @FXML
     private JFXDatePicker fromDate, toDate;
-
     @FXML
     private JFXComboBox<String> customerName, comboBills;
-
     @FXML
     private TableView<Bill> tableView;
-
     @FXML
     private JFXTextField searchBox;
-
     @FXML
     private StackPane main;
-
     private Main mainApp;
-
     private ObservableList<Bill> bills = FXCollections.observableArrayList();
 
     private String billTableName = "BILLS";
@@ -58,9 +59,9 @@ public class ViewBillsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        gst = DatabaseHelper_Cutomer.getCustomerNameList(0);
-        nonGst = DatabaseHelper_Cutomer.getCustomerNameList(1);
-        all = DatabaseHelper_Cutomer.getCustomerNameList(3);
+        gst = DatabaseHelperCustomer.getCustomerNameList(0);
+        nonGst = DatabaseHelperCustomer.getCustomerNameList(1);
+        all = DatabaseHelperCustomer.getCustomerNameList(3);
         customerName.setItems(gst);
         TextFields.bindAutoCompletion(customerName.getEditor(), customerName.getItems());
 
@@ -68,6 +69,7 @@ public class ViewBillsController implements Initializable {
         comboBills.getSelectionModel().selectFirst();
         checkGST.setOnAction(e -> setCustomerName());
         checkNonGst.setOnAction(e -> setCustomerName());
+        taxTotalCheckBox.setOnAction(e -> setTotalAmount());
     }
 
     public void setMainApp(Main mainApp) {
@@ -81,7 +83,7 @@ public class ViewBillsController implements Initializable {
                     setDisable(empty || date.compareTo(fromDate.getValue()) < 0);
             }
         });
-        if (!mainApp.getUser().getAccess().equals("admin")) {
+        if (!mainApp.getUser().getAccess().equals(StringUtil.ADMIN)) {
             edit.setDisable(true);
         }
         initTable();
@@ -100,7 +102,7 @@ public class ViewBillsController implements Initializable {
     @FXML
     void handleViewBill() {
         if (tableView.getSelectionModel().getSelectedItem() == null) {
-            mainApp.snackBar("INFO", "Select a bill", "green");
+            mainApp.snackBar(StringUtil.INFO, "Select a bill", StringUtil.GREEN);
             return;
         }
         showBill(tableView.getSelectionModel().getSelectedItem(), mainApp
@@ -110,16 +112,16 @@ public class ViewBillsController implements Initializable {
     @FXML
     void handleDownload() {
         if (bills.size() == 0) {
-            mainApp.snackBar("", "Nothing to Import", "red");
+            mainApp.snackBar(StringUtil.INFO, "Nothing to Import", "red");
             return;
         }
-        mainApp.snackBar("", "Choose File", "green");
+        mainApp.snackBar(StringUtil.INFO, "Choose File", StringUtil.GREEN);
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll
                 (new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
         File dest = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
         if (dest == null) {
-            mainApp.snackBar("INFO", "Operation cancelled", "green");
+            mainApp.snackBar(StringUtil.INFO, "Operation cancelled", StringUtil.GREEN);
         } else {
             JFXSpinner spinner = new JFXSpinner();
             double d = 50;
@@ -127,12 +129,12 @@ public class ViewBillsController implements Initializable {
             spinner.setPrefSize(d, d);
             main.getChildren().add(spinner);
             if (ExcelHelper.writeExcelBills(dest, bills)) {
-                mainApp.snackBar("Success"
-                        , "Bill History Data Written to Excel"
-                        , "green");
+                mainApp.snackBar(StringUtil.SUCCESS
+                        , "bill History Data Written to Excel"
+                        , StringUtil.GREEN);
             } else {
-                mainApp.snackBar("Failed"
-                        , "Bill History Data is NOT written to Excel"
+                mainApp.snackBar(StringUtil.FAILED
+                        , "bill History Data is NOT written to Excel"
                         , "red");
             }
             main.getChildren().remove(spinner);
@@ -141,7 +143,7 @@ public class ViewBillsController implements Initializable {
 
     @FXML
     void handleDeleteBill() {
-        if (!mainApp.getUser().getAccess().equals("admin")) {
+        if (!mainApp.getUser().getAccess().equals(StringUtil.ADMIN)) {
             mainApp.snackBar("INFO", "Requires admin Access", "red");
             return;
         }
@@ -152,18 +154,18 @@ public class ViewBillsController implements Initializable {
                 if (!AlertMaker.showMCAlert("Confirm delete?"
                         , "Are sure you want to delete?", mainApp))
                     return;
-                b = DatabaseHelper_Bills.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId()
+                b = DatabaseHelperBills.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId()
                         , billTableName);
                 if (b)
-                    mainApp.snackBar("Success", "Bill is Successfully Deleted", "green");
+                    mainApp.snackBar(StringUtil.SUCCESS, "bill is Successfully Deleted", StringUtil.GREEN);
                 else
-                    mainApp.snackBar("Failed", "Bill is Not Deleted", "red");
+                    mainApp.snackBar(StringUtil.FAILED, "bill is Not Deleted", StringUtil.RED);
                 loadTable();
             } else {
-                mainApp.snackBar("INFO", "Select a bill to delete", "green");
+                mainApp.snackBar(StringUtil.INFO, "Select a bill to delete", StringUtil.GREEN);
             }
         } else {
-            mainApp.snackBar("INFO", "Requires admin access", "green");
+            mainApp.snackBar(StringUtil.INFO, "Requires admin access", "StringUtil.GREEN");
         }
     }
 
@@ -178,7 +180,7 @@ public class ViewBillsController implements Initializable {
             return;
         }
         Bill bill = tableView.getSelectionModel().getSelectedItem();
-        if (DatabaseHelper_Cutomer.getCustomerInfo(bill.getCustomerName()) == null) {
+        if (DatabaseHelperCustomer.getCustomerInfo(bill.getCustomerName()) == null) {
             mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Cannot Modify the bill for now", "red");
             return;
         }
@@ -213,30 +215,44 @@ public class ViewBillsController implements Initializable {
         tableView.getItems().clear();
         billTableName = BillingSystemUtils.getTableName(comboBills.getValue());
         if (searchBox.getText() != null && !searchBox.getText().isEmpty())
-            bills = DatabaseHelper_Bills.getBillLists("%" + searchBox.getText() + "%", billTableName);
+            bills = DatabaseHelperBills.getBillLists("%" + searchBox.getText() + "%", billTableName);
         else if (customerName.getValue() != null && all.contains(customerName.getValue()))
             if (fromDate.getValue() != null && toDate != null)
-                bills = DatabaseHelper_Bills.getBillList(customerName.getValue()
+                bills = DatabaseHelperBills.getBillList(customerName.getValue()
                         , fromDate.getValue(), toDate.getValue(), billTableName);
             else
-                bills = DatabaseHelper_Bills.getBillList(customerName.getValue(), billTableName);
+                bills = DatabaseHelperBills.getBillList(customerName.getValue(), billTableName);
         else if (fromDate.getValue() != null && toDate != null)
             if (checkGST.isSelected() && !checkNonGst.isSelected())
-                bills = DatabaseHelper_Bills.getBillList(fromDate.getValue(), toDate.getValue(), 1
+                bills = DatabaseHelperBills.getBillList(fromDate.getValue(), toDate.getValue(), 1
                         , billTableName);
             else if (!checkGST.isSelected() && checkNonGst.isSelected())
-                bills = DatabaseHelper_Bills.getBillList(fromDate.getValue(), toDate.getValue(), 2
+                bills = DatabaseHelperBills.getBillList(fromDate.getValue(), toDate.getValue(), 2
                         , billTableName);
             else
-                bills = DatabaseHelper_Bills.getBillList(fromDate.getValue(), toDate.getValue(), 3
+                bills = DatabaseHelperBills.getBillList(fromDate.getValue(), toDate.getValue(), 3
                         , billTableName);
         else if (checkGST.isSelected() && !checkNonGst.isSelected())
-            bills = DatabaseHelper_Bills.getBillList(true, billTableName);
+            bills = DatabaseHelperBills.getBillList(true, billTableName);
         else if (!checkGST.isSelected() && checkNonGst.isSelected())
-            bills = DatabaseHelper_Bills.getBillList(false, billTableName);
+            bills = DatabaseHelperBills.getBillList(false, billTableName);
         else
-            bills = DatabaseHelper_Bills.getBillList(billTableName);
+            bills = DatabaseHelperBills.getBillList(billTableName);
+
         tableView.getItems().addAll(bills);
+        setTotalAmount();
+    }
+
+    private void setTotalAmount() {
+        float total = 0;
+        if (taxTotalCheckBox.isSelected()) {
+            for (Bill b : bills)
+                total = total + Float.parseFloat(b.getTotalAmount());
+        } else {
+            for (Bill b : bills)
+                total = total + Float.parseFloat(b.getGross());
+        }
+        totalAmount.setText("Rs. " + String.format("%.2f", total));
     }
 
     private void addTableColumn(String name, String msg) {

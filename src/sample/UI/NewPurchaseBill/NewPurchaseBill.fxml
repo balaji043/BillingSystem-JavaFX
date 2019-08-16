@@ -10,10 +10,9 @@
                 minWidth="-Infinity">
         <top>
             <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
-                <JFXButton fx:id="addBTN" onAction="#handleAddBill" styleClass="jfx-button1" textFill="WHITE"/>
-                <JFXButton fx:id="deleteBTN" onAction="#handleDeleteBill" styleClass="jfx-button1" textFill="WHITE"/>
-                <JFXButton layoutX="740.0" layoutY="30.0" minHeight="40.0" onAction="#handleBack" prefWidth="200.0"
-                           styleClass="jfx-button1" text="Back" textFill="WHITE"/>
+                <JFXButton fx:id="addBTN" onAction="#handleAddBill" styleClass="jfx-button2"/>
+                <JFXButton fx:id="deleteBTN" onAction="#handleDeleteBill" styleClass="jfx-button2"/>
+                <JFXButton fx:id="backBTN" onAction="#handleBack" styleClass="jfx-button2"/>
                 <padding>
                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                 </padding>
@@ -39,8 +38,12 @@
         </center>
         <bottom>
             <StackPane>
-                <JFXButton fx:id="submitBTN" onAction="#handleSubmit" prefHeight="40.0" prefWidth="200.0"
-                           styleClass="jfx-button1" text="Submit" textFill="WHITE"/>
+                <HBox alignment="CENTER" spacing="20.0">
+                    <JFXButton onAction="#handleCalculate" prefHeight="40.0" prefWidth="200.0"
+                               styleClass="jfx-button1" text="Calculate" textFill="WHITE"/>
+                    <JFXButton fx:id="submitBTN" onAction="#handleSubmit" prefHeight="40.0" prefWidth="200.0"
+                               styleClass="jfx-button1" text="Submit" textFill="WHITE"/>
+                </HBox>
                 <BorderPane.margin>
                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                 </BorderPane.margin>

@@ -5,18 +5,34 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import sample.Database.DatabaseHelper_User;
 import sample.Main;
+import sample.Utils.BillingSystemUtils;
+import sample.Utils.GenericController;
+import sample.Utils.ICON;
+import sample.database.DatabaseHelperUser;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
-public class LoginController implements Initializable {
+public class LoginController implements Initializable, GenericController {
+    private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
+    @FXML
+    private ImageView mainImageView;
+
+    @FXML
+    private ImageView userImageView;
+
+    @FXML
+    private ImageView passwordImageView;
 
     @FXML
     private JFXTextField textFieldUserName;
+
     @FXML
     private JFXPasswordField textFieldPassword;
 
@@ -31,9 +47,9 @@ public class LoginController implements Initializable {
         try {
             String user = textFieldUserName.getText(), password = textFieldPassword.getText();
             if (!user.isEmpty() && !password.isEmpty()) {
-                if (DatabaseHelper_User.valid(user, password)) {
+                if (DatabaseHelperUser.valid(user, password)) {
                     mainApp.snackBar("", "Welcome " + user, "green");
-                    mainApp.setUser(DatabaseHelper_User.getUserInfo(user));
+                    mainApp.setUser(DatabaseHelperUser.getUserInfo(user));
                     mainApp.initMenuLayout();
                     textFieldUserName.setText("");
                     textFieldPassword.setText("");
@@ -55,14 +71,15 @@ public class LoginController implements Initializable {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage());
         }
     }
 
     public void setMainApp(Main mainApp) {
-        textFieldUserName.requestFocus();
-        this.mainApp = mainApp;
+
+        setImages();
         validator.setMessage("*");
+        this.mainApp = mainApp;
         mainApp.getPrimaryStage().getScene().setOnKeyPressed(e -> {
             if (!mainApp.isLoggedIn && e.getCode() == KeyCode.ENTER) {
                 handleSignIn();
@@ -70,8 +87,16 @@ public class LoginController implements Initializable {
         });
     }
 
+    private void setImages() {
+        BillingSystemUtils.setImageToImageViews(ICON.KRISH, mainImageView);
+        BillingSystemUtils.setImageToImageViews(ICON.USER, userImageView);
+        BillingSystemUtils.setImageToImageViews(ICON.PASSWORD, passwordImageView);
+
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        textFieldUserName.requestFocus();
         textFieldUserName.getValidators().add(validator);
         textFieldUserName.focusedProperty().addListener((o, oldVal, newVal) -> {
             if (!newVal) textFieldUserName.validate();

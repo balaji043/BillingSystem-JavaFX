@@ -8,12 +8,12 @@
            fx:controller="sample.UI.CustomerPanel.CustomerPanelController">
     <BorderPane fx:id="borderPane">
         <right>
-            <VBox prefWidth="200.0" spacing="30.0">
+            <VBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="30.0">
                 <BorderPane.margin>
-                    <Insets/>
+                    <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
                 </BorderPane.margin>
-                <VBox spacing="10.0"/>
-                <VBox maxWidth="170.0" minWidth="185.0" prefHeight="500.0" prefWidth="170.0" spacing="25.0">
+                <VBox alignment="CENTER_LEFT" maxWidth="170.0" minWidth="185.0" prefHeight="500.0" prefWidth="170.0"
+                      spacing="25.0">
                     <JFXTextField fx:id="cnName" promptText="Customer Name"/>
                     <JFXTextField fx:id="phone" layoutX="10.0" layoutY="10.0" promptText="Phone"/>
                     <JFXCheckBox fx:id="checkGST" minWidth="200.0" prefHeight="40.0" prefWidth="200.0" text="GST IN"/>
@@ -26,12 +26,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                     </padding>
                 </VBox>
-                <VBox alignment="CENTER_LEFT" spacing="20.0">
-                    <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="40.0"
-                               prefWidth="185.0" styleClass="jfx-button1" text="Submit" textFill="WHITE"/>
-                    <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleDelete" prefHeight="40.0"
-                               prefWidth="185.0" styleClass="jfx-button1" text="Delete Customer" textFill="WHITE"/>
-                </VBox>
+                <JFXButton fx:id="submitBTN" buttonType="RAISED" onAction="#handleSubmit" styleClass="jfx-button"/>
             </VBox>
         </right>
         <center>
@@ -48,39 +43,36 @@
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                     <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
+                    <JFXTextField fx:id="cnNameSearchTField" promptText="Customer Name"/>
+                </StackPane>
+                <HBox prefHeight="100.0" prefWidth="200.0" spacing="50.0" GridPane.columnIndex="2">
+                    <JFXButton fx:id="searchBTN" buttonType="RAISED" onAction="#handleSearch" styleClass="jfx-button2"/>
+                    <JFXButton fx:id="exportButton" buttonType="RAISED" onAction="#handleExport"
+                               styleClass="jfx-button2"/>
+                    <JFXButton fx:id="importButton" buttonType="RAISED" onAction="#handleImport"
+                               styleClass="jfx-button2"/>
+                    <JFXButton fx:id="deleteBTN" buttonType="RAISED" onAction="#handleDelete" styleClass="jfx-button2"/>
+                </HBox>
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <JFXCheckBox fx:id="checkGST1" minWidth="200.0" prefHeight="40.0" prefWidth="200.0"
                                  text="GST IN CUSTOMER"/>
                 </StackPane>
-                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                     <JFXCheckBox fx:id="checkGST2" minWidth="200.0" prefHeight="40.0" prefWidth="200.0"
                                  text="NON-GST IN CUSTOMER"/>
-                </StackPane>
-                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                    <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleImport" prefHeight="40.0"
-                               prefWidth="185.0" styleClass="jfx-button1" text="Import" textFill="WHITE"/>
-                </StackPane>
-                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                    <JFXButton buttonType="RAISED" mnemonicParsing="false" onAction="#handleExport" prefHeight="40.0"
-                               prefWidth="185.0" styleClass="jfx-button1" text="Export" textFill="WHITE"/>
-                </StackPane>
-                <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
-                    <HBox>
-                        <JFXTextField fx:id="cnNameSearchTField" promptText="Customer Name"/>
-                        <JFXButton fx:id="searchBTN" onAction="#handleSearch" styleClass="jfx-button1"
-                                   textFill="WHITE"/>
-                    </HBox>
-
                 </StackPane>
                 <BorderPane.margin>
                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
                 </BorderPane.margin>
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
             </GridPane>
         </top>
     </BorderPane>

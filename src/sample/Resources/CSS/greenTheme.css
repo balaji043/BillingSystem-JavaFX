@@ -72,7 +72,6 @@
 }
 
 .jfx-button2 {
-    -fx-background-color: green;
     jfx-rippler-fill: white;
     -jfx-button-type: FLAT;
 }

@@ -10,16 +10,21 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import sample.Alert.AlertMaker;
-import sample.Database.DatabaseHelper_User;
 import sample.Main;
-import sample.Model.User;
+import sample.Utils.GenericController;
 import sample.Utils.Preferences;
+import sample.Utils.StringUtil;
+import sample.alert.AlertMaker;
+import sample.database.DatabaseHelperUser;
+import sample.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class UserPanelController {
+public class UserPanelController implements GenericController {
+    private static final Logger LOGGER = Logger.getLogger(UserPanelController.class.getName());
     @FXML
     private JFXTextField name, username;
     @FXML
@@ -75,7 +80,7 @@ public class UserPanelController {
 
     private void loadTable() {
         userTableView.getItems().clear();
-        userTableView.getItems().addAll(DatabaseHelper_User.getUserList());
+        userTableView.getItems().addAll(DatabaseHelperUser.getUserList());
     }
 
     @FXML
@@ -103,11 +108,11 @@ public class UserPanelController {
                         , "EMP" + new SimpleDateFormat("yyyyMMddHHSSS").format(new Date())
                         , "" + passwordField.getText()
                         , "" + accessComboBox.getValue());
-                if (DatabaseHelper_User.insertNewUser(user)) {
-                    mainApp.snackBar("Success", "User Added Successfully", "green");
+                if (DatabaseHelperUser.insertNewUser(user)) {
+                    mainApp.snackBar(StringUtil.SUCCESS, "User Added Successfully", StringUtil.GREEN);
                     clearAll();
                 } else {
-                    mainApp.snackBar("Failed", "User Not Added", "red");
+                    mainApp.snackBar(StringUtil.FAILED, "User Not Added", StringUtil.RED);
                 }
             }
         } else {
@@ -133,12 +138,12 @@ public class UserPanelController {
                         , emp
                         , "" + passwordField.getText()
                         , "" + accessComboBox.getValue());
-                if (DatabaseHelper_User.updateUser(user)) {
+                if (DatabaseHelperUser.updateUser(user)) {
                     clearAll();
-                    mainApp.snackBar("Success", "User Data Updated Successfully", "green");
+                    mainApp.snackBar(StringUtil.SUCCESS, "User Data Updated Successfully", StringUtil.GREEN);
                 } else {
-                    mainApp.snackBar("Failed"
-                            , "User Data Not Updated Successfully", "red");
+                    mainApp.snackBar(StringUtil.FAILED
+                            , "User Data Not Updated Successfully", StringUtil.RED);
 
                 }
             }
@@ -151,31 +156,30 @@ public class UserPanelController {
         try {
             User users = userTableView.getSelectionModel().getSelectedItem();
             boolean okay;
-            if (users == null)return;
+            if (users == null) return;
             if (user != null && users.getAccess().equals("admin")) {
                 mainApp.snackBar("Failed", "Cannot Delete Admin User", "red");
                 return;
             }
             okay = AlertMaker.showMCAlert("Confirm delete?"
-                    , "Are you sure you want to delete" + users.getName() + "'s data"
+                    , "Are you sure you want to delete" + users.getName() + "'settingsButton data"
                     , mainApp);
 
             if (okay) {
-                if (DatabaseHelper_User.deleteUser(users)) {
-                    mainApp.snackBar("Success"
-                            , "Selected User's data is deleted"
-                            , "green");
+                if (DatabaseHelperUser.deleteUser(users)) {
+                    mainApp.snackBar(StringUtil.SUCCESS
+                            , "Selected User'settingsButton data is deleted"
+                            , StringUtil.GREEN);
                     clearAll();
                 } else {
-                    mainApp.snackBar("Failed"
-                            , "Selected User's data is not deleted"
-                            , "red");
+                    mainApp.snackBar(StringUtil.FAILED
+                            , "Selected User'settingsButton data is not deleted"
+                            , StringUtil.RED);
                     clearAll();
                 }
             }
         } catch (Exception e) {
-            AlertMaker.showErrorMessage(e);
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage());
         }
         loadTable();
     }
@@ -185,7 +189,7 @@ public class UserPanelController {
         if (!passwordField1.getText().isEmpty()) {
             Preferences preferences = Preferences.getPreferences();
             Preferences.setPreference(preferences);
-            mainApp.snackBar("Success", "You special password is changed now.", "green");
+            mainApp.snackBar(StringUtil.SUCCESS, "You special password is changed now.", StringUtil.GREEN);
         }
     }
 

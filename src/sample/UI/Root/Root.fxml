@@ -45,9 +45,9 @@
             </center>
             <right>
                 <HBox alignment="CENTER" spacing="50.0">
-                    <JFXButton fx:id="s" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0"
+                    <JFXButton fx:id="settingsButton" onAction="#handleSettings" prefHeight="35.0" prefWidth="35.0"
                                styleClass="jfx-button2"/>
-                    <JFXButton fx:id="r" onAction="#handleRefresh" prefHeight="35.0" prefWidth="35.0"
+                    <JFXButton fx:id="refreshButton" onAction="#handleRefresh" prefHeight="35.0" prefWidth="35.0"
                                styleClass="jfx-button2"/>
                     <JFXHamburger fx:id="ham"/>
                 </HBox>

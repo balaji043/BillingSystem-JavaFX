@@ -1,11 +1,21 @@
 package sample.Utils;
 
+import com.jfoenix.controls.JFXButton;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import sample.Main;
+import sample.alert.AlertMaker;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BillingSystemUtils {
+    private static final Logger LOGGER = Logger.getLogger(BillingSystemUtils.class.getName());
 
     private static final String[] units = {"", "One", "Two", "Three", "Four",
             "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
@@ -23,6 +33,10 @@ public class BillingSystemUtils {
             "Eighty",    // 8
             "Ninety"     // 9
     };
+
+    private BillingSystemUtils() {
+
+    }
 
     public static String convert(final int n) {
         if (n < 0) {
@@ -46,8 +60,6 @@ public class BillingSystemUtils {
         return convert(n / 10000000) + " Crore" + ((n % 10000000 != 0) ? " " : "") + convert(n % 10000000);
     }
 
-    private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
-
     public static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
@@ -55,7 +67,7 @@ public class BillingSystemUtils {
     }
 
     public static String formatDateTimeString(Long time) {
-        return DATE_TIME_FORMAT.format(new Date(time));
+        return new SimpleDateFormat("dd-MM-yyyy").format(new Date(time));
     }
 
     public static String getTableName(String value) {
@@ -86,6 +98,34 @@ public class BillingSystemUtils {
             default: {
                 return false;
             }
+        }
+    }
+
+    public static void setImageViewToButtons(ICON iconName, JFXButton jfxButton) {
+        int i = 20;
+        ImageView view1 = null;
+        try {
+            view1 = new ImageView(new Image(Main.class.
+                    getResourceAsStream("Resources/icons/" + iconName.toString())
+                    , i + 10, i + 10, true, true));
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+        if (view1 != null)
+            jfxButton.setGraphic(view1);
+        jfxButton.setPrefSize(i + 5, i + 5);
+
+        jfxButton.setTooltip(new Tooltip(ButtonToolTip.valueOf(iconName.name()).toString()));
+
+    }
+
+    public static void setImageToImageViews(ICON iconName, ImageView mainImageView) {
+
+        try {
+            mainImageView.setImage(new Image(Main.class.
+                    getResourceAsStream("Resources/icons/" + iconName.toString())));
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
         }
     }
 }

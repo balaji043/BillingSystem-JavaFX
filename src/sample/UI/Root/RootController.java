@@ -8,8 +8,6 @@ import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -17,14 +15,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import sample.Alert.AlertMaker;
 import sample.Main;
+import sample.Utils.BillingSystemUtils;
+import sample.Utils.GenericController;
+import sample.Utils.ICON;
+import sample.Utils.StringUtil;
+import sample.alert.AlertMaker;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class RootController implements Initializable {
+public class RootController implements Initializable, GenericController {
 
     @FXML
     public Label window;
@@ -37,7 +39,7 @@ public class RootController implements Initializable {
     @FXML
     private JFXHamburger ham;
     @FXML
-    public JFXButton addNewUser, r, s;
+    public JFXButton addNewUser, refreshButton, settingsButton;
 
     private int i = 0;
     private Main mainApp;
@@ -60,13 +62,9 @@ public class RootController implements Initializable {
         ham.addEventFilter(MouseEvent.MOUSE_PRESSED, (event ->
                 toggle()
         ));
-        int i = 25;
-        r.setGraphic(new ImageView(new Image(Main.class.
-                getResourceAsStream("Resources/icons/refreshWhite.png")
-                , i, i, false, true)));
-        s.setGraphic(new ImageView(new Image(Main.class.
-                getResourceAsStream("Resources/icons/gear.png")
-                , i, i, false, true)));
+
+        BillingSystemUtils.setImageViewToButtons(ICON.REFRESH, refreshButton);
+        BillingSystemUtils.setImageViewToButtons(ICON.SETTING, settingsButton);
     }
 
     private void setAccelerators() {
@@ -109,7 +107,6 @@ public class RootController implements Initializable {
     }
 
     public void handleHome() {
-        // TODO: Replace the comments
         setContent(home);
         i = 0;
         window.setText("HOME");
@@ -118,7 +115,7 @@ public class RootController implements Initializable {
 
     public void handleNewBill() {
         i = 1;
-        window.setText("New Bill");
+        window.setText("New bill");
         toggle();
         mainApp.initNewBill(null, "");
     }
@@ -131,7 +128,7 @@ public class RootController implements Initializable {
     }
     public void handleViewBill() {
         i = 2;
-        window.setText("View Bill");
+        window.setText("View bill");
         toggle();
         mainApp.initViewBills();
     }
@@ -157,13 +154,13 @@ public class RootController implements Initializable {
 
     private void handleNewBill1() {
         i = 1;
-        window.setText("New Bill");
+        window.setText("New bill");
         mainApp.initNewBill(null, "");
     }
 
     private void handleViewBill1() {
         i = 2;
-        window.setText("View Bill");
+        window.setText("View bill");
         mainApp.initViewBills();
     }
 
@@ -221,15 +218,15 @@ public class RootController implements Initializable {
                 handleLogout();
             }
         }
-        mainApp.snackBar("Refreshed", "page refreshed successfully", "green");
+        mainApp.snackBar("Refreshed", "page refreshed successfully", StringUtil.GREEN);
     }
 
     @FXML
     public void handleSettings() {
         if (AlertMaker.showSettings(mainApp))
-            mainApp.snackBar("Success", "Changes Saved Successfully", "green");
+            mainApp.snackBar(StringUtil.SUCCESS, "Changes Saved Successfully", StringUtil.GREEN);
         else
-            mainApp.snackBar("Cancelled", "Settings Change Cancelled", "green");
+            mainApp.snackBar(StringUtil.CANCELLED, "Settings Change Cancelled", StringUtil.GREEN);
 
     }
 

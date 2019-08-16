@@ -4,41 +4,30 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import sample.Alert.AlertMaker;
-import sample.CustomUI.SinglePurchaseBill.SinglePurchaseBill;
-import sample.Database.DatabaseHelper_PurchaseBill;
+import javafx.fxml.FXML;
 import sample.Main;
+import sample.Utils.BillingSystemUtils;
+import sample.Utils.GenericController;
+import sample.Utils.ICON;
 import sample.Utils.Preferences;
+import sample.custom.single.purchasebill.SinglePurchaseBill;
+import sample.database.DatabaseHelperPurchaseBill;
 
-import java.util.HashSet;
+import java.util.Set;
 
-public class NewPurchaseBill {
+public class NewPurchaseBill implements GenericController {
 
     public JFXButton addBTN, deleteBTN, submitBTN;
     public JFXListView<SinglePurchaseBill> listView;
+    public JFXButton backBTN;
     private Main mainApp;
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-        int i = 35;
-        ImageView view1 = null, view2 = null;
-        try {
-            view1 = new ImageView(new Image(Main.class.
-                    getResourceAsStream("Resources/icons/add.png")
-                    , i, i, true, true));
-            view2 = new ImageView(new Image(Main.class.
-                    getResourceAsStream("Resources/icons/delete.png")
-                    , i, i, true, true));
 
-        } catch (Exception e) {
-            AlertMaker.showErrorMessage(e);
-        }
-        if (view1 != null)
-            addBTN.setGraphic(view1);
-        if (view2 != null)
-            deleteBTN.setGraphic(view2);
+        BillingSystemUtils.setImageViewToButtons(ICON.ADD, addBTN);
+        BillingSystemUtils.setImageViewToButtons(ICON.MINUS, deleteBTN);
+        BillingSystemUtils.setImageViewToButtons(ICON.BACK, backBTN);
     }
 
     public void handleAddBill() {
@@ -61,13 +50,13 @@ public class NewPurchaseBill {
         for (SinglePurchaseBill b : listView.getItems()) {
             ready = b.isReady() && ready;
         }
-        HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
+        Set<String> companyNames = Preferences.getPreferences().getCompanyNames();
         if (ready) {
             ObservableList<SinglePurchaseBill> s = listView.getItems();
             ObservableList<SinglePurchaseBill> toRemove = FXCollections.observableArrayList();
             boolean singleResult;
             for (SinglePurchaseBill bill : s) {
-                singleResult = DatabaseHelper_PurchaseBill.insertNewPurchaseBill(bill.getPurchaseBill());
+                singleResult = DatabaseHelperPurchaseBill.insertNewPurchaseBill(bill.getPurchaseBill());
                 ready = ready && singleResult;
                 if (singleResult) {
                     toRemove.add(bill);
@@ -105,5 +94,12 @@ public class NewPurchaseBill {
                 listView.getItems())
             b.setSlNoText(String.format("%2d", i++));
 
+    }
+
+    @FXML
+    private void handleCalculate() {
+        for (SinglePurchaseBill bill : listView.getItems()) {
+            bill.setAmountAfterText();
+        }
     }
 }

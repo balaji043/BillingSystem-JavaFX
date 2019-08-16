@@ -1,14 +1,17 @@
 package sample.Utils;
 
 import com.google.gson.Gson;
-import sample.Alert.AlertMaker;
 
 import java.io.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Preferences {
 
+    private static final Logger LOGGER = Logger.getLogger(Preferences.class.getName());
     private static final String FILE_PATH = "KrishnaConfig.txt";
 
     private String name;
@@ -23,12 +26,11 @@ public class Preferences {
     private String date;
     private String limit;
     private String theme;
-    private boolean isFirstTime;
 
-    private HashSet<String> descriptions;
-    private HashSet<String> perData;
-    private HashSet<String> hsn;
-    private HashSet<String> companyNames;
+    private Set<String> descriptions;
+    private Set<String> perData;
+    private Set<String> hsn;
+    private Set<String> companyNames;
 
 
     // Constructor
@@ -58,27 +60,25 @@ public class Preferences {
         date = "" + d.getTime();
         limit = "22";
         theme = "green";
-        isFirstTime = true;
     }
 
     private static void initConfig() {
         Writer writer = null;
         try {
             File file = new File(FILE_PATH);
-            if (file.createNewFile()) System.out.println();
+            if (file.createNewFile()) LOGGER.log(Level.INFO, FILE_PATH + " CREATED.");
             Preferences preferences = new Preferences();
             writer = new FileWriter(FILE_PATH);
             Gson gson = new Gson();
             gson.toJson(preferences, writer);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage());
         } finally {
             try {
                 assert writer != null;
                 writer.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, e.getMessage());
             }
         }
     }
@@ -99,8 +99,7 @@ public class Preferences {
                 preferences = gson.fromJson(fileReader, Preferences.class);
                 fileReader.close();
             } catch (IOException e) {
-                e.printStackTrace();
-
+                LOGGER.log(Level.SEVERE, e.getMessage());
             }
         }
         return preferences;
@@ -113,17 +112,13 @@ public class Preferences {
             Gson gson = new Gson();
             gson.toJson(preferences, writer);
         } catch (Exception e) {
-            //System.out.println(e.getMessage());
-            e.printStackTrace();
-
-            AlertMaker.showErrorMessage(e);
+            LOGGER.log(Level.SEVERE, e.getMessage());
         } finally {
             try {
                 assert writer != null;
                 writer.close();
             } catch (IOException e) {
-                AlertMaker.showErrorMessage(e);
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, e.getMessage());
             }
         }
     }
@@ -202,19 +197,19 @@ public class Preferences {
         this.phone = phone;
     }
 
-    public HashSet<String> getDescriptions() {
+    public Set<String> getDescriptions() {
         return descriptions;
     }
 
-    public void setDescriptions(HashSet<String> descriptions) {
+    public void setDescriptions(Set<String> descriptions) {
         this.descriptions = descriptions;
     }
 
-    public HashSet<String> getPerData() {
+    public Set<String> getPerData() {
         return perData;
     }
 
-    public void setPerData(HashSet<String> perData) {
+    public void setPerData(Set<String> perData) {
         this.perData = perData;
     }
 
@@ -234,11 +229,11 @@ public class Preferences {
         this.theme = theme;
     }
 
-    public HashSet<String> getHsn() {
+    public Set<String> getHsn() {
         return hsn;
     }
 
-    public void setHsn(HashSet<String> hsn) {
+    public void setHsn(Set<String> hsn) {
         this.hsn = hsn;
     }
 
@@ -250,19 +245,12 @@ public class Preferences {
         this.date = date;
     }
 
-    public HashSet<String> getCompanyNames() {
+    public Set<String> getCompanyNames() {
         return companyNames;
     }
 
-    public void setCompanyNames(HashSet<String> companyNames) {
+    public void setCompanyNames(Set<String> companyNames) {
         this.companyNames = companyNames;
     }
 
-    public boolean isFirstTime() {
-        return isFirstTime;
-    }
-
-    public void setFirstTime(boolean firstTime) {
-        isFirstTime = firstTime;
-    }
 }

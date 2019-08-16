@@ -14,44 +14,40 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import sample.Alert.AlertMaker;
-import sample.Database.DatabaseHelper;
-import sample.Model.Bill;
-import sample.Model.User;
 import sample.UI.Billing.BillingController;
-import sample.UI.CustomerPanel.CustomerPanelController;
-import sample.UI.Login.LoginController;
 import sample.UI.NewPurchaseBill.NewPurchaseBill;
-import sample.UI.PurchaseBills.PurchaseBills;
 import sample.UI.Root.RootController;
-import sample.UI.UserPanel.UserPanelController;
-import sample.UI.ViewBills.ViewBillsController;
+import sample.Utils.FxmlPaths;
+import sample.Utils.GenericController;
 import sample.Utils.Preferences;
+import sample.alert.AlertMaker;
+import sample.database.DatabaseHelper;
+import sample.model.Bill;
+import sample.model.User;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main extends Application {
 
+    private final Logger logger = Logger.getLogger(Main.class.getName());
+    public boolean isLoggedIn = false;
     private Stage primaryStage;
     private BorderPane rootLayout;
-
-    public boolean isLoggedIn = false;
-
     private RootController rootController = null;
 
     private User user = null;
 
     private JFXSpinner spinner = new JFXSpinner();
+    private Scene scene;
+    private String theme;
 
     public static void main(String[] args) {
         launch(args);
     }
-
-    private Scene scene;
-
-    private String theme;
-
 
     @Override
     public void start(Stage primaryStage) {
@@ -66,14 +62,14 @@ public class Main extends Application {
         DatabaseHelper.create();
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("UI/Root/Root.fxml"));
+        loader.setLocation(FxmlPaths.ROOT);
 
         try {
             loader.load();
             rootController = loader.getController();
             rootLayout = rootController.root;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }
 
         JFXDecorator decorator = new JFXDecorator(primaryStage, rootLayout);
@@ -107,16 +103,7 @@ public class Main extends Application {
         isLoggedIn = false;
         rootLayout.getTop().setVisible(false);
         if (!isLoggedIn) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("UI/Login/Login.fxml"));
-            try {
-                StackPane root = loader.load();
-                rootLayout.setCenter(root);
-                LoginController rootController = loader.getController();
-                rootController.setMainApp(Main.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            fxmlViewLoader(FxmlPaths.LOGIN);
         }
     }
 
@@ -129,94 +116,47 @@ public class Main extends Application {
 
     public void initNewBill(Bill bill, String isIGstBill) {
         if (isLoggedIn) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("UI/Billing/Billing.fxml"));
-            try {
-                StackPane root = loader.load();
-                rootController.setContent(root);
-                BillingController rootController = loader.getController();
-                rootController.setMainApp(Main.this);
-                if (bill != null) {
-                    rootController.setBill(bill, isIGstBill);
-                    this.rootController.window.setText("Edit Bill");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            BillingController billingController = (BillingController) fxmlViewLoader(FxmlPaths.BILLING_CONTROLLER);
+            if (bill != null && billingController != null) {
+                billingController.setBill(bill, isIGstBill);
+                this.rootController.window.setText("Edit bill");
             }
         }
     }
 
     public void initViewBills() {
-        if (isLoggedIn) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("UI/ViewBills/ViewBills.fxml"));
-            try {
-                StackPane root = loader.load();
-                rootController.setContent(root);
-                ViewBillsController rootController = loader.getController();
-                rootController.setMainApp(Main.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        fxmlViewLoader(FxmlPaths.VIEW_BILL);
     }
 
     public void initCustomerPanel() {
         if (isLoggedIn) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("UI/CustomerPanel/CustomerPanel.fxml"));
-            try {
-                StackPane root = loader.load();
-                rootController.setContent(root);
-                CustomerPanelController rootController = loader.getController();
-                rootController.setMainApp(Main.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            fxmlViewLoader(FxmlPaths.CUSTOMER_PANEL);
         }
     }
 
     public void initUserPanel() {
         if (isLoggedIn) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("UI/UserPanel/UserPanel.fxml"));
-            try {
-                StackPane root = loader.load();
-                rootController.setContent(root);
-                UserPanelController rootController = loader.getController();
-                rootController.setMainApp(Main.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            fxmlViewLoader(FxmlPaths.USER_PANEL);
         }
     }
 
     public void initPurchaseBills() {
         if (isLoggedIn) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("UI/PurchaseBills/PurchaseBills.fxml"));
-            try {
-                StackPane root = loader.load();
-                rootController.setContent(root);
-                PurchaseBills rootController = loader.getController();
-                rootController.setMainApp(Main.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            fxmlViewLoader(FxmlPaths.PURCHASE_BILL);
         }
     }
 
     public void initNewPurchaseBills() {
         if (isLoggedIn) {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("UI/NewPurchaseBill/NewPurchaseBill.fxml"));
+            loader.setLocation(FxmlPaths.NEW_PURCHASE_BILL);
             try {
                 StackPane root = loader.load();
                 rootController.setContent(root);
-                NewPurchaseBill rootController = loader.getController();
-                rootController.setMainApp(Main.this);
+                NewPurchaseBill newPurchaseBill = loader.getController();
+                newPurchaseBill.setMainApp(Main.this);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, e.getMessage());
             }
         }
     }
@@ -240,6 +180,22 @@ public class Main extends Application {
 
     public void handleRefresh() {
         rootController.handleRefresh();
+    }
+
+    private GenericController fxmlViewLoader(URL url) {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(url);
+        StackPane root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+        GenericController controller = loader.getController();
+        controller.setMainApp(Main.this);
+        rootController.setContent(root);
+        return controller;
     }
 
     public Stage getPrimaryStage() {
@@ -276,8 +232,7 @@ public class Main extends Application {
     public void setStyle() {
         scene.getStylesheets().remove(theme);
         theme = Main.class.getResource("Resources/CSS/" +
-                Preferences.getPreferences().getTheme() + "Theme.css")
-                .toExternalForm();
+                Preferences.getPreferences().getTheme() + "Theme.css").toExternalForm();
         scene.getStylesheets().add(theme);
     }
 
