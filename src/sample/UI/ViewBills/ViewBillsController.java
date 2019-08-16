@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
@@ -28,6 +29,10 @@ import static sample.Alert.AlertMaker.showBill;
 
 @SuppressWarnings("Duplicates")
 public class ViewBillsController implements Initializable {
+    @FXML
+    private Text totalAmount;
+    @FXML
+    private JFXCheckBox taxTotalCheckBox;
     @FXML
     private JFXCheckBox checkGST, checkNonGst;
 
@@ -81,6 +86,7 @@ public class ViewBillsController implements Initializable {
             invoices.add(b.getInvoice());
         }
         TextFields.bindAutoCompletion(searchBox, invoices);
+        taxTotalCheckBox.setOnAction(e -> setTotalAmount());
     }
 
     @FXML
@@ -219,6 +225,7 @@ public class ViewBillsController implements Initializable {
         else
             bills = DatabaseHelper_Bill.getBillList();
         tableView.getItems().addAll(bills);
+        setTotalAmount();
     }
 
     private void addTableColumn(String name, String msg) {
@@ -235,4 +242,17 @@ public class ViewBillsController implements Initializable {
         else
             customerName.setItems(all);
     }
+
+    private void setTotalAmount() {
+        float total = 0;
+        if (taxTotalCheckBox.isSelected()) {
+            for (Bill b : bills)
+                total = total + Float.parseFloat(b.getTotalAmount());
+        } else {
+            for (Bill b : bills)
+                total = total + Float.parseFloat(b.getTotalAmountBeforeRoundOff());
+        }
+        totalAmount.setText("Rs. " + String.format("%.2f", total));
+    }
+
 }

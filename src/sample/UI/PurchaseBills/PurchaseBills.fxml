@@ -4,6 +4,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="main" prefHeight="720.0" prefWidth="1920.0"
            xmlns="http://javafx.com/javafx/8.0.171" fx:controller="sample.UI.PurchaseBills.PurchaseBills">
     <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
@@ -23,9 +25,9 @@
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="134.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="134.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="179.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="120.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="120.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="100.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                 </columnConstraints>
                 <rowConstraints>
@@ -43,7 +45,7 @@
                 </StackPane>
                 <StackPane GridPane.columnIndex="5">
                     <JFXButton buttonType="RAISED" onAction="#handleAddNewPurchaseBill" prefHeight="40.0"
-                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="ADD NEW BILL"
+                               prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="ADD NEW BILL"
                                textFill="WHITE"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -54,7 +56,7 @@
                     <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0" promptText="Search Invoice"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="4">
-                    <JFXButton buttonType="RAISED" onAction="#handleDownloadSubmit" prefHeight="31.0" prefWidth="148.0"
+                    <JFXButton buttonType="RAISED" onAction="#handleDownloadSubmit" prefHeight="31.0" prefWidth="120.0"
                                ripplerFill="#3333cc" styleClass="jfx-button1" text="DOWNLOAD" textFill="WHITE"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="3" GridPane.rowIndex="1">
@@ -63,7 +65,7 @@
                 </StackPane>
                 <StackPane layoutX="448.0" layoutY="10.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
                     <JFXButton buttonType="RAISED" onAction="#handleDeletePurchaseBill" prefHeight="40.0"
-                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="DELETE"
+                               prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="DELETE"
                                textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="718.0" layoutY="60.0" GridPane.columnIndex="7" GridPane.rowIndex="1">
@@ -75,7 +77,7 @@
                 </StackPane>
                 <StackPane layoutX="496.0" layoutY="60.0" GridPane.columnIndex="6">
                     <JFXButton buttonType="RAISED" onAction="#handleSendToAuditorSubmit" prefHeight="40.0"
-                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="MARK AS SENT"
+                               prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="MARK AS SENT"
                                textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="192.0" layoutY="60.0" GridPane.rowIndex="1">
@@ -83,17 +85,33 @@
                                  promptText="Send To Auditor"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="4" GridPane.rowIndex="1">
-                    <JFXButton buttonType="RAISED" onAction="#handleDownloadAll" prefHeight="40.0" prefWidth="200.0"
+                    <JFXButton buttonType="RAISED" onAction="#handleDownloadAll" prefHeight="40.0" prefWidth="120.0"
                                ripplerFill="#3333cc" styleClass="jfx-button1" text="DOWNLOAD ALL" textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="623.0" layoutY="60.0" GridPane.columnIndex="6" GridPane.rowIndex="1">
                     <JFXButton buttonType="RAISED" onAction="#handleImportPurchaseBill" prefHeight="40.0"
-                               prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="IMPORT"
+                               prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="IMPORT"
                                textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="248.0" layoutY="60.0" GridPane.columnIndex="3">
                     <JFXTextField fx:id="searchBox2" maxWidth="250.0" prefWidth="250.0"
                                   promptText="Search TotalAmount"/>
+                </StackPane>
+                <StackPane alignment="CENTER_LEFT" GridPane.columnIndex="7">
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <VBox spacing="5.0">
+                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Purchase Amount"/>
+                            <JFXCheckBox fx:id="taxTotalCheckBox" text="Including Tax"/>
+                        </VBox>
+                        <Text fx:id="totalAmount" strokeType="OUTSIDE" strokeWidth="0.0" text="55.55">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                            <HBox.margin>
+                                <Insets left="5.0"/>
+                            </HBox.margin>
+                        </Text>
+                    </HBox>
                 </StackPane>
             </GridPane>
         </top>

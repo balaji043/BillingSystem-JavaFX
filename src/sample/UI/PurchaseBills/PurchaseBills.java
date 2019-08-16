@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.controlsfx.control.textfield.TextFields;
 import sample.Alert.AlertMaker;
 import sample.CustomUI.SinglePurchaseBill.SinglePurchaseBill;
@@ -38,7 +39,10 @@ public class PurchaseBills {
     public BorderPane borderPane;
     public JFXCheckBox editPanelCheckBox;
     private SinglePurchaseBill singlePurchaseBill = new SinglePurchaseBill();
-
+    @FXML
+    private JFXCheckBox taxTotalCheckBox;
+    @FXML
+    private Text totalAmount;
     @FXML
     private VBox editPanel;
 
@@ -61,6 +65,8 @@ public class PurchaseBills {
         tableView.setOnMouseClicked(e -> onPurchaseBillSelected());
         TextFields.bindAutoCompletion(searchBox2, getTotalNetAmountList());
         getInvoiceList();
+        taxTotalCheckBox.setOnAction(event -> setTotalAmount());
+
     }
 
     public void handleAddNewPurchaseBill() {
@@ -301,5 +307,17 @@ public class PurchaseBills {
                         , "Purchase Bill Data is NOT written to DB"
                         , "red");
         }
+    }
+
+    private void setTotalAmount() {
+        float total = 0;
+        if (taxTotalCheckBox.isSelected()) {
+            for (PurchaseBill p : tableView.getItems())
+                total = total + Float.parseFloat(p.getTotalAmount());
+        } else {
+            for (PurchaseBill p : tableView.getItems())
+                total = total + Float.parseFloat(p.getAmountBeforeTax());
+        }
+        totalAmount.setText("Rs. " + String.format("%.2f", total));
     }
 }
