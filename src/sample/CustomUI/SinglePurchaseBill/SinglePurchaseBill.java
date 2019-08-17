@@ -22,9 +22,12 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SinglePurchaseBill extends HBox {
 
+    private static final Logger LOGGER = Logger.getLogger(SinglePurchaseBill.class.getName());
     @FXML
     private JFXDatePicker fromDate;
     @FXML
@@ -81,6 +84,7 @@ public class SinglePurchaseBill extends HBox {
         invoiceTField.validate();
         amountBeforeTaxTField.validate();
         amountAfterTaxTField.validate();
+        amountAfterTaxTField.setDisable(true);
 
         companyNameCBOX.getItems().addAll(companyNames);
 
@@ -93,7 +97,10 @@ public class SinglePurchaseBill extends HBox {
         if (tFieldExists.isSelected()) {
             tField.getValidators().add(requiredFieldValidator);
             tField.validate();
-        } else tField.getValidators().clear();
+        } else {
+            tField.setText("0");
+            tField.getValidators().clear();
+        }
     }
 
     public boolean isReady() {
@@ -111,12 +118,11 @@ public class SinglePurchaseBill extends HBox {
                     , new Insets(0, 0, 0, 0))));
         }
 
+
         if (invoiceTField.getText() == null || invoiceTField.getText().isEmpty())
             addRedBackgroundToTField(invoiceTField);
         if (amountBeforeTaxTField.getText() == null || amountBeforeTaxTField.getText().isEmpty() || isWrongFormat(amountBeforeTaxTField.getText()))
             addRedBackgroundToTField(amountBeforeTaxTField);
-        if (amountAfterTaxTField.getText() == null || amountAfterTaxTField.getText().isEmpty() || isWrongFormat(amountAfterTaxTField.getText()))
-            addRedBackgroundToTField(amountAfterTaxTField);
         if (is_12Exists.isSelected() && (_12TField.getText() == null || _12TField.getText().isEmpty() || isWrongFormat(_12TField.getText())))
             addRedBackgroundToTField(_12TField);
         if (is_18Exists.isSelected() && (_18TField.getText() == null || _18TField.getText().isEmpty() || isWrongFormat(_18TField.getText())))
@@ -125,9 +131,9 @@ public class SinglePurchaseBill extends HBox {
             addRedBackgroundToTField(_28TField);
 
         if (ready) {
+            amountAfterTaxTField.setText(getTotalAmount());
             String date = "" + Date.from((fromDate.getValue()).atTime(Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.MILLISECOND)
                     .atZone(ZoneId.systemDefault()).toInstant()).getTime();
-
             purchaseBill = new PurchaseBill(date
                     , "" + companyNameCBOX.getValue()
                     , "" + invoiceTField.getText()
@@ -236,5 +242,27 @@ public class SinglePurchaseBill extends HBox {
 
     public void markRed() {
         addRedBackgroundToTField(invoiceTField);
+    }
+
+    private String getTotalAmount() {
+        return "" + (getFloatValue(amountBeforeTaxTField)
+                + getFloatValue(_12TField)
+                + getFloatValue(_18TField)
+                + getFloatValue(_28TField));
+    }
+
+    private float getFloatValue(JFXTextField s) {
+        if (s.getText() == null || s.getText().isEmpty() || s.getText().equalsIgnoreCase("0"))
+            return 0;
+        try {
+            return Float.parseFloat(s.getText());
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+        return 0;
+    }
+
+    public void setAmountAfterText() {
+        amountAfterTaxTField.setText(getTotalAmount());
     }
 }

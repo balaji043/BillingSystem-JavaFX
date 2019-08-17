@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import sample.Alert.AlertMaker;
@@ -112,6 +113,13 @@ public class NewPurchaseBill {
 
     public void handleBack() {
         mainApp.initPurchaseBills();
+    }
+
+    @FXML
+    private void handleCalculate() {
+        for (SinglePurchaseBill bill : listView.getItems()) {
+            bill.setAmountAfterText();
+        }
     }
 
     private void setSlNo() {
