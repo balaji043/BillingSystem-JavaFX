@@ -5,14 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import sample.alert.AlertMaker;
 import sample.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static sample.Utils.StringUtil.ADMIN;
+import static sample.Utils.StringUtil.*;
 
 /**
  * This class contains the functions for
@@ -34,23 +31,44 @@ public class DatabaseHelper {
     }
 
     public static void create() {
-        if (createUserTable()) {
+        if (createTable(CREATE_USER_TABLE)) {
             DatabaseHelperUser.insertNewUser(new User(ADMIN
                     , ADMIN
                     , ADMIN
                     , "123"
                     , ADMIN));
         }
-        if (createCustomerTable()) {
+        if (createTable(CREATE_CUSTOMER_TABLE))
             logger.log(Level.INFO, "Customer Table Created or Already Exists");
-        }
-        if (createBillTables()) {
+
+        if (createTable(CREATE_BILL_TABLE))
             logger.log(Level.INFO, "Bills Table Created or Already Exists");
 
-        }
-        if (createPurchaseBillTable()) {
+        if (createTable(CREATE_IBILL_TABLE))
+            logger.log(Level.INFO, "Bills Table Created or Already Exists");
+
+        if (createTable(CREATE_PURCHASE_TABLE))
             logger.log(Level.INFO, "PurchaseBills Table Created or Already Exists");
+
+        if (!isTableColumnExists(PURCHASE_TABLE_NAME, "ExtraAmount")) {
+            addTableColumn(PURCHASE_TABLE_NAME, "ExtraAmount TEXT");
         }
+
+    }
+
+
+    private static boolean isTableColumnExists(String tableName, String columnName) {
+        try {
+            DatabaseMetaData md = DatabaseHandler.getInstance().getConnection().getMetaData();
+            ResultSet rs = md.getColumns(null, null, tableName, columnName);
+            if (rs.next()) {
+                return true;
+            }
+            rs.close();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+        return false;
     }
 
     static boolean createTable(String createQuery) {
@@ -114,44 +132,25 @@ public class DatabaseHelper {
         }
     }
 
-    private static boolean createBillTable(String tableName) {
-        String create = "CREATE TABLE IF NOT EXISTS " + tableName + " ( " +
-                "BillID TEXT NOT NULL UNIQUE,INVOICE TEXT NOT NULL UNIQUE," +
-                "DATE TEXT NOT NULL, CustomerName TEXT NOT NULL, " +
-                "CustomerID TEXT NOT NULL, ADDRESS TEXT NOT NULL," +
-                "PHONE TEXT NOT NULL, GstNO TEXT NOT NULL,USERNAME TEXT NOT NULL)";
-        return createTable(create);
-    }
+    private static boolean addTableColumn(String tableName, String columnName) {
+        String updateQuery = String.format("ALTER TABLE %s ADD %s", tableName, columnName);
+        boolean okay = true;
+        PreparedStatement preparedStatement = null;
 
-    private static boolean createBillTables() {
-        boolean b = createBillTable("BILLS");
-        b = b && createBillTable("IBILLS");
-        return b;
-    }
+        try {
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
+            okay = preparedStatement.execute();
 
-    private static boolean createUserTable() {
-        String create = "CREATE TABLE IF NOT EXISTS Employee (Name TEXT NOT NULL" +
-                ",id TEXT NOT NULL UNIQUE,password TEXT NOT NULL" +
-                ",access TEXT NOT NULL,UserName TEXT NOT NULL)";
-        return createTable(create);
-    }
-
-    private static boolean createCustomerTable() {
-        String create = "CREATE TABLE IF NOT EXISTS CUSTOMER" +
-                "( NAME TEXT NOT NULL UNIQUE,  PHONE TEXT NOT NULL" +
-                ", GSTIN TEXT NOT NULL, STREET TEXT NOT NULL" +
-                ", CITY TEXT NOT NULL,  STATE TEXT NOT NULL" +
-                ", ZIP TEXT NOT NULL,   ID TEXT NOT NULL UNIQUE )";
-        return createTable(create);
-    }
-
-    private static boolean createPurchaseBillTable() {
-        String createQuery = "CREATE TABLE IF NOT EXISTS PURCHASEBILLS ( DATE TEXT NOT NULL, "
-                + " CompanyName TEXT NOT NULL, INVOICE TEXT NOT NULL,"
-                + " AmountBeforeTax TEXT NOT NULL, TwelvePerAmt TEXT NOT NULL, "
-                + " EighteenPerAmt TEXT NOT NULL, TwentyEightPerAmt TEXT NOT NULL, "
-                + " AmountAfterTax TEXT NOT NULL, HasGoneToAuditor TEXT NOT NULL,"
-                + "OTHERS TEXT ,DateCleared TEXT,Status NOT NULL,ExtraAmount TEXT, UNIQUE(CompanyName,INVOICE))";
-        return createTable(createQuery);
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
+        }
+        return okay;
     }
 }

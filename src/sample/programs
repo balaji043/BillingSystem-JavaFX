@@ -1,0 +1,21 @@
+    private static boolean addTableColumn(String tableName, String columnName) {
+        String updateQuery = "ALTER TABLE " + tableName + " ADD " + columnName;
+        boolean okay = true;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(updateQuery);
+            okay = preparedStatement.execute();
+
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
+        } finally {
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
+        }
+        return okay;
+    }
