@@ -183,12 +183,13 @@ public class ExcelHelper {
             row.createCell(4).setCellValue("12% TAX AMOUNT");
             row.createCell(5).setCellValue("18% TAX AMOUNT");
             row.createCell(6).setCellValue("28% TAX AMOUNT");
-            row.createCell(7).setCellValue("TOTAL NET AMOUNT");
-            row.createCell(8).setCellValue("SEND TO AUDITOR");
-            row.createCell(9).setCellValue("OTHERS");
-            row.createCell(10).setCellValue("STATUS");
+            row.createCell(7).setCellValue("POSTAGE");
+            row.createCell(8).setCellValue("TOTAL NET AMOUNT");
+            row.createCell(9).setCellValue("SEND TO AUDITOR");
+            row.createCell(10).setCellValue("Remarks");
             row.createCell(11).setCellValue("DATE CLEARED");
-            row.createCell(12).setCellValue("POSTAGE");
+            row.createCell(12).setCellValue("STATUS");
+
             rowNum++;
 
             for (PurchaseBill bill : purchaseBills) {
@@ -202,12 +203,13 @@ public class ExcelHelper {
                 row.createCell(4).setCellValue(bill.getTwelve());
                 row.createCell(5).setCellValue(bill.getEighteen());
                 row.createCell(6).setCellValue(bill.getTwentyEight());
-                row.createCell(7).setCellValue(bill.getTotalAmount());
-                row.createCell(8).setCellValue(bill.getHasGoneToAuditorString());
-                row.createCell(9).setCellValue(bill.getOthers());
-                row.createCell(10).setCellValue(bill.getStatus());
+                row.createCell(7).setCellValue(bill.getExtraAmount());
+                row.createCell(8).setCellValue(bill.getTotalAmount());
+                row.createCell(9).setCellValue(bill.getHasGoneToAuditorString());
+                row.createCell(10).setCellValue(bill.getOthers());
                 row.createCell(11).setCellValue(bill.getDateCleared());
-                row.createCell(12).setCellValue(bill.getExtraAmount());
+                row.createCell(12).setCellValue(bill.getStatus());
+
 
                 rowNum++;
             }

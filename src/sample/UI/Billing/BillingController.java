@@ -184,7 +184,6 @@ public class BillingController implements GenericController {
         if (bill == null) return;
 
         if (ready && AlertMaker.showBill(bill, mainApp, false, BillingSystemUtils.getN(comboBills.getValue()))) {
-            mainApp.addSpinner();
             boolean success;
 
             if (!isNewBill) DatabaseHelperBills.deleteBill(oldBill.getBillId(), tableName);
@@ -212,8 +211,6 @@ public class BillingController implements GenericController {
                 mainApp.snackBar("Failed", bill.getInvoice() +
                         " bill item is not saved !", "red");
             }
-
-            mainApp.removeSpinner();
 
         }
 

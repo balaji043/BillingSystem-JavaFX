@@ -89,9 +89,11 @@ public class RootController implements Initializable, GenericController {
     }
 
     private void toggle() {
-        hamTransition.setRate(hamTransition.getRate() * -1);
-        hamTransition.play();
-        stack.toggle(drawer);
+        if (mainApp.isLoggedIn) {
+            hamTransition.setRate(hamTransition.getRate() * -1);
+            hamTransition.play();
+            stack.toggle(drawer);
+        }
     }
 
     public void setMainApp(Main mainApp) {

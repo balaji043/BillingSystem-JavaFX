@@ -100,12 +100,12 @@ public class ExcelDatabaseHelper {
                         , "" + getStringValue(currentRow.getCell(4))
                         , "" + getStringValue(currentRow.getCell(5))
                         , "" + getStringValue(currentRow.getCell(6))
-                        , "" + getStringValue(currentRow.getCell(7))
                         , "" + getStringValue(currentRow.getCell(8))
                         , "" + getStringValue(currentRow.getCell(9))
-                        , "" + getDateStringValue(currentRow.getCell(11))
                         , "" + getStringValue(currentRow.getCell(10))
-                        , "" + getStringValue(currentRow.getCell(12)));
+                        , "" + getDateStringValue(currentRow.getCell(11))
+                        , "" + getStringValue(currentRow.getCell(12))
+                        , "" + getStringValue(currentRow.getCell(7)));
                 try {
                     DatabaseHelperPurchaseBill.insertNewPurchaseBill(purchaseBill);
                 } catch (Exception e) {

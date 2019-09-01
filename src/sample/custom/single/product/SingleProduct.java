@@ -113,7 +113,7 @@ public class SingleProduct extends HBox {
 
         boolean t = checkComboBox(tax);
         boolean p = checkComboBox(per);
-        boolean d = false;
+        boolean d = true;
 
         if (checkBoxDiscount.isSelected() || checkBoxAdd.isSelected())
             d = checkTextField(discount, true);

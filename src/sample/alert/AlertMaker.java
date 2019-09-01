@@ -255,7 +255,7 @@ public class AlertMaker {
         try {
             JFXAlert<ButtonType> alert = new JFXAlert<>(main.getPrimaryStage());
             JFXDialogLayout dialogLayout = new JFXDialogLayout();
-            dialogLayout.setStyle(String.format("-fx-background-color:%settingsButton;", Preferences.getPreferences().getTheme().equals("black")
+            dialogLayout.setStyle(String.format("-fx-background-color:%s;", Preferences.getPreferences().getTheme().equals("black")
                     ? "rgb(50,50,50)" : "white"));
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(FxmlPaths.SETTINGS);

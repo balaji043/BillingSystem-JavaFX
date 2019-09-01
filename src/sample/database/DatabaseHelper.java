@@ -95,9 +95,8 @@ public class DatabaseHelper {
         PreparedStatement preparedStatement = null;
 
         try {
-            String q = "DROP TABLE IF EXISTS ?";
+            String q = "DROP TABLE IF EXISTS " + tableName;
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(q);
-            preparedStatement.setString(1, tableName);
             boolean okay = false;
             try {
                 okay = preparedStatement.executeUpdate() > 0;

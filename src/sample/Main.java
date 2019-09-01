@@ -15,7 +15,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sample.UI.Billing.BillingController;
-import sample.UI.NewPurchaseBill.NewPurchaseBill;
 import sample.UI.Root.RootController;
 import sample.Utils.FxmlPaths;
 import sample.Utils.GenericController;
@@ -102,69 +101,49 @@ public class Main extends Application {
         user = null;
         isLoggedIn = false;
         rootLayout.getTop().setVisible(false);
-        if (!isLoggedIn) {
-            fxmlViewLoader(FxmlPaths.LOGIN);
-        }
+        fxmlViewLoader(FxmlPaths.LOGIN, true);
     }
 
     public void initMenuLayout() {
         isLoggedIn = true;
         rootLayout.getTop().setVisible(true);
-        if (isLoggedIn)
-            rootController.handleViewBill();
+        rootController.handleViewBill();
     }
 
     public void initNewBill(Bill bill, String isIGstBill) {
-        if (isLoggedIn) {
-            BillingController billingController = (BillingController) fxmlViewLoader(FxmlPaths.BILLING_CONTROLLER);
-            if (bill != null && billingController != null) {
-                billingController.setBill(bill, isIGstBill);
-                this.rootController.window.setText("Edit bill");
-            }
+        GenericController controller = fxmlViewLoader(FxmlPaths.BILLING_LAYOUT, false);
+        if (bill != null && controller instanceof BillingController) {
+            BillingController billingController = (BillingController) controller;
+            billingController.setBill(bill, isIGstBill);
+            this.rootController.window.setText("Edit bill");
         }
     }
 
     public void initViewBills() {
-        fxmlViewLoader(FxmlPaths.VIEW_BILL);
+        fxmlViewLoader(FxmlPaths.VIEW_BILL, false);
     }
 
     public void initCustomerPanel() {
-        if (isLoggedIn) {
-            fxmlViewLoader(FxmlPaths.CUSTOMER_PANEL);
-        }
+        fxmlViewLoader(FxmlPaths.CUSTOMER_PANEL, false);
     }
 
     public void initUserPanel() {
-        if (isLoggedIn) {
-            fxmlViewLoader(FxmlPaths.USER_PANEL);
-        }
+        fxmlViewLoader(FxmlPaths.USER_PANEL, false);
     }
 
     public void initPurchaseBills() {
-        if (isLoggedIn) {
-            fxmlViewLoader(FxmlPaths.PURCHASE_BILL);
-        }
+        fxmlViewLoader(FxmlPaths.PURCHASE_BILL, false);
     }
 
     public void initNewPurchaseBills() {
-        if (isLoggedIn) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(FxmlPaths.NEW_PURCHASE_BILL);
-            try {
-                StackPane root = loader.load();
-                rootController.setContent(root);
-                NewPurchaseBill newPurchaseBill = loader.getController();
-                newPurchaseBill.setMainApp(Main.this);
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, e.getMessage());
-            }
-        }
+        fxmlViewLoader(FxmlPaths.NEW_PURCHASE_BILL, false);
     }
 
     public void handleLogout() {
         if (isLoggedIn && AlertMaker.showMCAlert("Confirm logout?"
                 , "Are you sure you want to Logout?"
                 , Main.this)) {
+            isLoggedIn = false;
             rootLayout.setLeft(null);
             initLoginLayout();
         }
@@ -182,8 +161,10 @@ public class Main extends Application {
         rootController.handleRefresh();
     }
 
-    private GenericController fxmlViewLoader(URL url) {
-
+    private GenericController fxmlViewLoader(URL url, boolean isLoginPage) {
+        if (!isLoginPage && !isLoggedIn) {
+            initLoginLayout();
+        }
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
         StackPane root = null;
@@ -234,14 +215,6 @@ public class Main extends Application {
         theme = Main.class.getResource("Resources/CSS/" +
                 Preferences.getPreferences().getTheme() + "Theme.css").toExternalForm();
         scene.getStylesheets().add(theme);
-    }
-
-    public void addSpinner() {
-        rootLayout.getChildren().add(spinner);
-    }
-
-    public void removeSpinner() {
-        rootLayout.getChildren().remove(spinner);
     }
 
     public File chooseFile() {

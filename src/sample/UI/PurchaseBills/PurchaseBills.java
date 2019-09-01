@@ -252,7 +252,7 @@ public class PurchaseBills implements GenericController {
         addTableColumn("12%", "twelve");
         addTableColumn("18%", "eighteen");
         addTableColumn("28%", "twentyEight");
-        addTableColumn("Amount", "extraAmount");
+        addTableColumn("Postage ", "extraAmount");
         addTableColumn("Total Net Amount", "totalAmount");
         addTableColumn("Send To Auditor", "hasGoneToAuditorString");
         addTableColumn("Remarks", "others");

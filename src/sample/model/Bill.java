@@ -4,11 +4,8 @@ import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Bill {
-    private static final Logger LOGGER = Logger.getLogger(Bill.class.getName());
     private String billId;
     private String invoice;
     private String date;
@@ -120,13 +117,12 @@ public class Bill {
                 sign = "-";
             }
         }
-        roundedOff = String.format("%settingsButton%.2f", sign, r);
+        roundedOff = String.format("%s %.2f", sign, r);
         this.totalAmount = String.format("%.2f", totalInner);
         this.total = totalInner;
         try {
             this.place = address.split("\n")[2];
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 

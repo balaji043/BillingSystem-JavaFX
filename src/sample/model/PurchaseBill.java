@@ -5,7 +5,6 @@ import sample.Utils.BillingSystemUtils;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,9 +59,6 @@ public class PurchaseBill {
 
         Date d = new Date(Long.parseLong(dateInLong));
         date = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        String s = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        LOGGER.log(Level.INFO, s);
-
     }
 
     public String getDateInLong() {
