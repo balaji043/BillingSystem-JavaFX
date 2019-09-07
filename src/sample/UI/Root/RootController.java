@@ -37,10 +37,9 @@ public class RootController implements Initializable, GenericController {
     @FXML
     public StackPane home;
     @FXML
-    private JFXHamburger ham;
-    @FXML
     public JFXButton addNewUser, refreshButton, settingsButton;
-
+    @FXML
+    private JFXHamburger ham;
     private int i = 0;
     private Main mainApp;
     private JFXDrawersStack stack = new JFXDrawersStack();
@@ -62,6 +61,7 @@ public class RootController implements Initializable, GenericController {
         ham.addEventFilter(MouseEvent.MOUSE_PRESSED, (event ->
                 toggle()
         ));
+
 
         BillingSystemUtils.setImageViewToButtons(ICON.REFRESH, refreshButton);
         BillingSystemUtils.setImageViewToButtons(ICON.SETTING, settingsButton);
@@ -88,8 +88,9 @@ public class RootController implements Initializable, GenericController {
         mainApp.getPrimaryStage().getScene().getAccelerators().putAll(keyCodeCombinationRunnableHashMap);
     }
 
-    private void toggle() {
-        if (mainApp.isLoggedIn) {
+    public void toggle() {
+
+        if (mainApp.isLoggedIn || drawer.isOpened()) {
             hamTransition.setRate(hamTransition.getRate() * -1);
             hamTransition.play();
             stack.toggle(drawer);
@@ -128,6 +129,7 @@ public class RootController implements Initializable, GenericController {
         toggle();
         mainApp.initPurchaseBills();
     }
+
     public void handleViewBill() {
         i = 2;
         window.setText("View bill");
@@ -235,5 +237,6 @@ public class RootController implements Initializable, GenericController {
     public void disableAddNewUserButton(boolean s) {
         addNewUser.setDisable(s);
     }
+
 
 }

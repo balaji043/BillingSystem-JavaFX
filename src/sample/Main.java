@@ -101,6 +101,7 @@ public class Main extends Application {
         user = null;
         isLoggedIn = false;
         rootLayout.getTop().setVisible(false);
+        rootController.toggle();
         fxmlViewLoader(FxmlPaths.LOGIN, true);
     }
 
@@ -162,9 +163,6 @@ public class Main extends Application {
     }
 
     private GenericController fxmlViewLoader(URL url, boolean isLoginPage) {
-        if (!isLoginPage && !isLoggedIn) {
-            initLoginLayout();
-        }
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(url);
         StackPane root = null;
