@@ -64,7 +64,7 @@ public class ViewBillsController implements Initializable {
         all = DatabaseHelper_Customer.getCustomerNameList(3);
 
         TextFields.bindAutoCompletion(customerName.getEditor(), customerName.getItems());
-
+        setCustomerName();
         checkGST.setOnAction(e -> setCustomerName());
         checkNonGst.setOnAction(e -> setCustomerName());
     }
