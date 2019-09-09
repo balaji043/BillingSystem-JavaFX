@@ -6,12 +6,11 @@ import com.jfoenix.controls.JFXListView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import sample.Alert.AlertMaker;
 import sample.CustomUI.SinglePurchaseBill.SinglePurchaseBill;
 import sample.Database.DatabaseHelper_PurchaseBill;
 import sample.Main;
+import sample.Utils.BillingSystemUtils;
+import sample.Utils.ICON;
 import sample.Utils.Preferences;
 
 import java.util.HashSet;
@@ -26,23 +25,10 @@ public class NewPurchaseBill {
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
         typeComboBox.getItems().addAll("Standard Enterprises", "Standard Equipments");
-        int i = 35;
-        ImageView view1 = null, view2 = null;
-        try {
-            view1 = new ImageView(new Image(Main.class.
-                    getResourceAsStream("Resources/icons/add.png")
-                    , i, i, true, true));
-            view2 = new ImageView(new Image(Main.class.
-                    getResourceAsStream("Resources/icons/delete.png")
-                    , i, i, true, true));
 
-        } catch (Exception e) {
-            AlertMaker.showErrorMessage(e);
-        }
-        if (view1 != null)
-            addBTN.setGraphic(view1);
-        if (view2 != null)
-            deleteBTN.setGraphic(view2);
+        BillingSystemUtils.setImageViewToButtons(ICON.ADD, addBTN);
+        BillingSystemUtils.setImageViewToButtons(ICON.DELETE, deleteBTN);
+
     }
 
     public void handleAddBill() {

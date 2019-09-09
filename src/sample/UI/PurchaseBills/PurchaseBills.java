@@ -1,9 +1,6 @@
 package sample.UI.PurchaseBills;
 
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -25,6 +22,8 @@ import sample.Database.ExcelDatabaseHelper;
 import sample.Database.ExcelHelper;
 import sample.Main;
 import sample.Model.PurchaseBill;
+import sample.Utils.BillingSystemUtils;
+import sample.Utils.ICON;
 import sample.Utils.Preferences;
 
 import java.io.File;
@@ -38,6 +37,14 @@ public class PurchaseBills {
     public JFXDatePicker fromDate, toDate;
     public BorderPane borderPane;
     public JFXCheckBox editPanelCheckBox;
+    public JFXButton downloadButton;
+    public JFXButton searchSubmitButton;
+    public JFXButton deleteBTN;
+    public JFXButton downloadAllButton;
+    public JFXButton importButton;
+    public JFXButton editSubmitButton;
+    public JFXButton addBTN;
+
     private SinglePurchaseBill singlePurchaseBill = new SinglePurchaseBill();
     @FXML
     private JFXCheckBox taxTotalCheckBox;
@@ -50,6 +57,15 @@ public class PurchaseBills {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
+
+        BillingSystemUtils.setImageViewToButtons(ICON.ADD, addBTN);
+        BillingSystemUtils.setImageViewToButtons(ICON.DELETE, deleteBTN);
+        BillingSystemUtils.setImageViewToButtons(ICON.DOWNLOAD, downloadButton);
+        BillingSystemUtils.setImageViewToButtons(ICON.UPLOAD, importButton);
+        BillingSystemUtils.setImageViewToButtons(ICON.SEARCH, searchSubmitButton);
+        BillingSystemUtils.setImageViewToButtons(ICON.SAVE, editSubmitButton);
+
+
         borderPane.setRight(null);
         billTypeCBOX.getItems().addAll("Standard Enterprises", "Standard Equipments");
         billTypeCBOX.getSelectionModel().selectFirst();

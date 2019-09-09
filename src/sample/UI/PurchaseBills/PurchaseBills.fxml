@@ -44,7 +44,7 @@
                     <JFXDatePicker fx:id="toDate" prefHeight="40.0" prefWidth="210.0" promptText="TO"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="5">
-                    <JFXButton buttonType="RAISED" onAction="#handleAddNewPurchaseBill" prefHeight="40.0"
+                    <JFXButton fx:id="addBTN" buttonType="RAISED" onAction="#handleAddNewPurchaseBill" prefHeight="40.0"
                                prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="ADD NEW BILL"
                                textFill="WHITE"/>
                 </StackPane>
@@ -56,17 +56,19 @@
                     <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0" promptText="Search Invoice"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="4">
-                    <JFXButton buttonType="RAISED" onAction="#handleDownloadSubmit" prefHeight="31.0" prefWidth="120.0"
-                               ripplerFill="#3333cc" styleClass="jfx-button1" text="DOWNLOAD" textFill="WHITE"/>
+                    <JFXButton fx:id="downloadButton" buttonType="RAISED" onAction="#handleDownloadSubmit"
+                               prefHeight="31.0" prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1"
+                               text="DOWNLOAD" textFill="WHITE"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="3" GridPane.rowIndex="1">
-                    <JFXButton buttonType="RAISED" onAction="#handleSubmit" prefHeight="31.0" prefWidth="146.0"
-                               ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE"/>
+                    <JFXButton fx:id="searchSubmitButton" buttonType="RAISED" onAction="#handleSubmit" prefHeight="31.0"
+                               prefWidth="146.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT"
+                               textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="448.0" layoutY="10.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                    <JFXButton buttonType="RAISED" onAction="#handleDeletePurchaseBill" prefHeight="40.0"
-                               prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="DELETE"
-                               textFill="WHITE"/>
+                    <JFXButton fx:id="deleteBTN" buttonType="RAISED" onAction="#handleDeletePurchaseBill"
+                               prefHeight="40.0" prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1"
+                               text="DELETE" textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="718.0" layoutY="60.0" GridPane.columnIndex="7" GridPane.rowIndex="1">
                     <JFXCheckBox fx:id="editPanelCheckBox" minWidth="200.0" onAction="#handleEditPurchaseBill"
@@ -85,13 +87,14 @@
                                  promptText="Send To Auditor"/>
                 </StackPane>
                 <StackPane GridPane.columnIndex="4" GridPane.rowIndex="1">
-                    <JFXButton buttonType="RAISED" onAction="#handleDownloadAll" prefHeight="40.0" prefWidth="120.0"
-                               ripplerFill="#3333cc" styleClass="jfx-button1" text="DOWNLOAD ALL" textFill="WHITE"/>
+                    <JFXButton fx:id="downloadAllButton" buttonType="RAISED" onAction="#handleDownloadAll"
+                               prefHeight="40.0" prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1"
+                               text="DOWNLOAD ALL" textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="623.0" layoutY="60.0" GridPane.columnIndex="6" GridPane.rowIndex="1">
-                    <JFXButton buttonType="RAISED" onAction="#handleImportPurchaseBill" prefHeight="40.0"
-                               prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="IMPORT"
-                               textFill="WHITE"/>
+                    <JFXButton fx:id="importButton" buttonType="RAISED" onAction="#handleImportPurchaseBill"
+                               prefHeight="40.0" prefWidth="120.0" ripplerFill="#3333cc" styleClass="jfx-button1"
+                               text="IMPORT" textFill="WHITE"/>
                 </StackPane>
                 <StackPane layoutX="248.0" layoutY="60.0" GridPane.columnIndex="3">
                     <JFXTextField fx:id="searchBox2" maxWidth="250.0" prefWidth="250.0"
@@ -117,8 +120,9 @@
         </top>
         <right>
             <VBox fx:id="editPanel">
-                <JFXButton buttonType="RAISED" onAction="#handleEditSubmit" prefHeight="40.0" prefWidth="200.0"
-                           ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT" textFill="WHITE"/>
+                <JFXButton fx:id="editSubmitButton" buttonType="RAISED" onAction="#handleEditSubmit" prefHeight="40.0"
+                           prefWidth="200.0" ripplerFill="#3333cc" styleClass="jfx-button1" text="SUBMIT"
+                           textFill="WHITE"/>
             </VBox>
         </right>
     </BorderPane>

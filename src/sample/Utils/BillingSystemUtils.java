@@ -1,5 +1,12 @@
 package sample.Utils;
 
+import com.jfoenix.controls.JFXButton;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import sample.Alert.AlertMaker;
+import sample.Main;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -58,37 +65,33 @@ public class BillingSystemUtils {
         return DATE_TIME_FORMAT.format(new Date(time));
     }
 
-    public static String getTableName(String value) {
-        switch (value) {
-            case "GST": {
-                return "BILLS";
-            }
-            case "Non-GST": {
-                return "NONGST";
-            }
-            case "I-GST": {
-                return "IBILLS";
-            }
-            default: {
-                return "BILLS";
-            }
+    public static void setImageViewToButtons(ICON iconName, JFXButton jfxButton) {
+        jfxButton.setText("");
+        int i = 20;
+        ImageView view1 = null;
+        try {
+            view1 = new ImageView(new Image(Main.class.
+                    getResourceAsStream("Resources/icons/" + iconName.toString())
+                    , i + 10, i + 10, true, true));
+        } catch (Exception e) {
+            e.getMessage();
+            //LOGGER.log(Level.SEVERE, e.getMessage());
         }
+        if (view1 != null)
+            jfxButton.setGraphic(view1);
+        jfxButton.setPrefSize(i + 5, i + 5);
+
+        jfxButton.setTooltip(new Tooltip(ButtonToolTip.valueOf(iconName.name()).toString()));
+
     }
 
-    public static int getN(String value) {
-        switch (value) {
-            case "GST": {
-                return 1;
-            }
-            case "Non-GST": {
-                return 2;
-            }
-            case "I-GST": {
-                return 3;
-            }
-            default: {
-                return 1;
-            }
+    public static void setImageToImageViews(ICON iconName, ImageView mainImageView) {
+
+        try {
+            mainImageView.setImage(new Image(Main.class.
+                    getResourceAsStream("Resources/icons/" + iconName.toString())));
+        } catch (Exception e) {
+            AlertMaker.showErrorMessage(e);
         }
     }
 }
