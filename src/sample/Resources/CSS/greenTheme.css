@@ -9,6 +9,11 @@
     -jfx-button-type: RAISED;
     -fx-text-fill: white;
 }
+
+.jfx-button2 {
+    -jfx-rippler-fill: #3333cc;
+    -jfx-button-type: FLAT;
+}
 -jfx-text-field{
     -jfx-label-float:true;
 }

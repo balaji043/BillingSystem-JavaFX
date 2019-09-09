@@ -10,13 +10,18 @@
     -jfx-rippler-fill:grey;
     -jfx-button-type: RAISED;
     -fx-text-fill: white;
-    -fx-background-image:url("/Resources/icons/refreshWhite.png");
+    -fx-background-image: url("/sample/Resources/icons/refreshWhite.png");
+}
+
+.jfx-button2 {
+    -jfx-rippler-fill: #3333cc;
+    -jfx-button-type: FLAT;
 }
 .settingIcon{
     -jfx-rippler-fill:grey;
     -jfx-button-type: RAISED;
     -fx-text-fill: white;
-    -fx-background-image:url("/Resources/icons/gear.png");
+    -fx-background-image: url("/sample/Resources/icons/gear.png");
 }
 /****************COMBO BOX*********************/
 

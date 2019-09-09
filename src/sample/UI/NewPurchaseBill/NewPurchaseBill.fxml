@@ -11,8 +11,8 @@
         <top>
             <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
                 <JFXComboBox fx:id="typeComboBox" prefWidth="200.0" promptText="SELECT TYPE"/>
-                <JFXButton fx:id="addBTN" onAction="#handleAddBill" styleClass="jfx-button1" textFill="WHITE"/>
-                <JFXButton fx:id="deleteBTN" onAction="#handleDeleteBill" styleClass="jfx-button1" textFill="WHITE"/>
+                <JFXButton fx:id="addBTN" onAction="#handleAddBill" styleClass="jfx-button2" textFill="WHITE"/>
+                <JFXButton fx:id="deleteBTN" onAction="#handleDeleteBill" styleClass="jfx-button2" textFill="WHITE"/>
                 <JFXButton layoutX="740.0" layoutY="30.0" minHeight="40.0" onAction="#handleBack" prefWidth="200.0"
                            styleClass="jfx-button1" text="Back" textFill="WHITE"/>
                 <padding>
