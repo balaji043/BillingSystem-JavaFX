@@ -73,6 +73,7 @@ public class ViewBillsController implements Initializable {
         this.mainApp = mainApp;
         checkNonGst.setSelected(true);
         checkGST.setSelected(true);
+        TextFields.bindAutoCompletion(customerName.getEditor(), customerName.getItems());
         toDate.setDayCellFactory(picker -> new DateCell() {
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);

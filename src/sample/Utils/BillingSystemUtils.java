@@ -30,6 +30,7 @@ public class BillingSystemUtils {
             "Eighty",    // 8
             "Ninety"     // 9
     };
+    private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 
     public static String convert(final int n) {
         if (n < 0) {
@@ -53,8 +54,6 @@ public class BillingSystemUtils {
         return convert(n / 10000000) + " Crore" + ((n % 10000000 != 0) ? " " : "") + convert(n % 10000000);
     }
 
-    private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
-
     public static LocalDate convertToLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
@@ -66,14 +65,16 @@ public class BillingSystemUtils {
     }
 
     public static void setImageViewToButtons(ICON iconName, JFXButton jfxButton) {
-        jfxButton.setText("");
         int i = 20;
+
+        jfxButton.setText("");
         ImageView view1 = null;
         try {
             view1 = new ImageView(new Image(Main.class.
                     getResourceAsStream("Resources/icons/" + iconName.toString())
                     , i + 10, i + 10, true, true));
         } catch (Exception e) {
+            jfxButton.setText("");
             e.getMessage();
             //LOGGER.log(Level.SEVERE, e.getMessage());
         }

@@ -23,7 +23,8 @@
                     <JFXDatePicker fx:id="toDate" prefHeight="40.0" prefWidth="210.0" promptText="TO"/>
                 </VBox>
                 <VBox spacing="20.0">
-                    <JFXComboBox fx:id="customerName" prefHeight="40.0" prefWidth="200.0" promptText="CUSTOMER NAME"/>
+                    <JFXComboBox fx:id="customerName" editable="true" prefHeight="40.0" prefWidth="200.0"
+                                 promptText="CUSTOMER NAME"/>
                     <JFXTextField fx:id="searchBox" maxWidth="250.0" prefWidth="250.0" promptText="Search Invoice"/>
                 </VBox>
                 <VBox alignment="CENTER" spacing="20.0">

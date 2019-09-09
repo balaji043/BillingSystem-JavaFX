@@ -64,6 +64,9 @@ public class PurchaseBills {
         BillingSystemUtils.setImageViewToButtons(ICON.UPLOAD, importButton);
         BillingSystemUtils.setImageViewToButtons(ICON.SEARCH, searchSubmitButton);
         BillingSystemUtils.setImageViewToButtons(ICON.SAVE, editSubmitButton);
+        BillingSystemUtils.setImageViewToButtons(ICON.SAVE, downloadAllButton);
+        downloadAllButton.setPrefSize(80, 40);
+        downloadAllButton.setText("All");
 
 
         borderPane.setRight(null);
