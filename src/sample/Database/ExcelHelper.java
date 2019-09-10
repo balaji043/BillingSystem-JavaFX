@@ -255,6 +255,7 @@ public class ExcelHelper {
         }
         return okay;
     }
+
     private static void autoResizeColumn(Sheet sheet, int n) {
         for (int i = 0; i <= n; i++)
             sheet.autoSizeColumn(i);

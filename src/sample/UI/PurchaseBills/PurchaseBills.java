@@ -96,7 +96,7 @@ public class PurchaseBills {
         loadTable();
     }
 
-    public void handleDownloadSubmit() {
+    public void handleDownloadAll() {
         if (tableView.getItems().size() == 0) {
             mainApp.snackBar("", "Nothing to Export", "red");
             return;
@@ -291,7 +291,7 @@ public class PurchaseBills {
     }
 
 
-    public void handleDownloadAll() {
+    public void handleDownloadSubmit() {
         if (tableView.getItems().size() == 0) {
             mainApp.snackBar("", "Nothing to Export", "red");
             return;
