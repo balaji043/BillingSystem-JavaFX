@@ -124,7 +124,7 @@ public class ViewBillsController implements Initializable {
             spinner.setMaxSize(d, d);
             spinner.setPrefSize(d, d);
             main.getChildren().add(spinner);
-            if (ExcelHelper.writeExcelBills(dest, bills)) {
+            if (ExcelHelper.writeExcelBills(dest, tableView.getItems())) {
                 mainApp.snackBar("Success"
                         , "Bill History Data Written to Excel"
                         , "green");
@@ -247,10 +247,10 @@ public class ViewBillsController implements Initializable {
     private void setTotalAmount() {
         float total = 0;
         if (taxTotalCheckBox.isSelected()) {
-            for (Bill b : bills)
+            for (Bill b : tableView.getItems())
                 total = total + Float.parseFloat(b.getTotalAmount());
         } else {
-            for (Bill b : bills)
+            for (Bill b : tableView.getItems())
                 total = total + Float.parseFloat(b.getTotalAmountBeforeRoundOff());
         }
         totalAmount.setText("Rs. " + String.format("%.2f", total));

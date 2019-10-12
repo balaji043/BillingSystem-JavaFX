@@ -1,0 +1,48 @@
+
+Œ"squid:SwitchLastCaseIsDefaultCheck"YComplete cases by adding the missing enum constants or add a default case to this switch.(ıú…Ÿ8áÕ€ÙÉ-
+‘"squid:SwitchLastCaseIsDefaultCheck"YComplete cases by adding the missing enum constants or add a default case to this switch.(şÖ™³úÿÿÿÿ8áÕ€ÙÉ-
+Œ"squid:SwitchLastCaseIsDefaultCheck"YComplete cases by adding the missing enum constants or add a default case to this switch.(Öç­©8áÕ€ÙÉ-
+‘"squid:SwitchLastCaseIsDefaultCheck"YComplete cases by adding the missing enum constants or add a default case to this switch.(ËÊ…Šúÿÿÿÿ8áÕ€ÙÉ-
+‘"squid:SwitchLastCaseIsDefaultCheck"YComplete cases by adding the missing enum constants or add a default case to this switch.(‘áèÖûÿÿÿÿ8áÕ€ÙÉ-
+Œ"squid:SwitchLastCaseIsDefaultCheck"YComplete cases by adding the missing enum constants or add a default case to this switch.(ÎÈÏ8áÕ€ÙÉ-
+Œ"squid:SwitchLastCaseIsDefaultCheck"YComplete cases by adding the missing enum constants or add a default case to this switch.(şë¢8áÕ€ÙÉ-
+Œ"squid:SwitchLastCaseIsDefaultCheck"YComplete cases by adding the missing enum constants or add a default case to this switch.(û‹Àò8áÕ€ÙÉ-
+Qsquid:S1191"5Use classes from the Java API instead of Sun classes.(¤œĞ8áÕ€ÙÉ-
+gsquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(ıú…Ÿ8áÕ€ÙÉ-
+lsquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(şÖ™³úÿÿÿÿ8áÕ€ÙÉ-
+gsquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(Öç­©8áÕ€ÙÉ-
+lsquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(ËÊ…Šúÿÿÿÿ8áÕ€ÙÉ-
+lsquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(‘áèÖûÿÿÿÿ8áÕ€ÙÉ-
+gsquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(ÎÈÏ8áÕ€ÙÉ-
+gsquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(şë¢8áÕ€ÙÉ-
+gsquid:S1301"KReplace this "switch" statement by "if" statements to increase readability.(û‹Àò8áÕ€ÙÉ-
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÿö¹÷8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(ĞóÒúøÿÿÿÿ8áÕ€ÙÉ-
+T
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÿö¹÷8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8áÕ€ÙÉ-
+Y
+squid:S106"9Replace this use of System.out or System.err by a logger.(©şêÜúÿÿÿÿ8áÕ€ÙÉ-
+nsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ü³Ü¸8áÕ€ÙÉ-
+ssquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 80 to the 15 allowed.(Ø©¾ìüÿÿÿÿ8áÕ€ÙÉ-
+[squid:S1118":Add a private constructor to hide the implicit public one.(¶Ö—ğÿÿÿÿÿ8áÕ€ÙÉ-
+nsquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¢¿ò8áÕ€ÙÉ-
+nsquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¢¿ò8áÕ€ÙÉ-
+ssquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Óª€ùÿÿÿÿ8áÕ€ÙÉ-
+ssquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Óª€ùÿÿÿÿ8áÕ€ÙÉ-
+ssquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Óª€ùÿÿÿÿ8áÕ€ÙÉ-

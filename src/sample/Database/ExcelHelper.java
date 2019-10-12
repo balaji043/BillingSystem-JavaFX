@@ -15,16 +15,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import static sample.Utils.Constants.PURCHASE_BILLS_FOR;
+
 @SuppressWarnings("Duplicates")
 public class ExcelHelper {
 
     private static boolean okay = false;
 
+    private ExcelHelper() {
+
+    }
+
     public static boolean writeExcelBills(@NotNull File dest
             , @NotNull ObservableList<Bill> bills) {
         okay = false;
         try {
-            String FILE_NAME = dest.getAbsolutePath();
+            String fileName = dest.getAbsolutePath();
             FileInputStream excel;
             XSSFWorkbook workbook;
             try {
@@ -66,6 +72,7 @@ public class ExcelHelper {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
                 row.createCell(6).setCellValue(place);
                 row.createCell(7).setCellValue(bill.getUserName());
                 place = "";
@@ -73,7 +80,7 @@ public class ExcelHelper {
             }
             autoResizeColumn(sheet, 7);
 
-            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+            FileOutputStream outputStream = new FileOutputStream(fileName);
             workbook.write(outputStream);
             outputStream.close();
             workbook.close();
@@ -88,7 +95,7 @@ public class ExcelHelper {
             , @NotNull ObservableList<Customer> customers) {
         okay = false;
         try {
-            String FILE_NAME = dest.getAbsolutePath();
+            String fileName = dest.getAbsolutePath();
             FileInputStream excel;
             XSSFWorkbook workbook;
             XSSFSheet sheet;
@@ -129,7 +136,7 @@ public class ExcelHelper {
                 rowNum++;
             }
             autoResizeColumn(sheet, 7);
-            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+            FileOutputStream outputStream = new FileOutputStream(fileName);
             workbook.write(outputStream);
             outputStream.close();
             workbook.close();
@@ -143,7 +150,7 @@ public class ExcelHelper {
     public static boolean writeExcelPurchaseBills(@NotNull File dest) {
         okay = false;
         try {
-            String FILE_NAME = dest.getAbsolutePath();
+            String fileName = dest.getAbsolutePath();
             FileInputStream excel;
             XSSFWorkbook workbook;
             try {
@@ -157,9 +164,9 @@ public class ExcelHelper {
                 ObservableList<PurchaseBill> purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList(s);
                 XSSFSheet sheet;
                 try {
-                    sheet = workbook.createSheet("PURCHASE BILLS FOR " + s);
+                    sheet = workbook.createSheet(PURCHASE_BILLS_FOR + s);
                 } catch (Exception e) {
-                    sheet = workbook.getSheet("PURCHASE BILLS FOR " + s);
+                    sheet = workbook.getSheet(PURCHASE_BILLS_FOR + s);
                 }
                 int rowNum = 0;
 
@@ -189,7 +196,7 @@ public class ExcelHelper {
                 }
                 autoResizeColumn(sheet, 8);
             }
-            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+            FileOutputStream outputStream = new FileOutputStream(fileName);
             workbook.write(outputStream);
             outputStream.close();
             workbook.close();
@@ -203,7 +210,7 @@ public class ExcelHelper {
     public static boolean writeExcelPurchaseBills(@NotNull File dest, String companyName, ObservableList<PurchaseBill> purchaseBills) {
         okay = false;
         try {
-            String FILE_NAME = dest.getAbsolutePath();
+            String fileName = dest.getAbsolutePath();
             FileInputStream excel;
             XSSFWorkbook workbook;
             try {
@@ -214,9 +221,9 @@ public class ExcelHelper {
             }
             XSSFSheet sheet;
             try {
-                sheet = workbook.createSheet("PURCHASE BILLS FOR " + companyName);
+                sheet = workbook.createSheet(PURCHASE_BILLS_FOR + companyName);
             } catch (Exception e) {
-                sheet = workbook.getSheet("PURCHASE BILLS FOR " + companyName);
+                sheet = workbook.getSheet(PURCHASE_BILLS_FOR + companyName);
             }
             int rowNum = 0;
 
@@ -245,7 +252,7 @@ public class ExcelHelper {
                 rowNum++;
             }
             autoResizeColumn(sheet, 8);
-            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+            FileOutputStream outputStream = new FileOutputStream(fileName);
             workbook.write(outputStream);
             outputStream.close();
             workbook.close();

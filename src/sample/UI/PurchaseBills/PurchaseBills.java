@@ -97,7 +97,7 @@ public class PurchaseBills {
     }
 
     public void handleDownloadAll() {
-        if (tableView.getItems().size() == 0) {
+        if (tableView.getItems().isEmpty()) {
             mainApp.snackBar("", "Nothing to Export", "red");
             return;
         }
@@ -166,26 +166,33 @@ public class PurchaseBills {
     }
 
     public void handleEditSubmit() {
-        if (mainApp.getUser().getAccess().equals("admin"))
-            if (singlePurchaseBill.isReady())
-                if (AlertMaker.showMCAlert("Confirm?", "Are you sure you want to update these changes?", mainApp))
+        if (mainApp.getUser().getAccess().equals("admin")) {
+            if (singlePurchaseBill.isReady()) {
+                if (AlertMaker.showMCAlert("Confirm?", "Are you sure you want to update these changes?", mainApp)) {
                     if (DatabaseHelper_PurchaseBill.updatePurchaseBill(singlePurchaseBill.getPurchaseBill(), DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()))) {
                         mainApp.snackBar("Success", "Purchase Bill Updated Successfully", "green");
                         loadTable();
-                    } else mainApp.snackBar("ERROR", "Operation Failed", "red");
-                else mainApp.snackBar("INFO", "Operation cancelled", "green");
-            else
+                    } else {
+                        mainApp.snackBar("ERROR", "Operation Failed", "red");
+                    }
+                } else {
+                    mainApp.snackBar("INFO", "Operation cancelled", "green");
+                }
+            } else {
                 mainApp.snackBar("INFO", "Check the details once again", "green");
-
+            }
+        }
     }
 
     public void handleSendToAuditorSubmit() {
         ObservableList<PurchaseBill> selectedBills = tableView.getSelectionModel().getSelectedItems();
-        if (!mainApp.getUser().getAccess().equals("admin") || selectedBills.size() == 0 || !AlertMaker.showMCAlert("Confirm?", "Are you sure you want to mark these items as send to auditor?", mainApp))
+        if (!mainApp.getUser().getAccess().equals("admin") || selectedBills.isEmpty() || !AlertMaker.showMCAlert("Confirm?", "Are you sure you want to mark these items as send to auditor?", mainApp)) {
             return;
+        }
         boolean result = true;
-        for (PurchaseBill purchaseBill : selectedBills)
+        for (PurchaseBill purchaseBill : selectedBills) {
             result = result && DatabaseHelper_PurchaseBill.updatePurchaseBillAsGoneToAuditor(purchaseBill, DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
+        }
         loadTable();
     }
 
@@ -225,19 +232,22 @@ public class PurchaseBills {
 
         ObservableList<PurchaseBill> purchaseBills;
         if ((searchBox.getText() != null && !searchBox.getText().isEmpty()) || (searchBox2.getText() != null && !searchBox2.getText().isEmpty())) {
-            if (searchBox.getText() != null && !searchBox.getText().isEmpty())
+            if (searchBox.getText() != null && !searchBox.getText().isEmpty()) {
                 purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(searchBox.getText(), tableName);
-            else
+            } else {
                 purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillListByTotalNetAmount(searchBox2.getText(), tableName);
-        } else if (companyNameCBOX.getValue() != null)
-            if (fromDate.getValue() != null && toDate.getValue() != null)
+            }
+        } else if (companyNameCBOX.getValue() != null) {
+            if (fromDate.getValue() != null && toDate.getValue() != null) {
                 purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(companyNameCBOX.getValue(), fromDate.getValue(), toDate.getValue(), tableName);
-            else
+            } else {
                 purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillListByCompanyName(companyNameCBOX.getValue(), tableName);
-        else if (fromDate.getValue() != null && toDate.getValue() != null)
+            }
+        } else if (fromDate.getValue() != null && toDate.getValue() != null) {
             purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(fromDate.getValue(), toDate.getValue(), tableName);
-        else
+        } else {
             purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList(tableName);
+        }
 
         tableView.getItems().addAll(getFilterListBySendToAuditor(purchaseBills));
         tableView.sort();
@@ -292,7 +302,7 @@ public class PurchaseBills {
 
 
     public void handleDownloadSubmit() {
-        if (tableView.getItems().size() == 0) {
+        if (tableView.getItems().isEmpty()) {
             mainApp.snackBar("", "Nothing to Export", "red");
             return;
         }
