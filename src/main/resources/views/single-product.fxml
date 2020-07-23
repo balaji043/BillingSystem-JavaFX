@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER_LEFT" focusTraversable="true" prefHeight="90.0"
+         prefWidth="1200.0"
+         spacing="2.0" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.171">
+    <Text fx:id="slNo" strokeType="OUTSIDE" strokeWidth="0.0" text="SL.NO">
+        <font>
+            <Font name="System Bold" size="15.0"/>
+        </font>
+    </Text>
+    <JFXTextField fx:id="name" prefHeight="40.0" prefWidth="175.0" promptText="DESCRIPTION">
+        <HBox.margin>
+            <Insets left="10.0"/>
+        </HBox.margin>
+    </JFXTextField>
+    <JFXTextField fx:id="hsn" prefHeight="40.0" prefWidth="175.0" promptText="HSN"/>
+    <JFXTextField fx:id="qty" prefHeight="40.0" prefWidth="175.0" promptText="QTY"/>
+    <JFXTextField fx:id="rate" prefHeight="40.0" prefWidth="175.0" promptText="RATE"/>
+    <JFXComboBox fx:id="per" prefHeight="40.0" prefWidth="175.0" promptText="PER"/>
+    <VBox alignment="CENTER" spacing="10.0">
+        <JFXCheckBox fx:id="checkBoxAdd" prefWidth="126.0" text="Add"/>
+        <JFXCheckBox fx:id="checkBoxDiscount" prefWidth="126.0" text="Minus"/>
+    </VBox>
+    <JFXTextField fx:id="discount" prefHeight="40.0" prefWidth="175.0" promptText="DISCOUNT"/>
+    <Label fx:id="amount" prefHeight="40.0" prefWidth="200.0" text="Amount">
+        <HBox.margin>
+            <Insets left="20.0"/>
+        </HBox.margin>
+        <font>
+            <Font name="System Bold" size="15.0"/>
+        </font>
+    </Label>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+    </padding>
+</fx:root>
