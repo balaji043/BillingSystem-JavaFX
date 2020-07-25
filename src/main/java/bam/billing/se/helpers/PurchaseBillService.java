@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class DatabaseHelper_PurchaseBill extends DatabaseHelper {
+public class PurchaseBillService extends DatabaseHelper {
 
 
     static boolean createPurchaseBillTable() {

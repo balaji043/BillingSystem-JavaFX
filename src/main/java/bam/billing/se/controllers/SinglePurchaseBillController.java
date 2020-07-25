@@ -27,9 +27,9 @@ import java.util.logging.Logger;
 
 import static bam.billing.se.utils.ResourceConstants.Views;
 
-public class PurchaseBillController extends HBox {
+public class SinglePurchaseBillController extends HBox {
 
-    private static final Logger LOGGER = Logger.getLogger(PurchaseBillController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SinglePurchaseBillController.class.getName());
     @FXML
     private JFXDatePicker fromDate;
     @FXML
@@ -51,7 +51,7 @@ public class PurchaseBillController extends HBox {
     private HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
 
 
-    public PurchaseBillController() {
+    public SinglePurchaseBillController() {
         FXMLLoader loader = BillingSystemUtils.getFXMLLoader(Views.SINGLE_PURCHASE_BILL);
 
         loader.setRoot(this);

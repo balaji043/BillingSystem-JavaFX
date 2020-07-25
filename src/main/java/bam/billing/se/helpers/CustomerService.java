@@ -1,7 +1,9 @@
 package bam.billing.se.helpers;
 
+import bam.billing.se.dto.CustomerNameResult;
 import bam.billing.se.models.Customer;
 import bam.billing.se.utils.AlertMaker;
+import bam.billing.se.utils.Constants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -9,7 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DatabaseHelper_Customer extends DatabaseHelper {
+
+public class CustomerService extends DatabaseHelper {
+
+
     static boolean createCustomerTable() {
         String create = "CREATE TABLE IF NOT EXISTS CUSTOMER" +
                 "( NAME TEXT NOT NULL UNIQUE,  PHONE TEXT NOT NULL" +
@@ -93,16 +98,11 @@ public class DatabaseHelper_Customer extends DatabaseHelper {
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, customerId);
             resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) return null;
-            customer = new Customer(
-                    "" + resultSet.getString("NAME")
-                    , "" + resultSet.getString("PHONE")
-                    , "" + resultSet.getString("GSTIN")
-                    , "" + resultSet.getString("STREET")
-                    , "" + resultSet.getString("CITY")
-                    , "" + resultSet.getString("STATE")
-                    , "" + resultSet.getString("ZIP")
-                    , "" + customerId);
+
+            if (!resultSet.next())
+                return null;
+
+            customer = getCustomerFromResultSet(resultSet);
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
             e.printStackTrace();
@@ -114,14 +114,14 @@ public class DatabaseHelper_Customer extends DatabaseHelper {
         return customer;
     }
 
-    public static ObservableList<Customer> getCustomerList() {
+    public static ObservableList<Customer> getCustomerList(int offset) {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         PreparedStatement preparedStatement = null;
 
         try {
-            String query = "SELECT * FROM CUSTOMER WHERE TRUE";
+            String query = "SELECT * FROM CUSTOMER LIMIT 10 OFFSET " + offset + ";";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
-            customers = getCustomerList(preparedStatement);
+            customers = getCustomerListFromPreparedStatement(preparedStatement);
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         } finally {
@@ -135,15 +135,15 @@ public class DatabaseHelper_Customer extends DatabaseHelper {
         return customers;
     }
 
-    public static ObservableList<Customer> getCustomerList(String searchText) {
+    public static ObservableList<Customer> getCustomerListBySearchText(String searchText, int offset) {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         PreparedStatement preparedStatement = null;
 
         try {
-            String query = "SELECT * FROM CUSTOMER WHERE NAME LIKE ?";
+            String query = "SELECT * FROM CUSTOMER WHERE NAME LIKE ? LIMIT 10 OFFSET " + offset + ";";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             preparedStatement.setString(1, searchText);
-            customers = getCustomerList(preparedStatement);
+            customers = getCustomerListFromPreparedStatement(preparedStatement);
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
         } finally {
@@ -157,21 +157,13 @@ public class DatabaseHelper_Customer extends DatabaseHelper {
         return customers;
     }
 
-    private static ObservableList<Customer> getCustomerList(PreparedStatement preparedStatement) {
+    private static ObservableList<Customer> getCustomerListFromPreparedStatement(PreparedStatement preparedStatement) {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         ResultSet resultSet = null;
-
         try {
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                customers.add(new Customer("" + resultSet.getString(1)
-                        , "" + resultSet.getString(2)
-                        , "" + resultSet.getString(3)
-                        , "" + resultSet.getString(4)
-                        , "" + resultSet.getString(5)
-                        , "" + resultSet.getString(6)
-                        , "" + resultSet.getString(7)
-                        , "" + resultSet.getString(8)));
+                customers.add(getCustomerFromResultSet(resultSet));
             }
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
@@ -181,41 +173,41 @@ public class DatabaseHelper_Customer extends DatabaseHelper {
             DatabaseHelper.closePAndRMethod(preparedStatement, resultSet);
         }
         return customers;
+    }
+
+
+    private static Customer getCustomerFromResultSet(ResultSet resultSet) throws SQLException {
+        Customer customer = new Customer();
+        customer.setName(resultSet.getString(Column.NAME));
+        customer.setPhone(resultSet.getString(Column.PHONE));
+        customer.setGstIn(resultSet.getString(Column.GSTIN));
+        customer.setStreetAddress(resultSet.getString(Column.STREET));
+        customer.setCity(resultSet.getString(Column.CITY));
+        customer.setState(resultSet.getString(Column.STATE));
+        customer.setZipCode(resultSet.getString(Column.ZIP));
+        customer.setId(resultSet.getString(Column.ID));
+        return customer;
     }
 
     /**
-     * This functions returns the customer list
-     *
-     * @param no is either 0,1 or any to indicate whether to return gst customers or non-gst Customers or both;
-     *           if  no == 0 then non-gst customer list will be returned;
-     *           if  no == 0 then gst customer list will be returned;
-     *           if  no == 0 then both gst and non-gst customer list will be returned;
+     * This functions returns the customer list result by segregating them by GSTIN column
      **/
-
-    public static ObservableList<String> getCustomerNameList(int no) {
-        ObservableList<String> customers = FXCollections.observableArrayList();
+    public static CustomerNameResult getCustomerNameResult() {
+        CustomerNameResult customerNameResult = new CustomerNameResult();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-
+        String query = "SELECT GSTIN, NAME FROM CUSTOMER WHERE TRUE";
         try {
-            String query = "SELECT * FROM CUSTOMER WHERE TRUE";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
-            if (no == 0) {
-                while (resultSet.next()) {
-                    if (!resultSet.getString(3).equals("For Own Use"))
-                        customers.add(resultSet.getString("NAME"));
-                }
-            } else if (no == 1) {
-                while (resultSet.next()) {
-                    if (resultSet.getString(3).equals("For Own Use"))
-                        customers.add(resultSet.getString("NAME"));
-                }
-            } else {
-                while (resultSet.next()) {
-                    customers.add(resultSet.getString("NAME"));
-                }
+            while (resultSet.next()) {
+                String name = resultSet.getString(Column.NAME);
+                customerNameResult.allCustomerNames.add(name);
 
+                if (resultSet.getString(Column.GSTIN).equals(Constants.FOR_OWN_USE))
+                    customerNameResult.nonGstCustomerNames.add(name);
+                else
+                    customerNameResult.gstCustomerNames.add(name);
             }
         } catch (Exception e) {
             AlertMaker.showErrorMessage(e);
@@ -224,6 +216,18 @@ public class DatabaseHelper_Customer extends DatabaseHelper {
             assert resultSet != null;
             DatabaseHelper.closePAndRMethod(preparedStatement, resultSet);
         }
-        return customers;
+        return customerNameResult;
     }
+
+    static class Column {
+        public static String NAME = "NAME";
+        public static String PHONE = "PHONE";
+        public static String GSTIN = "GSTIN";
+        public static String STREET = "STREET";
+        public static String CITY = "CITY";
+        public static String STATE = "STATE";
+        public static String ZIP = "ZIP";
+        public static String ID = "ID";
+    }
+
 }

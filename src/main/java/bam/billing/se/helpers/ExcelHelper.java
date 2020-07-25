@@ -157,7 +157,7 @@ public class ExcelHelper {
             }
             String[] typeArray = {"StdEnt", "StdEqm"};
             for (String s : typeArray) {
-                ObservableList<PurchaseBill> purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList(s);
+                ObservableList<PurchaseBill> purchaseBills = PurchaseBillService.getAllPurchaseBillList(s);
                 XSSFSheet sheet;
                 try {
                     sheet = workbook.createSheet(PURCHASE_BILLS_FOR + s);

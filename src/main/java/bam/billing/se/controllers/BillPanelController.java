@@ -1,11 +1,13 @@
 package bam.billing.se.controllers;
 
 import bam.billing.se.Main;
-import bam.billing.se.helpers.DatabaseHelper_Bill;
-import bam.billing.se.helpers.DatabaseHelper_Customer;
+import bam.billing.se.dto.CustomerNameResult;
+import bam.billing.se.helpers.BillService;
+import bam.billing.se.helpers.CustomerService;
 import bam.billing.se.helpers.ExcelHelper;
 import bam.billing.se.models.Bill;
 import bam.billing.se.utils.AlertMaker;
+import bam.billing.se.utils.CustomerType;
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,40 +30,33 @@ import java.util.ResourceBundle;
 import static bam.billing.se.utils.AlertMaker.showBill;
 
 @SuppressWarnings("Duplicates")
-public class ViewBillsController implements Initializable {
+public class BillPanelController implements Initializable {
+
     @FXML
     private Text totalAmount;
     @FXML
     private JFXCheckBox taxTotalCheckBox;
     @FXML
     private JFXCheckBox checkGST, checkNonGst;
-
     @FXML
     private JFXDatePicker fromDate, toDate;
-
     @FXML
     private JFXComboBox<String> customerName;
-
     @FXML
     private TableView<Bill> tableView;
-
     @FXML
     private JFXTextField searchBox;
-
     @FXML
     private StackPane main;
 
     private Main mainApp;
-
     private ObservableList<Bill> bills = FXCollections.observableArrayList();
-    private ObservableList<String> gst, nonGst, all;
+    CustomerNameResult customerNameResult = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        gst = DatabaseHelper_Customer.getCustomerNameList(0);
-        nonGst = DatabaseHelper_Customer.getCustomerNameList(1);
-        all = DatabaseHelper_Customer.getCustomerNameList(3);
+        customerNameResult = CustomerService.getCustomerNameResult();
 
         TextFields.bindAutoCompletion(customerName.getEditor(), customerName.getItems());
         setCustomerName();
@@ -147,7 +142,7 @@ public class ViewBillsController implements Initializable {
             if (!AlertMaker.showMCAlert("Confirm delete?"
                     , "Are sure you want to delete?", mainApp))
                 return;
-            boolean b = DatabaseHelper_Bill.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId());
+            boolean b = BillService.deleteBill(tableView.getSelectionModel().getSelectedItem().getBillId());
             if (b)
                 mainApp.snackBar("Success", "Bill is Successfully Deleted", "green");
             else
@@ -169,7 +164,7 @@ public class ViewBillsController implements Initializable {
             return;
         }
         Bill bill = tableView.getSelectionModel().getSelectedItem();
-        if (DatabaseHelper_Customer.getCustomerInfo(bill.getCustomerName()) == null) {
+        if (CustomerService.getCustomerInfo(bill.getCustomerName()) == null) {
             mainApp.snackBar("Info", " Customer Data Doesn't Exists.\n Cannot Modify the bill for now", "red");
             return;
         }
@@ -205,26 +200,26 @@ public class ViewBillsController implements Initializable {
         tableView.getItems().clear();
 
         if (searchBox.getText() != null && !searchBox.getText().isEmpty())
-            bills = DatabaseHelper_Bill.getBillLists("%" + searchBox.getText() + "%");
-        else if (customerName.getValue() != null && all.contains(customerName.getValue()))
+            bills = BillService.getBillLists("%" + searchBox.getText() + "%");
+        else if (customerName.getValue() != null && customerNameResult.allCustomerNames.contains(customerName.getValue()))
             if (fromDate.getValue() != null && toDate != null)
-                bills = DatabaseHelper_Bill.getBillList(customerName.getValue()
+                bills = BillService.getBillList(customerName.getValue()
                         , fromDate.getValue(), toDate.getValue());
             else
-                bills = DatabaseHelper_Bill.getBillList(customerName.getValue());
+                bills = BillService.getBillList(customerName.getValue());
         else if (fromDate.getValue() != null && toDate != null)
             if (checkGST.isSelected() && !checkNonGst.isSelected())
-                bills = DatabaseHelper_Bill.getBillList(fromDate.getValue(), toDate.getValue(), 1);
+                bills = BillService.getBillList(fromDate.getValue(), toDate.getValue(), CustomerType.GST);
             else if (!checkGST.isSelected() && checkNonGst.isSelected())
-                bills = DatabaseHelper_Bill.getBillList(fromDate.getValue(), toDate.getValue(), 2);
+                bills = BillService.getBillList(fromDate.getValue(), toDate.getValue(), CustomerType.NON_GST);
             else
-                bills = DatabaseHelper_Bill.getBillList(fromDate.getValue(), toDate.getValue(), 3);
+                bills = BillService.getBillList(fromDate.getValue(), toDate.getValue(), CustomerType.BOTH);
         else if (checkGST.isSelected() && !checkNonGst.isSelected())
-            bills = DatabaseHelper_Bill.getBillList(true);
+            bills = BillService.getBillList(true);
         else if (!checkGST.isSelected() && checkNonGst.isSelected())
-            bills = DatabaseHelper_Bill.getBillList(false);
+            bills = BillService.getBillList(false);
         else
-            bills = DatabaseHelper_Bill.getBillList();
+            bills = BillService.getBillList();
         tableView.getItems().addAll(bills);
         setTotalAmount();
     }
@@ -237,11 +232,11 @@ public class ViewBillsController implements Initializable {
 
     private void setCustomerName() {
         if (checkGST.isSelected() && !checkNonGst.isSelected())
-            customerName.setItems(gst);
+            customerName.setItems(customerNameResult.gstCustomerNames);
         else if (!checkGST.isSelected() && checkNonGst.isSelected())
-            customerName.setItems(nonGst);
+            customerName.setItems(customerNameResult.nonGstCustomerNames);
         else
-            customerName.setItems(all);
+            customerName.setItems(customerNameResult.allCustomerNames);
     }
 
     private void setTotalAmount() {

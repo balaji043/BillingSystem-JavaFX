@@ -137,7 +137,7 @@ public class Main extends Application {
             try {
                 StackPane root = loader.load();
                 rootLayoutController.setContent(root);
-                ViewBillsController rootController = loader.getController();
+                BillPanelController rootController = loader.getController();
                 rootController.setMainApp(Main.this);
             } catch (IOException e) {
                 e.printStackTrace();

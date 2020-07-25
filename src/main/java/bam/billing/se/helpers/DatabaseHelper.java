@@ -19,13 +19,13 @@ public class DatabaseHelper {
                     , "123"
                     , UserRole.ADMIN));
         }
-        if (DatabaseHelper_Customer.createCustomerTable()) {
+        if (CustomerService.createCustomerTable()) {
             System.out.println("Customer Table Created or Already Exists");
         }
-        if (DatabaseHelper_Bill.createBillTable()) {
+        if (BillService.createBillTable()) {
             System.out.println("Bills Table Created or Already Exists");
         }
-        if (DatabaseHelper_PurchaseBill.createPurchaseBillTable()) {
+        if (PurchaseBillService.createPurchaseBillTable()) {
             System.out.println("PurchaseBills Table Created or Already Exists");
         }
     }

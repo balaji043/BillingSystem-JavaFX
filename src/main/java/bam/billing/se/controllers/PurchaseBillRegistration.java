@@ -1,7 +1,7 @@
 package bam.billing.se.controllers;
 
 import bam.billing.se.Main;
-import bam.billing.se.helpers.DatabaseHelper_PurchaseBill;
+import bam.billing.se.helpers.PurchaseBillService;
 import bam.billing.se.utils.BillingSystemUtils;
 import bam.billing.se.utils.Preferences;
 import com.jfoenix.controls.JFXButton;
@@ -18,7 +18,7 @@ import static bam.billing.se.utils.ResourceConstants.Icons;
 public class PurchaseBillRegistration {
 
     public JFXButton addBTN, deleteBTN, submitBTN;
-    public JFXListView<PurchaseBillController> listView;
+    public JFXListView<SinglePurchaseBillController> listView;
     public JFXComboBox<String> typeComboBox;
     private Main mainApp;
 
@@ -36,7 +36,7 @@ public class PurchaseBillRegistration {
             mainApp.snackBar("INFO", "SELECT TYPE FIRST", "green");
             return;
         }
-        PurchaseBillController purchaseBill = new PurchaseBillController();
+        SinglePurchaseBillController purchaseBill = new SinglePurchaseBillController();
         listView.getItems().add(purchaseBill);
         setSlNo();
     }
@@ -62,16 +62,16 @@ public class PurchaseBillRegistration {
         }
         boolean ready = true;
         int noOfPurchaseBills = listView.getItems().size();
-        for (PurchaseBillController b : listView.getItems()) {
+        for (SinglePurchaseBillController b : listView.getItems()) {
             ready = ready && b.isReady();
         }
         HashSet<String> companyNames = Preferences.getPreferences().getCompanyNames();
         if (ready) {
-            ObservableList<PurchaseBillController> s = listView.getItems();
-            ObservableList<PurchaseBillController> toRemove = FXCollections.observableArrayList();
+            ObservableList<SinglePurchaseBillController> s = listView.getItems();
+            ObservableList<SinglePurchaseBillController> toRemove = FXCollections.observableArrayList();
             boolean singleResult;
-            for (PurchaseBillController bill : s) {
-                singleResult = DatabaseHelper_PurchaseBill.insertNewPurchaseBill(bill.getPurchaseBill(), DatabaseHelper_PurchaseBill.getTableName(typeComboBox.getValue()));
+            for (SinglePurchaseBillController bill : s) {
+                singleResult = PurchaseBillService.insertNewPurchaseBill(bill.getPurchaseBill(), PurchaseBillService.getTableName(typeComboBox.getValue()));
                 ready = ready && singleResult;
                 if (singleResult) {
                     toRemove.add(bill);
@@ -83,7 +83,7 @@ public class PurchaseBillRegistration {
                 }
                 companyNames.add(bill.getPurchaseBill().getCompanyName());
             }
-            for (PurchaseBillController r : toRemove)
+            for (SinglePurchaseBillController r : toRemove)
                 listView.getItems().remove(r);
             if (ready) {
                 mainApp.snackBar("SUCCESS", "Successfully Added " + noOfPurchaseBills + " Purchased Bills", "green");
@@ -103,14 +103,14 @@ public class PurchaseBillRegistration {
 
     @FXML
     private void handleCalculate() {
-        for (PurchaseBillController bill : listView.getItems()) {
+        for (SinglePurchaseBillController bill : listView.getItems()) {
             bill.setAmountAfterText();
         }
     }
 
     private void setSlNo() {
         int i = 1;
-        for (PurchaseBillController b :
+        for (SinglePurchaseBillController b :
                 listView.getItems())
             b.setSlNoText(String.format("%2d", i++));
 

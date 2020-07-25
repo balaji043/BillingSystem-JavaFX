@@ -1,9 +1,9 @@
 package bam.billing.se.controllers;
 
 import bam.billing.se.Main;
-import bam.billing.se.helpers.DatabaseHelper_PurchaseBill;
 import bam.billing.se.helpers.ExcelDatabaseHelper;
 import bam.billing.se.helpers.ExcelHelper;
+import bam.billing.se.helpers.PurchaseBillService;
 import bam.billing.se.models.PurchaseBill;
 import bam.billing.se.utils.AlertMaker;
 import bam.billing.se.utils.BillingSystemUtils;
@@ -45,7 +45,7 @@ public class PurchaseBillsPanelController {
     public JFXButton editSubmitButton;
     public JFXButton addBTN;
 
-    private PurchaseBillController purchaseBillController = new PurchaseBillController();
+    private SinglePurchaseBillController singlePurchaseBillController = new SinglePurchaseBillController();
     @FXML
     private JFXCheckBox taxTotalCheckBox;
     @FXML
@@ -126,7 +126,7 @@ public class PurchaseBillsPanelController {
                                 , "Are you sure you want to delete this Purchase Bill from "
                                         + toDeletePurchaseBill.getCompanyName() + "?"
                                 , mainApp)) {
-                    if (DatabaseHelper_PurchaseBill.deletePurchaseBill(toDeletePurchaseBill, DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()))) {
+                    if (PurchaseBillService.deletePurchaseBill(toDeletePurchaseBill, PurchaseBillService.getTableName(billTypeCBOX.getValue()))) {
                         mainApp.snackBar("Success", "Purchase Bill Deleted Successfully", "green");
                         loadTable();
                     }
@@ -140,7 +140,7 @@ public class PurchaseBillsPanelController {
                         , "Are you sure you want to delete " + toDelete.size() + " Purchase Bills from ?"
                         , mainApp)) {
                     for (PurchaseBill toDeleteBill : toDelete)
-                        DatabaseHelper_PurchaseBill.deletePurchaseBill(toDeleteBill, DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
+                        PurchaseBillService.deletePurchaseBill(toDeleteBill, PurchaseBillService.getTableName(billTypeCBOX.getValue()));
                     loadTable();
                 }
             }
@@ -152,7 +152,7 @@ public class PurchaseBillsPanelController {
             if (editPanelCheckBox.isSelected()) {
 
                 VBox vBox = new VBox();
-                vBox.getChildren().addAll(purchaseBillController.getVBox(), editPanel);
+                vBox.getChildren().addAll(singlePurchaseBillController.getVBox(), editPanel);
                 vBox.setAlignment(Pos.TOP_LEFT);
                 vBox.setSpacing(20);
                 vBox.setPadding(new Insets(20, 20, 20, 20));
@@ -167,9 +167,9 @@ public class PurchaseBillsPanelController {
 
     public void handleEditSubmit() {
         if (mainApp.isAdmin()) {
-            if (purchaseBillController.isReady()) {
+            if (singlePurchaseBillController.isReady()) {
                 if (AlertMaker.showMCAlert("Confirm?", "Are you sure you want to update these changes?", mainApp)) {
-                    if (DatabaseHelper_PurchaseBill.updatePurchaseBill(purchaseBillController.getPurchaseBill(), DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()))) {
+                    if (PurchaseBillService.updatePurchaseBill(singlePurchaseBillController.getPurchaseBill(), PurchaseBillService.getTableName(billTypeCBOX.getValue()))) {
                         mainApp.snackBar("Success", "Purchase Bill Updated Successfully", "green");
                         loadTable();
                     } else {
@@ -191,7 +191,7 @@ public class PurchaseBillsPanelController {
         }
         boolean result = true;
         for (PurchaseBill purchaseBill : selectedBills) {
-            result = result && DatabaseHelper_PurchaseBill.updatePurchaseBillAsGoneToAuditor(purchaseBill, DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue()));
+            result = result && PurchaseBillService.updatePurchaseBillAsGoneToAuditor(purchaseBill, PurchaseBillService.getTableName(billTypeCBOX.getValue()));
         }
         loadTable();
     }
@@ -228,25 +228,25 @@ public class PurchaseBillsPanelController {
 
     private void loadTable() {
         tableView.getItems().clear();
-        String tableName = DatabaseHelper_PurchaseBill.getTableName(billTypeCBOX.getValue());
+        String tableName = PurchaseBillService.getTableName(billTypeCBOX.getValue());
 
         ObservableList<PurchaseBill> purchaseBills;
         if ((searchBox.getText() != null && !searchBox.getText().isEmpty()) || (searchBox2.getText() != null && !searchBox2.getText().isEmpty())) {
             if (searchBox.getText() != null && !searchBox.getText().isEmpty()) {
-                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(searchBox.getText(), tableName);
+                purchaseBills = PurchaseBillService.getPurchaseBillList(searchBox.getText(), tableName);
             } else {
-                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillListByTotalNetAmount(searchBox2.getText(), tableName);
+                purchaseBills = PurchaseBillService.getPurchaseBillListByTotalNetAmount(searchBox2.getText(), tableName);
             }
         } else if (companyNameCBOX.getValue() != null) {
             if (fromDate.getValue() != null && toDate.getValue() != null) {
-                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(companyNameCBOX.getValue(), fromDate.getValue(), toDate.getValue(), tableName);
+                purchaseBills = PurchaseBillService.getPurchaseBillList(companyNameCBOX.getValue(), fromDate.getValue(), toDate.getValue(), tableName);
             } else {
-                purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillListByCompanyName(companyNameCBOX.getValue(), tableName);
+                purchaseBills = PurchaseBillService.getPurchaseBillListByCompanyName(companyNameCBOX.getValue(), tableName);
             }
         } else if (fromDate.getValue() != null && toDate.getValue() != null) {
-            purchaseBills = DatabaseHelper_PurchaseBill.getPurchaseBillList(fromDate.getValue(), toDate.getValue(), tableName);
+            purchaseBills = PurchaseBillService.getPurchaseBillList(fromDate.getValue(), toDate.getValue(), tableName);
         } else {
-            purchaseBills = DatabaseHelper_PurchaseBill.getAllPurchaseBillList(tableName);
+            purchaseBills = PurchaseBillService.getAllPurchaseBillList(tableName);
         }
 
         tableView.getItems().addAll(getFilterListBySendToAuditor(purchaseBills));
@@ -256,12 +256,12 @@ public class PurchaseBillsPanelController {
 
     private void onPurchaseBillSelected() {
         if (tableView.getSelectionModel().getSelectedItems().size() != 1) {
-            purchaseBillController.setPurchaseBill(null);
+            singlePurchaseBillController.setPurchaseBill(null);
             return;
         }
         if (editPanelCheckBox.isSelected()) {
             PurchaseBill toEdit = tableView.getSelectionModel().getSelectedItem();
-            purchaseBillController.setPurchaseBill(toEdit);
+            singlePurchaseBillController.setPurchaseBill(toEdit);
         }
     }
 
@@ -286,7 +286,7 @@ public class PurchaseBillsPanelController {
         ObservableList<String> s = FXCollections.observableArrayList();
         String[] strings = {"StdEnt", "StdEqm"};
         for (String string : strings)
-            for (PurchaseBill v : DatabaseHelper_PurchaseBill.getAllPurchaseBillList(string))
+            for (PurchaseBill v : PurchaseBillService.getAllPurchaseBillList(string))
                 s.add(v.getInvoiceNo());
         TextFields.bindAutoCompletion(searchBox, s);
     }
@@ -295,7 +295,7 @@ public class PurchaseBillsPanelController {
         ObservableList<String> invoices = FXCollections.observableArrayList();
         String[] strings = {"StdEnt", "StdEqm"};
         for (String string : strings)
-            for (PurchaseBill v : DatabaseHelper_PurchaseBill.getAllPurchaseBillList(string))
+            for (PurchaseBill v : PurchaseBillService.getAllPurchaseBillList(string))
                 invoices.add(v.getTotalAmount());
         return invoices;
     }

@@ -1,8 +1,9 @@
 package bam.billing.se.controllers;
 
 import bam.billing.se.Main;
-import bam.billing.se.helpers.DatabaseHelper_Bill;
-import bam.billing.se.helpers.DatabaseHelper_Customer;
+import bam.billing.se.dto.CustomerNameResult;
+import bam.billing.se.helpers.BillService;
+import bam.billing.se.helpers.CustomerService;
 import bam.billing.se.models.Bill;
 import bam.billing.se.models.Customer;
 import bam.billing.se.models.Product;
@@ -58,8 +59,9 @@ public class BillRegistrationController {
         borderPane.setDisable(true);
         checkBoxGST.setSelected(true);
         manualDate.setDisable(true);
-        gst = DatabaseHelper_Customer.getCustomerNameList(0);
-        nonGst = DatabaseHelper_Customer.getCustomerNameList(1);
+        CustomerNameResult customerNameResult = CustomerService.getCustomerNameResult();
+        gst = customerNameResult.gstCustomerNames;
+        nonGst = customerNameResult.nonGstCustomerNames;
 
         comboBoxCustomer.getItems().addAll(gst);
         TextFields.bindAutoCompletion(comboBoxCustomer.getEditor(), comboBoxCustomer.getItems());
@@ -132,17 +134,17 @@ public class BillRegistrationController {
         }
 
         String errorMsg;
-        boolean errored = false;
+        boolean hasEror = false;
         for (SingleProductController s : p) {
             errorMsg = s.isReady();
             if (!errorMsg.equals("s")) {
                 mainApp.snackBar(Constants.CHECK_FOR_ERROR, errorMsg, SnackBarColor.RED);
-                errored = true;
+                hasEror = true;
             }
 
         }
 
-        if (errored) {
+        if (hasEror) {
             bill = null;
             return;
         }
@@ -175,7 +177,7 @@ public class BillRegistrationController {
     private void getBillId() {
         int num = 1;
         invoice = preferences.getBillInvoiceCodePrefix() + "-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
-        while (DatabaseHelper_Bill.ifInvoiceExist(invoice)) {
+        while (BillService.ifInvoiceExist(invoice)) {
             invoice = preferences.getBillInvoiceCodePrefix() + "-" + new SimpleDateFormat("ddMMyy/").format(date) + String.format("%03d", num);
             num++;
         }
@@ -189,9 +191,9 @@ public class BillRegistrationController {
         if (bill == null) return;
 
         if (ready && AlertMaker.showBill(bill, mainApp, false)) {
-            boolean success = isNewBill ? DatabaseHelper_Bill.insertNewBill(bill) :
-                    DatabaseHelper_Bill.deleteBill(oldBill.getBillId())
-                            && DatabaseHelper_Bill.insertNewBill(bill);
+            boolean success = isNewBill ? BillService.insertNewBill(bill) :
+                    BillService.deleteBill(oldBill.getBillId())
+                            && BillService.insertNewBill(bill);
             if (success) {
                 mainApp.snackBar(SUCCESS, bill.getInvoice() +
                         BILL_SAVE, SnackBarColor.GREEN);
@@ -220,7 +222,7 @@ public class BillRegistrationController {
     @FXML
     void handleCustomerSubmit() {
         if (comboBoxCustomer.getValue() != null && !comboBoxCustomer.getValue().isEmpty()) {
-            customer = DatabaseHelper_Customer.getCustomerInfo(comboBoxCustomer.getValue());
+            customer = CustomerService.getCustomerInfo(comboBoxCustomer.getValue());
             if (customer == null) {
                 mainApp.snackBar(CUSTOMER_NOT_FOUND);
                 return;
@@ -253,7 +255,7 @@ public class BillRegistrationController {
     public void setBill(Bill bill) {
         isNewBill = false;
         oldBill = bill;
-        checkBoxGST.setSelected(!bill.getGSTNo().equalsIgnoreCase("for own use"));
+        checkBoxGST.setSelected(!bill.getGSTNo().equalsIgnoreCase(Constants.FOR_OWN_USE));
         toggleCustomer();
         comboBoxCustomer.getSelectionModel().select(bill.getCustomerName());
         handleCustomerSubmit();

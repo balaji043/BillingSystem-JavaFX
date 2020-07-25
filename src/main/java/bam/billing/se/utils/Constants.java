@@ -18,7 +18,7 @@ public class Constants {
 
     public static final String BILL_NOT_SAVED = " Bill item is not saved !";
     public static final String BILL_SAVE = " Bill is saved successfully!";
-
+    public static final String FOR_OWN_USE = "For Own Use";
 
     private Constants() {
 

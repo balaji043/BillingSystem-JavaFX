@@ -1,6 +1,6 @@
 package bam.billing.se.controllers;
 
-import bam.billing.se.helpers.DatabaseHelper_Customer;
+import bam.billing.se.helpers.CustomerService;
 import bam.billing.se.models.Bill;
 import bam.billing.se.models.Customer;
 import bam.billing.se.models.Product;
@@ -68,7 +68,7 @@ public class NonGstBillController {
 
         //billing address section
 
-        Customer customer = DatabaseHelper_Customer.getCustomerInfo(bill.getCustomerName());
+        Customer customer = CustomerService.getCustomerInfo(bill.getCustomerName());
         if (customer != null) {
             lCusName.setText(": " + customer.getName());
             lCusStreet.setText(": " + customer.getStreetAddress()

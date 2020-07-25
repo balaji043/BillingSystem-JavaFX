@@ -70,7 +70,8 @@ public class ExcelDatabaseHelper {
                 if (currentRow.getCell(7) != null) {
                     id = "" + currentRow.getCell(7).getStringCellValue();
                 }
-                DatabaseHelper_Customer.insertNewCustomer(new Customer(n, p, g, a1, a2, a3, z, id));
+                boolean isInserted = CustomerService.insertNewCustomer(new Customer(n, p, g, a1, a2, a3, z, id));
+
             }
 
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
@@ -269,7 +270,7 @@ public class ExcelDatabaseHelper {
 
             purchaseBill = new PurchaseBill("" + date1.getTime(), cmpName, invoice, amount, _12, _18, _28, totalNet, sendToAuditor);
             try {
-                DatabaseHelper_PurchaseBill.insertNewPurchaseBill(purchaseBill, tableName);
+                PurchaseBillService.insertNewPurchaseBill(purchaseBill, tableName);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }

@@ -58,8 +58,10 @@ public class Bill {
         this.initialize();
     }
 
+    public Bill() {
+    }
 
-    private void initialize() {
+    public void initialize() {
         double total = 0, r = 0.00f;
 
         for (Product product : products) {
@@ -181,5 +183,66 @@ public class Bill {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+
+    public void setBillId(String billId) {
+        this.billId = billId;
+    }
+
+    public void setInvoice(String invoice) {
+        this.invoice = invoice;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public void setGSTNo(String GSTNo) {
+        this.GSTNo = GSTNo;
+    }
+
+    public void setProducts(ObservableList<Product> products) {
+        this.products = products;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public void setTotalAmountBeforeRoundOff(String totalAmountBeforeRoundOff) {
+        this.totalAmountBeforeRoundOff = totalAmountBeforeRoundOff;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public void setRoundOff(String roundOff) {
+        this.roundOff = roundOff;
     }
 }

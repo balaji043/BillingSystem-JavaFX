@@ -25,13 +25,15 @@ public class Product extends RecursiveTreeObject<Product> {
     }
 
     public Product(String name, String hsn, String qty, String rate, String per) {
-
         this.name = name;
         this.hsn = hsn;
         this.qty = qty;
         this.rate = rate;
         this.per = per;
+        initialize();
+    }
 
+    public void initialize() {
         float q = Integer.parseInt(qty);
         float r = Float.parseFloat(this.rate);
         float originalAmount = q * r;
@@ -39,7 +41,6 @@ public class Product extends RecursiveTreeObject<Product> {
 
         totalAmount = String.format("%.2f", originalAmount);
         ready = true;
-
     }
 
     public String getName() {
@@ -78,5 +79,31 @@ public class Product extends RecursiveTreeObject<Product> {
         return totalAmount;
     }
 
+    public boolean isReady() {
+        return ready;
+    }
 
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    public void setHsn(String hsn) {
+        this.hsn = hsn;
+    }
+
+    public void setQty(String qty) {
+        this.qty = qty;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public void setPer(String per) {
+        this.per = per;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 }

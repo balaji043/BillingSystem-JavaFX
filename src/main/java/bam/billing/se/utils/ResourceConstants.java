@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ResourceConstants {
+
     public static class Views {
         public static String BILLING = "/views/bill-registration.fxml";
         public static String CUSTOMER_PANEL = "/views/customer-panel.fxml";
@@ -19,7 +20,7 @@ public class ResourceConstants {
         public static String SINGLE_PRODUCT = "/views/single-product.fxml";
         public static String SINGLE_PURCHASE_BILL = "/views/single-purchase-bill.fxml";
         public static String USER_PANEL = "/views/user-panel.fxml";
-        public static String BILLS_PANEL = "/views/bills-panel.fxml";
+        public static String BILLS_PANEL = "/views/bill-panel.fxml";
         public static String NON_GST_BILL = "/views/non-gst-bill.fxml";
     }
 

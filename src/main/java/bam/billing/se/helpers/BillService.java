@@ -1,10 +1,11 @@
 package bam.billing.se.helpers;
 
 import bam.billing.se.models.Bill;
-import bam.billing.se.models.Customer;
 import bam.billing.se.models.Product;
 import bam.billing.se.utils.AlertMaker;
 import bam.billing.se.utils.BillingSystemUtils;
+import bam.billing.se.utils.Constants;
+import bam.billing.se.utils.CustomerType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -14,7 +15,60 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class DatabaseHelper_Bill extends DatabaseHelper {
+public class BillService extends DatabaseHelper {
+
+    public static ObservableList<Bill> getBillList() {
+        ObservableList<Bill> bill = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+        try {
+            String insert = " SELECT * FROM NonGstBills";
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) bill.add(getBill(resultSet));
+        } catch (SQLException e) {
+            AlertMaker.showErrorMessage(e);
+        } finally {
+            try {
+                assert preparedStatement != null;
+                preparedStatement.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return bill;
+    }
+
+    public static ObservableList<Bill> getBillList(String customer
+            , LocalDate a, LocalDate b) {
+        ObservableList<Bill> bill = FXCollections.observableArrayList();
+        ResultSet resultSet = null;
+
+        try {
+            resultSet = getResultSet(customer);
+            if (resultSet == null) {
+                System.out.println("null");
+                return bill;
+            }
+            while (resultSet.next()) {
+                long l = Long.parseLong(resultSet.getString(BillColumn.DATE));
+                Date date = new Date(l);
+                LocalDate d = BillingSystemUtils.convertToLocalDateViaInstant(date);
+                if ((d.isEqual(a) || d.isEqual(b)) || (d.isAfter(a) && d.isBefore(b)))
+                    bill.add(getBill(resultSet));
+            }
+        } catch (SQLException e) {
+            AlertMaker.showErrorMessage(e);
+        } finally {
+            try {
+                assert resultSet != null;
+                resultSet.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return bill;
+    }
+
     static boolean createBillTable() {
         String create = "CREATE TABLE IF NOT EXISTS NonGstBills ( " +
                 "BillID TEXT NOT NULL UNIQUE,INVOICE TEXT NOT NULL UNIQUE," +
@@ -56,14 +110,24 @@ public class DatabaseHelper_Bill extends DatabaseHelper {
         return okay;
     }
 
-    public static ObservableList<Bill> getBillList() {
+    public static ObservableList<Bill> getBillList(LocalDate a, LocalDate b
+            , CustomerType customerType) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
         PreparedStatement preparedStatement = null;
         try {
             String insert = " SELECT * FROM NonGstBills WHERE TRUE ";
             preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) bill.add(getBill(resultSet));
+            while (resultSet.next()) {
+                long l = Long.parseLong(resultSet.getString(BillColumn.DATE));
+                Date date = new Date(l);
+                LocalDate d = BillingSystemUtils.convertToLocalDateViaInstant(date);
+                if (((customerType == CustomerType.GST && !resultSet.getString(BillColumn.GST_NO).equals(Constants.FOR_OWN_USE))
+                        || (customerType == CustomerType.NON_GST && resultSet.getString(BillColumn.GST_NO).equals(Constants.FOR_OWN_USE))
+                        || (customerType == CustomerType.BOTH))
+                        && ((d.isEqual(a) || d.isEqual(b)) || (d.isAfter(a) && d.isBefore(b))))
+                    bill.add(getBill(resultSet));
+            }
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
         } finally {
@@ -77,30 +141,25 @@ public class DatabaseHelper_Bill extends DatabaseHelper {
         return bill;
     }
 
-    public static ObservableList<Bill> getBillList(String customer
-            , LocalDate a, LocalDate b) {
+    public static ObservableList<Bill> getBillList(boolean b) {
         ObservableList<Bill> bill = FXCollections.observableArrayList();
-        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            resultSet = getResultSet(customer);
-            if (resultSet == null) {
-                System.out.println("null");
-                return bill;
-            }
+            String insert = " SELECT * FROM  NonGstBills";
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                long l = Long.parseLong(resultSet.getString(3));
-                Date date = new Date(l);
-                LocalDate d = BillingSystemUtils.convertToLocalDateViaInstant(date);
-                if ((d.isEqual(a) || d.isEqual(b)) || (d.isAfter(a) && d.isBefore(b)))
+                if (((b && !resultSet.getString(BillColumn.GST_NO).equals(Constants.FOR_OWN_USE))
+                        || (!b && resultSet.getString(BillColumn.GST_NO).equals(Constants.FOR_OWN_USE))))
                     bill.add(getBill(resultSet));
             }
         } catch (SQLException e) {
             AlertMaker.showErrorMessage(e);
         } finally {
             try {
-                assert resultSet != null;
-                resultSet.close();
+                assert preparedStatement != null;
+                preparedStatement.close();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -167,83 +226,73 @@ public class DatabaseHelper_Bill extends DatabaseHelper {
         return bill;
     }
 
-    public static ObservableList<Bill> getBillList(LocalDate a, LocalDate b
-            , int i) {
-        ObservableList<Bill> bill = FXCollections.observableArrayList();
-        PreparedStatement preparedStatement = null;
-        try {
-            String insert = " SELECT * FROM NonGstBills WHERE TRUE ";
-            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                long l = Long.parseLong(resultSet.getString(3));
-                Date date = new Date(l);
-                LocalDate d = BillingSystemUtils.convertToLocalDateViaInstant(date);
-                if (((i == 1 && !resultSet.getString(8).equals("For Own Use"))
-                        || (i == 2 && resultSet.getString(8).equals("For Own Use"))
-                        || (i == 3))
-                        && ((d.isEqual(a) || d.isEqual(b)) || (d.isAfter(a) && d.isBefore(b))))
-                    bill.add(getBill(resultSet));
-            }
-        } catch (SQLException e) {
-            AlertMaker.showErrorMessage(e);
-        } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return bill;
-    }
-
-    public static ObservableList<Bill> getBillList(boolean b) {
-        ObservableList<Bill> bill = FXCollections.observableArrayList();
-        PreparedStatement preparedStatement = null;
-
-        try {
-            String insert = " SELECT * FROM  NonGstBills";
-            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                if (((b && !resultSet.getString(8).equals("For Own Use"))
-                        || (!b && resultSet.getString(8).equals("For Own Use"))))
-                    bill.add(getBill(resultSet));
-            }
-        } catch (SQLException e) {
-            AlertMaker.showErrorMessage(e);
-        } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return bill;
-    }
-
     private static Bill getBill(ResultSet resultSet) throws SQLException {
-        long l = Long.parseLong(resultSet.getString(3));
-        String bi = resultSet.getString(1);
-        Customer customer = new Customer();
-        customer.setName(resultSet.getString(4));
-        customer.setId(resultSet.getString(5));
-        customer.setPhone(resultSet.getString(7));
-        customer.setGstIn(resultSet.getString(8));
-        Bill bill = new Bill(resultSet.getString(1)
-                , resultSet.getString(2)
-                , BillingSystemUtils.formatDateTimeString(l)
-                , resultSet.getString(4)
-                , resultSet.getString(5)
-                , resultSet.getString(6)
-                , resultSet.getString(7)
-                , resultSet.getString(8)
-                , getBillProductList(bi)
-                , resultSet.getString("USERNAME"));
-        bill.setTime(resultSet.getString(3));
+        Bill bill = new Bill();
+        bill.setBillId(resultSet.getString(BillColumn.BillID));
+        bill.setInvoice(resultSet.getString(BillColumn.INVOICE));
+        bill.setDate(BillingSystemUtils.formatDateTimeString(Long.parseLong(resultSet.getString(BillColumn.DATE))));
+        bill.setCustomerName(resultSet.getString(BillColumn.CUSTOMER_NAME));
+        bill.setCustomerId(resultSet.getString(BillColumn.CUSTOMER_ID));
+        bill.setAddress(resultSet.getString(BillColumn.ADDRESS));
+        bill.setMobile(resultSet.getString(BillColumn.PHONE));
+        bill.setGSTNo(resultSet.getString(BillColumn.GST_NO));
+        bill.setUserName(resultSet.getString(BillColumn.USER_NAME));
+        bill.setTime(resultSet.getString(BillColumn.DATE));
+        bill.setProducts(getBillProductList(bill.getBillId()));
+        bill.initialize();
         return bill;
+    }
+
+    private static ObservableList<Product> getBillProductList(String tableName) {
+        ObservableList<Product> products = FXCollections.observableArrayList();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            String insert = " SELECT * FROM " + tableName + " WHERE TRUE ";
+            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
+            resultSet = preparedStatement.executeQuery();
+            int i = 1;
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setName(resultSet.getString(ProductColumn.NAME));
+                product.setHsn(resultSet.getString(ProductColumn.HSN));
+                product.setQty(resultSet.getString(ProductColumn.QTY));
+                product.setRate(resultSet.getString(ProductColumn.RATE));
+                product.setPer(resultSet.getString(ProductColumn.PER));
+                product.setSl("" + (i++));
+
+                product.initialize();
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            AlertMaker.showErrorMessage(e);
+        } finally {
+            try {
+                assert preparedStatement != null;
+                preparedStatement.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            try {
+                assert resultSet != null;
+                resultSet.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+        }
+        return products;
+    }
+
+    static class BillColumn {
+        public static String BillID = "BillID";
+        public static String INVOICE = "INVOICE";
+        public static String DATE = "DATE";
+        public static String CUSTOMER_NAME = "CustomerName";
+        public static String CUSTOMER_ID = "CustomerID";
+        public static String ADDRESS = "ADDRESS";
+        public static String PHONE = "PHONE";
+        public static String GST_NO = "GstNO";
+        public static String USER_NAME = "USERNAME";
     }
 
     public static boolean deleteBill(String billId) {
@@ -321,43 +370,12 @@ public class DatabaseHelper_Bill extends DatabaseHelper {
         return okay;
     }
 
-    private static ObservableList<Product> getBillProductList(String tableName) {
-        ObservableList<Product> products = FXCollections.observableArrayList();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            String insert = " SELECT * FROM " + tableName + " WHERE TRUE ";
-            preparedStatement = DatabaseHandler.getInstance().getConnection().prepareStatement(insert);
-            resultSet = preparedStatement.executeQuery();
-            Product product;
-            int i = 1;
-            while (resultSet.next()) {
-                product = new Product(
-                        "" + resultSet.getString(1)
-                        , "" + resultSet.getString(2)
-                        , "" + resultSet.getString(3)
-                        , "" + resultSet.getString(4)
-                        , "" + resultSet.getString(5));
-                product.setSl("" + (i++));
-                products.add(product);
-            }
-        } catch (SQLException e) {
-            AlertMaker.showErrorMessage(e);
-        } finally {
-            try {
-                assert preparedStatement != null;
-                preparedStatement.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-            try {
-                assert resultSet != null;
-                resultSet.close();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-        }
-        return products;
+    static class ProductColumn {
+        public static String NAME = "NAME";
+        public static String HSN = "HSN";
+        public static String QTY = "QTY";
+        public static String RATE = "RATE";
+        public static String PER = "PER";
     }
 
     public static boolean ifInvoiceExist(String s) {

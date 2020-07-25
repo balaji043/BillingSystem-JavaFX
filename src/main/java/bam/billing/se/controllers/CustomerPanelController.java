@@ -1,12 +1,13 @@
 package bam.billing.se.controllers;
 
 import bam.billing.se.Main;
-import bam.billing.se.helpers.DatabaseHelper_Customer;
+import bam.billing.se.helpers.CustomerService;
 import bam.billing.se.helpers.ExcelDatabaseHelper;
 import bam.billing.se.helpers.ExcelHelper;
 import bam.billing.se.models.Customer;
 import bam.billing.se.utils.AlertMaker;
 import bam.billing.se.utils.BillingSystemUtils;
+import bam.billing.se.utils.Constants;
 import bam.billing.se.utils.Message;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -16,11 +17,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.io.File;
@@ -33,6 +38,9 @@ import static bam.billing.se.utils.Message.*;
 import static bam.billing.se.utils.ResourceConstants.Icons;
 
 public class CustomerPanelController implements Initializable {
+
+    private int limit = 10;
+    private int offset;
     @FXML
     public JFXCheckBox checkGST, checkGST1, checkGST2;
     public JFXTextField cnNameSearchTField;
@@ -69,7 +77,7 @@ public class CustomerPanelController implements Initializable {
         zip.getValidators().add(validator);
         checkGST1.setSelected(true);
         checkGST2.setSelected(true);
-        TextFields.bindAutoCompletion(cnNameSearchTField, DatabaseHelper_Customer.getCustomerNameList(2));
+        TextFields.bindAutoCompletion(cnNameSearchTField, CustomerService.getCustomerNameResult().allCustomerNames);
     }
 
     public void setMainApp(Main mainApp) {
@@ -92,7 +100,7 @@ public class CustomerPanelController implements Initializable {
 
     private void setAll(Customer customer) {
         cnName.setText(customer.getName());
-        if (!customer.getGstIn().equals("For Own Use")) checkGST.setSelected(true);
+        if (!customer.getGstIn().equals(Constants.FOR_OWN_USE)) checkGST.setSelected(true);
         else checkGST.setSelected(false);
         toggle(checkGST.isSelected());
         gstIn.setText(customer.getGstIn());
@@ -117,6 +125,28 @@ public class CustomerPanelController implements Initializable {
         userTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         setCustomer();
         borderPane.setCenter(userTableView);
+
+        JFXButton paginationPreviousJfxButton = new JFXButton("Previous");
+        paginationPreviousJfxButton.setButtonType(JFXButton.ButtonType.RAISED);
+        paginationPreviousJfxButton.setOnAction(e -> {
+            if (this.offset == 0) return;
+            offset -= limit;
+            setCustomer();
+        });
+        JFXButton paginationNextJfxButton = new JFXButton("Next");
+        paginationNextJfxButton.setButtonType(JFXButton.ButtonType.RAISED);
+        paginationNextJfxButton.setOnAction(e -> {
+            offset += limit;
+            setCustomer();
+        });
+        HBox paginationHBox = new HBox(paginationPreviousJfxButton, paginationNextJfxButton);
+        paginationHBox.setAlignment(Pos.CENTER_RIGHT);
+        paginationHBox.setSpacing(10);
+
+        StackPane paginationStackPane = new StackPane(paginationHBox);
+        paginationStackPane.setAlignment(Pos.CENTER_RIGHT);
+        paginationHBox.setPadding(new Insets(50));
+        borderPane.setBottom(paginationStackPane);
     }
 
     @FXML
@@ -129,7 +159,7 @@ public class CustomerPanelController implements Initializable {
                             " the time of bill submission.\n" + customer.getName() + "'s data"
                     , mainApp);
             if (okay) {
-                if (DatabaseHelper_Customer.deleteCustomer(customer)) {
+                if (CustomerService.deleteCustomer(customer)) {
                     mainApp.snackBar(Message.CUSTOMER_DELETE_SUCCESS);
                     clearAll();
                 } else {
@@ -153,7 +183,7 @@ public class CustomerPanelController implements Initializable {
                 Customer customer = new Customer(cnName.getText(), phone.getText(), gstIn.getText()
                         , "" + address1.getText(), "" + address2.getText(), state.getText(), zip.getText()
                         , "CUS" + new SimpleDateFormat("yyyyMMddHHSSS").format(new Date()));
-                submitted = DatabaseHelper_Customer.insertNewCustomer(customer);
+                submitted = CustomerService.insertNewCustomer(customer);
                 if (submitted) {
                     mainApp.snackBar(CUSTOMER_ADD_SUCCESS);
                 } else {
@@ -168,7 +198,7 @@ public class CustomerPanelController implements Initializable {
                         , "" + address1.getText(), "" + address2.getText()
                         , "" + state.getText(), "" + zip.getText()
                         , customer.getId());
-                submitted = DatabaseHelper_Customer.updateCustomer(newCustomer);
+                submitted = CustomerService.updateCustomer(newCustomer);
                 if (submitted) {
                     mainApp.snackBar(CUSTOMER_UPDATE_SUCCESS);
                 } else {
@@ -263,7 +293,7 @@ public class CustomerPanelController implements Initializable {
                 return false;
             }
         } else {
-            gstIn.setText("For Own Use");
+            gstIn.setText(Constants.FOR_OWN_USE);
         }
         if (phone.getText() != null && !phone.getText().isEmpty()) {
             if (phone.getText().length() != 10 || !checkNum(phone.getText())) {
@@ -289,15 +319,15 @@ public class CustomerPanelController implements Initializable {
             gstIn.setEditable(true);
             gstIn.getValidators().add(validator);
             gstIn.validate();
-            if (gstIn.getText().equalsIgnoreCase("For Own Use")) {
+            if (gstIn.getText().equalsIgnoreCase(Constants.FOR_OWN_USE)) {
                 gstIn.setText("");
             }
         } else {
             gstIn.setDisable(true);
             gstIn.setEditable(false);
             gstIn.resetValidation();
-            if (!gstIn.getText().equalsIgnoreCase("For Own Use")) {
-                gstIn.setText("For Own Use");
+            if (!gstIn.getText().equalsIgnoreCase(Constants.FOR_OWN_USE)) {
+                gstIn.setText(Constants.FOR_OWN_USE);
             }
         }
     }
@@ -315,11 +345,11 @@ public class CustomerPanelController implements Initializable {
     }
 
     private void getCustomers() {
-        all = DatabaseHelper_Customer.getCustomerList();
+        all = CustomerService.getCustomerList(offset);
         nonGST.clear();
         gst.clear();
         for (Customer c : all) {
-            if (c.getGstIn().equals("For Own Use"))
+            if (c.getGstIn().equals(Constants.FOR_OWN_USE))
                 nonGST.add(c);
             else gst.add(c);
         }
@@ -328,7 +358,7 @@ public class CustomerPanelController implements Initializable {
     public void handleSearch() {
         if (cnNameSearchTField.getText() != null && !cnNameSearchTField.getText().isEmpty()) {
             userTableView.getItems().clear();
-            userTableView.getItems().addAll(DatabaseHelper_Customer.getCustomerList(cnNameSearchTField.getText()));
+            userTableView.getItems().addAll(CustomerService.getCustomerListBySearchText(cnNameSearchTField.getText(), offset));
         }
     }
 }
