@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class Preferences {
 
     private static final Logger LOGGER = Logger.getLogger(Preferences.class.getName());
-    private static final String FILE_PATH = "KrishnaConfig.txt";
+    private static final String FILE_PATH = "GSTAppConfig.txt";
 
     private String name;
     private String address1;

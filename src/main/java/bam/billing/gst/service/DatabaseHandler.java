@@ -29,7 +29,7 @@ class DatabaseHandler {
         try {
             Class.forName("org.sqlite.JDBC");
             String s = "tiger";
-            conn = DriverManager.getConnection("jdbc:sqlite:krishna.sqlite"
+            conn = DriverManager.getConnection("jdbc:sqlite:GSTApp.sqlite"
                     , "scott"
                     , s);
         } catch (Exception e) {

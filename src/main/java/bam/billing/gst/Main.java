@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import static bam.billing.gst.utils.ResourceConstants.CSS;
 import static bam.billing.gst.utils.ResourceConstants.Views;
+import static bam.billing.gst.utils.StringUtil.TITLE;
 
 public class Main extends Application {
 
@@ -78,10 +79,11 @@ public class Main extends Application {
 
         scene = new Scene(decorator, 1080, 720);
 
-        decorator.setTitle("Krishna Enterprises");
+        decorator.setTitle(TITLE);
         setNewStyle();
 
         primaryStage.setScene(scene);
+        primaryStage.setTitle(TITLE);
         primaryStage.show();
 
         rootController.setMainApp(Main.this);

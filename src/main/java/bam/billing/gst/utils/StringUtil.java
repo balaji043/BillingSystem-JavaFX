@@ -13,6 +13,8 @@ public class StringUtil {
     public static final String RED = "red";
     public static final String CANCELLED = "Cancelled";
     public static final String ERROR = "Error Happened";
+    public static final String TITLE = Preferences.getPreferences().getName();
+
     public static final String CREATE_PURCHASE_TABLE = "CREATE TABLE IF NOT EXISTS PURCHASEBILLS ( DATE TEXT NOT NULL, "
             + " CompanyName TEXT NOT NULL, INVOICE TEXT NOT NULL,"
             + " AmountBeforeTax TEXT NOT NULL, TwelvePerAmt TEXT NOT NULL, "
