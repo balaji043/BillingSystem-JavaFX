@@ -48,4 +48,18 @@ public class Constants {
     public static class MenuNames {
         public static String MODIFY_BILL = "Edit Bill";
     }
+
+    public static class StoreType {
+
+        public static String STANDARD_ENTERPRISES = "Standard Enterprises";
+        public static String STANDARD_EQUIPMENTS = "Standard Equipments";
+
+        public static List<String> STORE_NAMES_LIST = new ArrayList<>();
+
+        static {
+            STORE_NAMES_LIST.add(STANDARD_ENTERPRISES);
+            STORE_NAMES_LIST.add(STANDARD_EQUIPMENTS);
+        }
+
+    }
 }

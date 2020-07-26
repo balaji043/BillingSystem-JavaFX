@@ -7,6 +7,7 @@ import bam.billing.nongst.helpers.PurchaseBillService;
 import bam.billing.nongst.models.PurchaseBill;
 import bam.billing.nongst.utils.AlertMaker;
 import bam.billing.nongst.utils.BillingSystemUtils;
+import bam.billing.nongst.utils.Constants;
 import bam.billing.nongst.utils.Preferences;
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
@@ -70,7 +71,7 @@ public class PurchaseBillsPanelController {
 
 
         borderPane.setRight(null);
-        billTypeCBOX.getItems().addAll("Standard Enterprises", "Standard Equipments");
+        billTypeCBOX.getItems().addAll(Constants.StoreType.STORE_NAMES_LIST);
         billTypeCBOX.getSelectionModel().selectFirst();
 
         sendToAuditorComboBox.getItems().addAll("All", "Sent To Auditor", "Not Send to Auditor");

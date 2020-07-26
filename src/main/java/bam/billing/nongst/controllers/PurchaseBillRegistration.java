@@ -3,6 +3,7 @@ package bam.billing.nongst.controllers;
 import bam.billing.nongst.Main;
 import bam.billing.nongst.helpers.PurchaseBillService;
 import bam.billing.nongst.utils.BillingSystemUtils;
+import bam.billing.nongst.utils.Constants;
 import bam.billing.nongst.utils.Preferences;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -24,7 +25,7 @@ public class PurchaseBillRegistration {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-        typeComboBox.getItems().addAll("Standard Enterprises", "Standard Equipments");
+        typeComboBox.getItems().addAll(Constants.StoreType.STORE_NAMES_LIST);
 
         BillingSystemUtils.setImageViewToButtons(Icons.ADD, addBTN);
         BillingSystemUtils.setImageViewToButtons(Icons.DELETE, deleteBTN);

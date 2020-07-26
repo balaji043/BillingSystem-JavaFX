@@ -33,7 +33,7 @@ public class Preferences {
 
     // Constructor
     private Preferences() {
-        storeName = "Standard Enterprises";
+        storeName = "Some Name";
         addressLineOne = "JALAL KUDI STREET";
         addressLineTwo = "Chatram Trichy";
         gstInNumber = "ADADS456465412";

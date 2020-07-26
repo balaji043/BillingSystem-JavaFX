@@ -2,6 +2,7 @@ package bam.billing.nongst.helpers;
 
 import bam.billing.nongst.models.PurchaseBill;
 import bam.billing.nongst.utils.AlertMaker;
+import bam.billing.nongst.utils.Constants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -267,7 +268,7 @@ public class PurchaseBillService extends DatabaseHelper {
     }
 
     public static String getTableName(String name) {
-        if ("Standard Enterprises".equals(name))
+        if (Constants.StoreType.STANDARD_ENTERPRISES.equals(name))
             return "StdEnt";
         return "StdEqm";
     }
