@@ -1,4 +1,4 @@
-package bam.billing.se.dto;
+package bam.billing.nongst.dto;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
