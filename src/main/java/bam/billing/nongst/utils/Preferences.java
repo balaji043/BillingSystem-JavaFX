@@ -9,7 +9,7 @@ import java.util.HashSet;
 
 public class Preferences {
 
-    private static final String FILE_PATH = "ElectronicConfig.txt";
+    private static final String FILE_PATH = "NonGSTAppConfig.txt";
 
     private String storeName;
     private String addressLineOne;
