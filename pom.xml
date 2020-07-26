@@ -69,7 +69,7 @@
         <javafx.version>2.2</javafx.version>
         <jar.final.name>SEBillingSystem</jar.final.name>
         <!--  the default class that has the public static void main(String[]) method -->
-        <main.class>bam.billing.se.Main</main.class>
+        <main.class>bam.billing.gst.Main</main.class>
     </properties>
 
     <build>
