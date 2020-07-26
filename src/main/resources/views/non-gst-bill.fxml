@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" maxHeight="840.0" maxWidth="600.0" minHeight="840.0"
       minWidth="600.0" prefHeight="840.0" prefWidth="600.0" style="-fx-background-color: white;"
-      xmlns="http://javafx.com/javafx/8.0.171" fx:controller="bam.billing.se.controllers.NonGstBillController">
+      xmlns="http://javafx.com/javafx/8.0.171" fx:controller="bam.billing.nongst.controllers.NonGstBillController">
     <VBox fx:id="root" maxHeight="835.0" maxWidth="560.0" minHeight="835.0" minWidth="560.0" prefHeight="835.0"
           prefWidth="560.0">
         <GridPane gridLinesVisible="true">

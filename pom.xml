@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>bam.billing.se</groupId>
-    <artifactId>SEBillingSystem</artifactId>
+    <groupId>bam.billing.nongst</groupId>
+    <artifactId>NonGstBillingSystem</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -69,7 +69,7 @@
         <javafx.version>2.2</javafx.version>
         <jar.final.name>SEBillingSystem</jar.final.name>
         <!--  the default class that has the public static void main(String[]) method -->
-        <main.class>bam.billing.se.Main</main.class>
+        <main.class>bam.billing.nongst.Main</main.class>
     </properties>
 
     <build>
@@ -90,7 +90,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>bam.billing.se.Main</mainClass>
+                            <mainClass>bam.billing.nongst.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

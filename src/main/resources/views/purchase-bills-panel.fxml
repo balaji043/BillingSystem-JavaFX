@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="main" prefHeight="720.0" prefWidth="1920.0"
            xmlns="http://javafx.com/javafx/8.0.171"
-           fx:controller="bam.billing.se.controllers.PurchaseBillsPanelController">
+           fx:controller="bam.billing.nongst.controllers.PurchaseBillsPanelController">
     <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
         <center>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">

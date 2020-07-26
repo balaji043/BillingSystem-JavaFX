@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.*?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171"
-           fx:controller="bam.billing.se.controllers.CustomerPanelController">
+           fx:controller="bam.billing.nongst.controllers.CustomerPanelController">
     <BorderPane fx:id="borderPane">
         <right>
             <VBox prefWidth="200.0" spacing="30.0">
