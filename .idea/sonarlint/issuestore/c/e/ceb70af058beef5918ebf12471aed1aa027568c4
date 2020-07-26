@@ -1,9 +1,0 @@
-
-psquid:S00117["QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¢¿ò8áÕ€ÙÉ-
-psquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¢¿ò8áÕ€ÙÉ-
-qsquid:S00117’"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¢¿ò8áÕ€ÙÉ-
-ssquid:S1192 "TDefine a constant instead of duplicating this literal "PURCHASE BILLS FOR " 4 times.(ÕÙó8áÕ€ÙÉ-
-qsquid:S00117Î"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¢¿ò8áÕ€ÙÉ-
-Fsquid:S1148C"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ8áÕ€ÙÉ-
-Ssquid:S1191"5Use classes from the Java API instead of Sun classes.(¤œĞ8áÕ€ÙÉ-
-]squid:S1118":Add a private constructor to hide the implicit public one.(œ‚òüÿÿÿÿ8áÕ€ÙÉ-
