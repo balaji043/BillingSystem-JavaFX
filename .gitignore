@@ -3,4 +3,4 @@ target/*
 out/*
 *.sqlite
 *.iml
-KrishnaConfig.txt
+*.txt
