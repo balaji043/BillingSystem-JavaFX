@@ -69,6 +69,7 @@ public class Main extends Application {
         JFXDecorator decorator = new JFXDecorator(primaryStage, rootLayout);
         decorator.setCustomMaximize(true);
         decorator.setMaximized(true);
+        decorator.setTitle(TITLE);
         return decorator;
     }
 
