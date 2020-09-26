@@ -1,8 +1,0 @@
-
-isquid:S1192e"FDefine a constant instead of duplicating this literal "green" 7 times.(õ§—ğøÿÿÿÿ8Ùû€·Ñ-
-asquid:S1155n">Use isEmpty() to check whether the collection is empty or not.(‘ŸĞšøÿÿÿÿ8ƒÜúßÛ-
-Psquid:S5261Ú"1Add explicit curly braces to avoid dangling else.(­›Âô8ƒÜúßÛ-
-lsquid:MaximumInheritanceDepthM"<This class has 8 parents which is greater than 5 authorized.(ãç”š8ƒÜúßÛ-
-qsquid:S3776Ì"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(¢éúù8Ùû€·Ñ-
-]squid:S1161N":Add the "@Override" annotation above this method signature(—Õ¨úÿÿÿÿ8ƒÜúßÛ-
-Usquid:S5261Õ"1Add explicit curly braces to avoid dangling else.(„¶áìøÿÿÿÿ8ƒÜúßÛ-
